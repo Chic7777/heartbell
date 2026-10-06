@@ -32,10 +32,8 @@ export function createPlan(state: V2State, viewer: string, input: Record<string,
   }
   const targetType = input.targetType === "anniversary" ? "anniversary" : "marriage";
   const rewardChoice: RewardChoice = input.rewardChoice === "B" ? "B" : "A";
-  let beneficiary: string | null = null;
-  if (rewardChoice === "B") {
-    beneficiary = typeof input.beneficiary === "string" && rel.members.includes(input.beneficiary) ? input.beneficiary : viewer;
-  }
+  // 奖励 B 的玫瑰演示券为双方共同持有（每人各一张），不再指定单独领取人。
+  const beneficiary: string | null = null;
   const plan: CommitmentPlan = {
     id: `plan-${Math.random().toString(36).slice(2, 10)}`,
     relationshipId: rel.id, status: "awaiting_partner",
@@ -240,11 +238,13 @@ export function redeemBenefit(state: V2State, viewer: string, benefitId: unknown
       }, now);
     }
   } else {
-    const beneficiary = benefit.recipients[0];
-    postLedger(state, {
-      from: "pool:reward", to: `user:${beneficiary}`, amount: 1, unit: "rose-ticket",
-      businessKey: `rose:${plan.id}`, type: "redeem", note: "99 朵玫瑰演示券（不可实际核销）",
-    }, now);
+    // 玫瑰演示券双方共同持有：每人各得一张（预留库存 2 张）。
+    for (const uid of planMembers(state, plan)) {
+      postLedger(state, {
+        from: "pool:reward", to: `user:${uid}`, amount: 1, unit: "rose-ticket",
+        businessKey: `rose:${plan.id}:${uid}`, type: "redeem", note: "99 朵玫瑰演示券 · 双方共同持有（不可实际核销）",
+      }, now);
+    }
   }
   consumeReservation(state, plan);
   benefit.status = "settled";

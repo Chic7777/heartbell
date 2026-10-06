@@ -46,10 +46,11 @@ export function buildStateView(state: V2State, viewer: string): V2StateView {
   const radar = state.radar.get(viewer);
   const myRel = activeRelationshipOf(state, viewer);
   const closedWith = new Set(state.connections.filter(c => c.closed && c.members.includes(viewer)).map(c => c.members[0] === viewer ? c.members[1] : c.members[0]));
-  // 雷达互相可见、连接未关闭、双方都没有有效关系（MEET-02/MEET-06）：
+  // 雷达互相可见、连接未关闭、双方都没有有效关系（MEET-02/MEET-06）；
+  // 最小资料仅含一句话介绍，不含其他长期信息。
   const partnerRadar = partner ? state.radar.get(partner.id) : null;
   const nearbyVisible = (radar?.active && partner && partnerRadar?.active && !closedWith.has(partner.id) && !myRel && !activeRelationshipOf(state, partner.id))
-    ? [{ userId: partner.id, traits: partnerRadar!.traits.map(t => ({ category: t.category, value: t.value })) }]
+    ? [{ userId: partner.id, traits: partnerRadar!.traits.map(t => ({ category: t.category, value: t.value })), bio: partner.profile.bio }]
     : [];
   const myBells = state.bells.filter(b => b.from === viewer || b.to === viewer);
   const roundStart = radar?.expiresAt ? radar.expiresAt - 600_000 : 0;
@@ -74,13 +75,15 @@ export function buildStateView(state: V2State, viewer: string): V2StateView {
       userId: otherId,
       profile: echoed && other ? {
         nickname: other.profile.nickname, avatar: other.profile.avatar,
+        ageWindow: other.profile.ageWindow, orientation: other.profile.orientation,
+        mbti: other.profile.mbti,
         interests: other.profile.interests, bio: other.profile.bio,
-        intention: other.profile.intention, contact: null, // 联系方式绝不随档案返回
+        intention: other.profile.intention, contacts: [], // 联系方式绝不随档案返回
       } : null,
       intention: echoed ? other?.profile.intention ?? null : null,
       intentionLabel: echoed ? intentionLabels[other?.profile.intention ?? "open"] : null,
       appBindingStatus: otherRel ? (otherRel.status === "married" ? "married" as const : "active" as const) : "none" as const,
-      contact: contactGrant && other?.profile.contact ? { value: other.profile.contact, granted: true } : null,
+      contacts: contactGrant && other ? other.profile.contacts.map(c => ({ label: c.label, value: c.value })) : null,
       trust: {
         status: trustStatus,
         summary: trustStatus === "granted" && snapshot
@@ -176,7 +179,7 @@ export function buildStateView(state: V2State, viewer: string): V2StateView {
     modes: { ...modes, virtualNow: now, realNow: Date.now() },
     me: {
       id: viewer,
-      profile: { ...user.profile, contact: user.profile.contact },
+      profile: user.profile,
       adultDeclared: user.adultDeclared,
       verificationLevels: user.verificationLevels,
       balance: balanceOf(state, `user:${viewer}`, "demo-point"),
@@ -198,7 +201,7 @@ export function buildStateView(state: V2State, viewer: string): V2StateView {
       myTraits: radar?.traits.map(t => ({ category: t.category, value: t.value })) ?? [],
       zoneLabel: "武汉 · 演示街区（模拟位置，非真实距离）",
       blockedByRelationship: !!myRel,
-      nearby: nearbyVisible.map(n => ({ userId: n.userId, traits: n.traits.map(t => ({ category: String(t.category), value: t.value })) })),
+      nearby: nearbyVisible.map(n => ({ userId: n.userId, traits: n.traits.map(t => ({ category: String(t.category), value: t.value })), bio: n.bio })),
       bells: myBells.map(b => ({
         id: b.id,
         from: b.status === "pending" && b.to === viewer ? "匿名铃铛" : b.from,

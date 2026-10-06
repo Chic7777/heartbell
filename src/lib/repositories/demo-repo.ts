@@ -51,8 +51,13 @@ export function createDemoState(now: number): V2State {
   state.users.set("a", {
     id: "a", kind: "demo", adultDeclared: false,
     profile: {
-      nickname: "小铃", avatar: "☕", interests: ["咖啡", "音乐", "散步"], intention: "open",
-      bio: "想认识一个愿意一起慢慢走的人。", contact: "微信 demo-xiaoling",
+      nickname: "小铃", avatar: "☕", ageWindow: "24–32", orientation: "not_say", mbti: "INFP",
+      interests: ["咖啡", "音乐", "散步"], intention: "open",
+      bio: "想认识一个愿意一起慢慢走的人。",
+      contacts: [
+        { id: "c-wechat", label: "微信", value: "demo-xiaoling" },
+        { id: "c-phone", label: "手机号", value: "138****0001（演示）" },
+      ],
     },
     verificationLevels: [
       { label: "邮箱已验证", verified: false },
@@ -63,8 +68,13 @@ export function createDemoState(now: number): V2State {
   state.users.set("b", {
     id: "b", kind: "demo", adultDeclared: false,
     profile: {
-      nickname: "阿响", avatar: "🌷", interests: ["猫咪", "音乐", "展览"], intention: "serious",
-      bio: "慢热，但认真。想认真认识一个人。", contact: "微信 demo-axiang",
+      nickname: "阿响", avatar: "🌷", ageWindow: "25–33", orientation: "men", mbti: "ISFJ",
+      interests: ["猫咪", "音乐", "展览"], intention: "serious",
+      bio: "慢热，但认真。想认真认识一个人。",
+      contacts: [
+        { id: "c-wechat", label: "微信", value: "demo-axiang" },
+        { id: "c-phone", label: "手机号", value: "139****0002（演示）" },
+      ],
     },
     verificationLevels: [
       { label: "邮箱已验证", verified: false },
@@ -77,8 +87,9 @@ export function createDemoState(now: number): V2State {
   state.users.set(exId, {
     id: exId, kind: "fixture", adultDeclared: true,
     profile: {
-      nickname: "演示前史对象", avatar: "🕯️", interests: [], intention: "open",
-      bio: "虚构演示数据，用于展示履约参考的计算方式。", contact: null,
+      nickname: "演示前史对象", avatar: "🕯️", ageWindow: "", orientation: null, mbti: null,
+      interests: [], intention: "open",
+      bio: "虚构演示数据，用于展示履约参考的计算方式。", contacts: [],
     },
     verificationLevels: [],
   });

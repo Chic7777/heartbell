@@ -57,13 +57,13 @@ check("T01 未回响前 B 看不到 A 档案", bView.know.connections.length ===
 const respond = await post("respond", { viewer: "b", bellId: pendingBell.id, status: "accepted" });
 check("B 回响成功", respond.status === 200);
 const aAfterEcho = await state("a");
-check("T01 回响后双方档案揭晓", aAfterEcho.know.connections[0]?.profile?.nickname === "阿响" && aAfterEcho.know.connections[0]?.contact === null);
-check("T02 未授权不返回联系方式", aAfterEcho.know.connections[0].contact === null);
+check("T01 回响后双方档案揭晓（档案不含联系方式）", aAfterEcho.know.connections[0]?.profile?.nickname === "阿响" && aAfterEcho.know.connections[0].contacts === null);
+check("T02 未授权不返回联系方式", aAfterEcho.know.connections[0].contacts === null);
 
 // ---------- 联系方式独立授权 ----------
 check("授权联系方式", (await post("share-grants", { viewer: "b", scope: "profile_contact" })).status === 200);
 const aWithContact = await state("a");
-check("授权后可见", aWithContact.know.connections[0].contact?.value === "微信 demo-axiang");
+check("授权后可见全部联系方式栏（微信+手机号）", JSON.stringify(aWithContact.know.connections[0].contacts) === JSON.stringify([{label:"微信",value:"demo-axiang"},{label:"手机号",value:"139****0002（演示）"}]));
 
 // ---------- T03/T04/T05 履约摘要与授权 ----------
 check("T03 未授权读取摘要被拒", (await get(`trust/summary?subjectId=b&viewer=a`)).status === 403);
@@ -228,7 +228,8 @@ await post("relationships/propose", { viewer: "a" });
 const invite2 = (await state("b")).us.incomingInvite;
 await post("relationships/accept", { viewer: "b", relationshipId: invite2.id });
 // 冷静期内取消：全额退款
-const plan2 = await post("plans", { viewer: "a", targetType: "anniversary", rewardChoice: "B", beneficiary: "b" });
+const plan2 = await post("plans", { viewer: "a", targetType: "anniversary", rewardChoice: "B" });
+check("v2.1 玫瑰券计划不再需要领取人", plan2.status === 200 && (await state("a")).future.plan.beneficiary === null);
 check("场景二创建计划 B(玫瑰券)", plan2.status === 200);
 await post("plans/accept", { viewer: "b", planId: plan2.json.data.planId, expectedRevision: 1, termsConfirmed: true });
 const cancelCooling = await post("plans/cancel", { viewer: "a", planId: plan2.json.data.planId, expectedRevision: 1, reasonType: "normal" });
@@ -266,11 +267,13 @@ check("T21 已结束关系不自动复合或标记 married", (await state("b")).
 await post("admin/advance-time", { ms: 8 * DAY });
 const plan4View = (await state("b")).future.plan;
 check("T21 复核通过后可领取", plan4View.status === "redeemable");
-check("T21 非领取人不能领取", (await post("benefits/redeem", { viewer: "a", benefitId: `benefit-${plan4.json.data.planId}`, idempotencyKey: "x" })).status === 403);
 const redeemB = await post("benefits/redeem", { viewer: "b", benefitId: `benefit-${plan4.json.data.planId}`, idempotencyKey: "y" });
-check("T21 领取人领取玫瑰券", redeemB.status === 200);
+check("T21 玫瑰券共同权益：任一方领取后双方各得一张", redeemB.status === 200);
 const finalB = await state("b");
-check("T17 只有一张演示券 + 双方各返本金（此前失效的 200 点不返还）", finalB.me.roseTickets === 1 && finalB.me.balance === 900 && (await state("a")).me.balance === 900, { b: finalB.me.balance, rose: finalB.me.roseTickets });
+const finalA = await state("a");
+check("T17 玫瑰券双方共同持有（各 1 张）+ 各返本金（此前失效的 200 点不返还）", finalB.me.roseTickets === 1 && finalA.me.roseTickets === 1 && finalB.me.balance === 900 && finalA.me.balance === 900, { b: finalB.me.balance, rose: finalB.me.roseTickets, a: finalA.me.balance, roseA: finalA.me.roseTickets });
+const redeemAgain = await post("benefits/redeem", { viewer: "a", benefitId: `benefit-${plan4.json.data.planId}`, idempotencyKey: "z2" });
+check("T17 共同权益幂等：重复领取不重复发放", redeemAgain.status === 200 && (await state("a")).me.roseTickets === 1 && (await state("b")).me.roseTickets === 1);
 check("T21 领取后关系仍为结束", finalB.us.relationship === null && finalB.us.archives.some(a => a.id === rel4Id));
 
 // ---------- T22 旧分享失效 / 撤销 ----------

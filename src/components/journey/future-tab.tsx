@@ -19,7 +19,6 @@ export function FutureTab({ view, user, busy, act, switchTab }: {
   const [creating, setCreating] = useState(false);
   const [targetType, setTargetType] = useState<"marriage" | "anniversary">("marriage");
   const [rewardChoice, setRewardChoice] = useState<"A" | "B">("A");
-  const [beneficiary, setBeneficiary] = useState<string>(user);
   const [acceptOpen, setAcceptOpen] = useState(false);
   const [claimOpen, setClaimOpen] = useState(false);
   const [goalDate, setGoalDate] = useState("");
@@ -28,7 +27,7 @@ export function FutureTab({ view, user, busy, act, switchTab }: {
   const [evidence, setEvidence] = useState<{ anchor: AnchorEvidence | null; business: string; recordId?: string } | null>(null);
   const plan = view.future.plan;
   const now = view.modes.virtualNow;
-  useEffect(() => { if (!creating) return; setTargetType("marriage"); setRewardChoice("A"); setBeneficiary(user); }, [creating, user]);
+  useEffect(() => { if (!creating) return; setTargetType("marriage"); setRewardChoice("A"); }, [creating]);
 
   return <>
     <p className="eyebrow">期待相守</p>
@@ -56,7 +55,7 @@ export function FutureTab({ view, user, busy, act, switchTab }: {
     </>}
 
     {plan && <PlanDetail view={view} user={user} plan={plan} now={now} busy={busy} act={act}
-      onAccept={() => setAcceptOpen(true)} onClaim={() => setClaimOpen(true)} onEnd={mode => setEndOpen(mode)}
+      onAccept={() => setAcceptOpen(true)} onClaim={() => { setGoalDate(defaultClaimDate(plan, now)); setEvidenceNote("双方线下登记（演示剧情，非真实证件）"); setClaimOpen(true); }} onEnd={mode => setEndOpen(mode)}
       onEvidence={() => setEvidence({ anchor: plan.anchor, business: "计划条款（双方确认）", recordId: plan.id })} />}
 
     {creating && <Modal title="发起相守计划" onClose={() => setCreating(false)}>
@@ -71,14 +70,8 @@ export function FutureTab({ view, user, busy, act, switchTab }: {
         <button className={rewardChoice === "A" ? "chosen" : ""} onClick={() => setRewardChoice("A")}>A · 每人各返 100 点 + 50 点奖励</button>
         <button className={rewardChoice === "B" ? "chosen" : ""} onClick={() => setRewardChoice("B")}>B · 每人各返 100 点 + 共领一张 99 朵玫瑰演示券</button>
       </div>
-      {rewardChoice === "B" && <>
-        <label className="field-label">玫瑰券领取人（激活后不可单方更改）</label>
-        <div className="choice-list">
-          {plan0Members(view).map(uid => <button key={uid} className={beneficiary === uid ? "chosen" : ""} onClick={() => setBeneficiary(uid)}>{view.us.relationship?.nicknameOf?.[uid] ?? uid}</button>)}
-        </div>
-        <p className="muted">演示券不可实际核销、不可转卖；领取人可拒绝提交地址。</p>
-      </>}
-      <Button disabled={busy} onClick={async () => { if (await act("plans", { targetType, rewardChoice, beneficiary })) setCreating(false); }}>送出加入邀请（72 小时内有效）</Button>
+      {rewardChoice === "B" && <p className="muted">玫瑰演示券为<strong>双方共同持有</strong>（每人各一张），不需要指定单独领取人；券不可实际核销、不可转卖。</p>}
+      <Button disabled={busy} onClick={async () => { if (await act("plans", { targetType, rewardChoice })) setCreating(false); }}>送出加入邀请（72 小时内有效）</Button>
     </Modal>}
 
     {acceptOpen && plan && <Modal title="确认加入相守计划" onClose={() => setAcceptOpen(false)}>
@@ -116,6 +109,17 @@ export function FutureTab({ view, user, busy, act, switchTab }: {
   </>;
 }
 
+
+// 核验目标日期默认值：不早于冷静期结束、不晚于虚拟今天（宽限期内仍可选到期前日期）
+function defaultClaimDate(plan: NonNullable<V2StateView["future"]["plan"]>, now: number): string {
+  const floor = plan.coolingUntil ?? 0;
+  const dateStr = new Date(Math.max(now, floor)).toISOString().slice(0, 10);
+  // 日期输入按当日 12:00Z 解析；若该时刻仍早于冷静期结束，顺延一天
+  if (Date.parse(`${dateStr}T12:00:00Z`) < floor) {
+    return new Date(floor + 86_400_000).toISOString().slice(0, 10);
+  }
+  return dateStr;
+}
 function plan0Members(view: V2StateView): string[] {
   return view.us.relationship?.members ?? [view.me.id];
 }
@@ -144,7 +148,7 @@ function PlanDetail({ view, user, plan, now, busy, act, onAccept, onClaim, onEnd
     {plan.status === "awaiting_partner" && <>
       <Card><h3>{iAmInviter ? "等待 TA 加入" : "TA 邀请你一起加入"}</h3>
         <p className="muted">邀请 {countdownText(plan.inviteExpiresAt - now)}；对方未接受不会扣点。</p>
-        <p className="muted">奖励：{plan.rewardChoice === "A" ? "A · 每人各 50 点" : `B · 99 朵玫瑰演示券（领取人：${plan.nicknameOf?.[plan.beneficiary ?? ""] ?? "—"}）`}</p>
+        <p className="muted">奖励：{plan.rewardChoice === "A" ? "A · 每人各 50 点" : "B · 99 朵玫瑰演示券 · 双方共同持有"}</p>
         {iAmInviter
           ? <Button className="ghost" disabled={busy} onClick={() => act("plans/cancel", { planId: plan.id, expectedRevision: plan.revision, reasonType: "normal" })}>取消邀请</Button>
           : <Button disabled={busy} onClick={onAccept}>查看条款并加入</Button>}
@@ -184,13 +188,13 @@ function PlanDetail({ view, user, plan, now, busy, act, onAccept, onClaim, onEnd
       <div className="rose-visual center"><RoseIcon /></div>
       <h3 className="center">{benefit.kind === "rose_ticket" ? "99 朵玫瑰 · 演示券" : "相守达成 · 点数奖励"}</h3>
       {benefit.kind === "rose_ticket"
-        ? <><p className="center muted">领取人：{plan.nicknameOf?.[benefit.recipients[0]] ?? "—"} · 此券不可实际核销、不可转卖</p>
+        ? <><p className="center muted">双方共同持有 · 每人各一张 · 此券不可实际核销、不可转卖</p>
           <p className="center muted">目标核验：模拟通过（演示材料，非真实证件）</p></>
         : <p className="center muted">你们各返还 100 点，并各获得 50 点奖励（独立奖励预算）</p>}
       {benefit.recipients.includes(user)
         ? <Button disabled={busy} onClick={() => act("benefits/redeem", { benefitId: benefit.id, idempotencyKey: benefit.idempotencyKey })}>
           {benefit.status === "settled" ? "已领取（重复点击不会重复发放）" : benefit.kind === "rose_ticket" ? "领取演示玫瑰券" : "领取演示点数"}</Button>
-        : <p className="muted center">等待领取人（{plan.nicknameOf?.[benefit.recipients[0]]}）领取</p>}
+        : <p className="muted center">共同权益：任意一方领取后，双方各自得到属于自己的一份。</p>}
       <p className="muted center">条款版本 {plan.termsVersion} · <button className="text-button" onClick={onEvidence}>查看证据</button></p>
     </div>}
 

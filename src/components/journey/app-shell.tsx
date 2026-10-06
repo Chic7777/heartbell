@@ -85,6 +85,7 @@ export function JourneyShell({ user }: { user: "a" | "b" }) {
     future: false,
   };
   const needsAdult = view && !view.me.adultDeclared;
+  void needsAdult;
 
   return <PhoneFrame>
     <header className="app-header">
@@ -96,7 +97,7 @@ export function JourneyShell({ user }: { user: "a" | "b" }) {
     <div className="phone-scroll" ref={scroll}>
       {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
       {!view ? <div className="empty-state">正在连接演示服务……</div> : <>
-        {tab === "meet" && <MeetTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} onRing={() => setRingOpen(true)} />}
+        {tab === "meet" && <MeetTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} onRing={() => setRingOpen(true)} onNeedAdult={() => setMeOpen(true)} />}
         {tab === "know" && <KnowTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} />}
         {tab === "us" && <UsTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} />}
         {tab === "future" && <FutureTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} />}
@@ -116,11 +117,12 @@ export function JourneyShell({ user }: { user: "a" | "b" }) {
       ))}
     </nav>
 
-    <MeDrawer open={meOpen} onClose={() => setMeOpen(false)} view={view} busy={busy} act={act} needsAdult={!!needsAdult} />
+    <MeDrawer open={meOpen} onClose={() => setMeOpen(false)} view={view} busy={busy} act={act} />
 
     {ringOpen && view && <Modal title="轻轻摇一下" onClose={() => setRingOpen(false)}>
       <div className="ring-bell-hero" aria-hidden="true"><span className="hb-ring" style={{ display: "inline-flex", width: 46, height: 46, color: "var(--brand)" }}><BellIcon /></span></div>
       <p>{view.meet.nearby[0]?.traits.map(t => t.value).join(" · ")}</p>
+      {view.meet.nearby[0]?.bio && <p className="quote-sm">“{view.meet.nearby[0].bio}”</p>}
       <p className="muted">选择一句你想对 TA 说的话。同轮次对同一个人只能摇一次。</p>
       <div className="phrase-options">
         {phrases.map(phrase => (

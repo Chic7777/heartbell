@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Card, Chip, EmptyState, StageArt, zhDate, countdownText } from "../ui";
 import { Modal } from "../modal";
 import type { KnowConnectionDto, V2StateView } from "../../lib/domain/view-dtos";
+import { orientationLabels } from "../../lib/domain/v2-types";
 import type { TabId } from "./app-shell";
 
 export function KnowTab({ view, user, busy, act, switchTab }: {
@@ -50,21 +51,31 @@ export function KnowTab({ view, user, busy, act, switchTab }: {
         </div>
       </div>
       {conn.profile && <>
-        <div className="interest-tags">{conn.profile.interests.map(i => <span key={i}>{i}</span>)}</div>
-        <p className="muted" style={{ marginTop: 8 }}>{conn.profile.bio}</p>
+        <p className="quote-sm" style={{ marginTop: 8 }}>“{conn.profile.bio}”</p>
+        <div className="me-row"><b>年龄窗口</b><span>{conn.profile.ageWindow || "未填写"}</span></div>
+        <div className="me-row"><b>性取向</b><span>{conn.profile.orientation ? orientationLabels[conn.profile.orientation] : "未填写"}</span></div>
+        <div className="me-row"><b>MBTI</b><span>{conn.profile.mbti ?? "未填写"}</span></div>
+        <div className="me-row" style={{ alignItems: "flex-start" }}><b>爱好标签</b>
+          <span className="interest-tags" style={{ justifyContent: "flex-end" }}>
+            {conn.profile.interests.length ? conn.profile.interests.map(i => <span key={i}>{i}</span>) : "未填写"}
+          </span>
+        </div>
       </>}
       <div className="me-row"><b>应用内关系状态</b>
         <span>{conn.appBindingStatus === "none" ? <Chip tone="success">暂无有效恋爱绑定</Chip> : conn.appBindingStatus === "active" ? <Chip tone="warning">已在应用内绑定</Chip> : <Chip tone="warning">应用内已婚标记</Chip>}</span>
       </div>
-      <p className="muted">应用内无绑定不等于现实单身；有绑定也不代表现实已婚。</p>
+      <p className="muted">应用内无绑定不等于现实单身；有绑定也不代表现实已婚。性取向与年龄窗口为对方本人填写，仅作了解参考。</p>
     </Card>
 
     <TrustCard conn={conn} viewerId={view.me.id} busy={busy} act={act} />
 
     <Card>
       <h3>联系方式</h3>
-      {conn.contact
-        ? <p>已获得授权：<b className="points">{conn.contact.value}</b><br /><span className="muted">由对方独立授权给你，有效期 72 小时，可随时撤销。</span></p>
+      {conn.contacts && conn.contacts.length
+        ? <>
+          {conn.contacts.map(c => <div className="me-row" key={c.label}><b>{c.label}</b><span className="points">{c.value}</span></div>)}
+          <p className="muted">由对方独立授权给你，有效期 72 小时，可随时撤销。</p>
+        </>
         : <p className="muted">联系方式需要对方单独授权；拒绝交换仍可以继续了解。</p>}
       {myGrantForContact
         ? <p className="muted">你已授权对方查看你的联系方式（剩余 {countdownText(myGrantForContact.expiresAt - view.modes.virtualNow)}）。</p>

@@ -153,9 +153,8 @@ export function consumeReservation(state: V2State, plan: CommitmentPlan): void {
 function createBenefitFor(state: V2State, plan: CommitmentPlan, t: number): void {
   if (state.benefits.some(b => b.planId === plan.id)) return; // 每 planId 仅产生一次 benefitId
   const rel = state.relationships.find(r => r.id === plan.relationshipId);
-  const recipients = plan.rewardChoice === "A"
-    ? [...(rel?.members ?? [])]
-    : [plan.beneficiary ?? (rel?.members[0] ?? "")];
+  // 奖励 A（点数）与奖励 B（玫瑰演示券）均为双方共同权益。
+  const recipients = [...(rel?.members ?? [])];
   state.benefits.push({
     id: `benefit-${plan.id}`, planId: plan.id,
     kind: plan.rewardChoice === "A" ? "points_each" : "rose_ticket",

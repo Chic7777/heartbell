@@ -60,7 +60,8 @@ export function canTransition(from: PlanStatus, to: PlanStatus): boolean {
 export const planTerminal: PlanStatus[] = ["settled", "cancelled", "forfeited"];
 
 export function rewardBudgetFor(choice: RewardChoice): { kind: "points" | "rose_ticket"; amount: number } {
-  return choice === "A" ? { kind: "points", amount: REWARD_POINTS_BUDGET } : { kind: "rose_ticket", amount: 1 };
+  // 奖励 B 为双方共同持有：预留 2 张演示券（每人各得一张）。
+  return choice === "A" ? { kind: "points", amount: REWARD_POINTS_BUDGET } : { kind: "rose_ticket", amount: 2 };
 }
 
 // 冷静期内：可取消退款；之后只能走普通结束（失效异议期）或例外。
@@ -78,7 +79,7 @@ export const planRulesSummary = [
   `双方各投入 ${INVEST_PER_USER} 演示点（初始 ${INITIAL_DEMO_BALANCE} 点，系统发放，不可购买/转让/提现）`,
   `激活后 ${COOLING_HOURS} 小时为冷静期，任一方取消即全额退回双方投入`,
   `有效期 ${VALID_DAYS} 天，到期后 ${GRACE_DAYS} 天宽限期只受理到期前已发生的目标`,
-  `达成并通过核验：每人返还 ${INVEST_PER_USER} 点；奖励 A 各 ${REWARD_POINTS_EACH} 点，或奖励 B 共领一张 99 朵玫瑰演示券`,
+  `达成并通过核验：每人返还 ${INVEST_PER_USER} 点；奖励 A 各 ${REWARD_POINTS_EACH} 点，或奖励 B 双方共同持有 99 朵玫瑰演示券（每人各一张）`,
   `普通结束或到期失效：投入记入不可流通的演示失效账户，不转给任何人；${FORFEIT_WINDOW_DAYS} 天异议窗口内可申请例外复核`,
   "退出关系不需要等待计划结算或对方同意",
 ];

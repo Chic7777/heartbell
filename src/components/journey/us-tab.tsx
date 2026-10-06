@@ -10,7 +10,8 @@ import { EvidenceDrawer } from "./evidence-drawer";
 import type { TabId } from "./app-shell";
 
 type Filter = "all" | "diary" | "promise" | "milestone";
-const today = () => new Date().toISOString().slice(0, 10);
+// 日期默认值/上限跟随虚拟业务时钟（演示台推进时间后表单仍与服务端一致）。
+const todayOf = (virtualNow: number) => new Date(virtualNow).toISOString().slice(0, 10);
 
 export function UsTab({ view, user, busy, act, switchTab }: {
   view: V2StateView; user: string; busy: boolean;
@@ -80,12 +81,21 @@ export function UsTab({ view, user, busy, act, switchTab }: {
     <button className="text-button" style={{ margin: "10px auto", display: "block" }} onClick={() => setPromiseCreating(true)}>立下一个重要承诺</button>
     <p className="muted center">计分承诺：已用 {view.us.scoringUsage.used}/{view.us.scoringUsage.max} 项（今日已新增 {view.us.scoringUsage.todayNew} 项）</p>
 
-    <DiaryEditor open={creating} onClose={() => setCreating(false)} busy={busy} act={act} />
+    <DiaryEditor open={creating} onClose={() => setCreating(false)} busy={busy} act={act} virtualNow={view.modes.virtualNow} />
     <DiaryDetail open={openDiary} onClose={() => setOpenDiary(null)} user={user} busy={busy} act={act} onEvidence={setEvidence} />
     <PromiseFlow open={openPromise} onClose={() => setOpenPromise(null)} view={view} user={user} busy={busy} act={act} creating={promiseCreating} setCreating={setPromiseCreating} onEvidence={setEvidence} />
 
     {endOpen && <Modal title="关系设置" onClose={() => setEndOpen(false)}>
-      <h3>结束当前绑定</h3>
+      <h3>关系详情</h3>
+      <div className="me-row"><b>成员</b><span>{rel.members.map(m => rel.nicknameOf?.[m] ?? m).join(" · ")}</span></div>
+      <div className="me-row"><b>状态</b><span>{rel.status === "married" ? "已婚（应用内标记）" : "在一起"}</span></div>
+      <div className="me-row"><b>开始于</b><span className="date">{zhDate(rel.startedAt)}</span></div>
+      <div className="me-row"><b>在一起</b><span className="points">{view.us.daysTogether ?? 1} 天</span></div>
+      <div className="me-row"><b>条款版本</b><span>{rel.termsVersion}</span></div>
+      <h3 style={{ marginTop: 16 }}>存证与证据</h3>
+      <p className="muted">关系建立/结束事件、双方确认的日记与承诺都会生成存证任务（preview 模式保留本地承诺指纹，无需钱包）。可在各记录的「查看证据」中核对与导出证据包。</p>
+      <Button className="secondary" onClick={() => { setEndOpen(false); switchTab("future"); }}>查看相守计划</Button>
+      <h3 style={{ marginTop: 16, color: "var(--danger)" }}>结束当前绑定</h3>
       <p className="muted">结束只需你本人确认，立即生效：共享写入关闭、雷达限制解除、后续联系方式共享停止。不等待对方同意、不等待链上确认、不等待相守计划结算。已有争议或资金处理继续按独立流程进行。</p>
       <p className="muted">进行中的相守计划会按规则独立处理（复核或进入失效等待），不会锁住这次退出。</p>
       <Button className="danger" disabled={busy} onClick={async () => { if (await act("relationships/end", { relationshipId: rel.id })) setEndOpen(false); }}>结束当前绑定</Button>
@@ -115,14 +125,14 @@ function TimelineRow({ item, onOpen, onEvidence }: { item: TimelineItemDto; onOp
   </button>;
 }
 
-function DiaryEditor({ open, onClose, busy, act }: { open: boolean; onClose: () => void; busy: boolean; act: (p: string, b?: Record<string, unknown>) => Promise<boolean> }) {
+function DiaryEditor({ open, onClose, busy, act, virtualNow }: { open: boolean; onClose: () => void; busy: boolean; virtualNow: number; act: (p: string, b?: Record<string, unknown>) => Promise<boolean> }) {
   const [kind, setKind] = useState<"diary" | "milestone">("diary");
-  const [date, setDate] = useState(today());
+  const [date, setDate] = useState(todayOf(virtualNow));
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
   const [asDraft, setAsDraft] = useState(false);
-  useEffect(() => { if (open) { setDate(today()); setTitle(""); setBody(""); setPhotos([]); setAsDraft(false); setKind("diary"); } }, [open]);
+  useEffect(() => { if (open) { setDate(todayOf(virtualNow)); setTitle(""); setBody(""); setPhotos([]); setAsDraft(false); setKind("diary"); } }, [open, virtualNow]);
   if (!open) return null;
   return <Modal title="写下今天" onClose={onClose}>
     <div className="kind-options">
@@ -130,7 +140,7 @@ function DiaryEditor({ open, onClose, busy, act }: { open: boolean; onClose: () 
       <button className={kind === "milestone" ? "chosen" : ""} onClick={() => setKind("milestone")}><span>🎀</span>纪念节点</button>
     </div>
     <label className="field-label" htmlFor="diary-date">这一天发生在</label>
-    <input id="diary-date" type="date" value={date} max={today()} onChange={e => setDate(e.target.value)} />
+    <input id="diary-date" type="date" value={date} max={todayOf(virtualNow)} onChange={e => setDate(e.target.value)} />
     <label className="field-label" htmlFor="diary-title">标题（40 字内）</label>
     <input id="diary-title" maxLength={40} value={title} placeholder="例如：一起等了一场雨" onChange={e => setTitle(e.target.value)} />
     <label className="field-label" htmlFor="diary-body">正文（3000 字内）</label>
@@ -215,7 +225,14 @@ function DiaryDetail({ open, onClose, user, busy, act, onEvidence }: {
       }}>生成新版本并重新确认</Button>
       <Button className="ghost" onClick={() => setEditing(false)}>取消</Button>
     </> : <Button className="secondary" onClick={() => { setEditing(true); setTitle(version.title); setBody(version.body); }}>修改内容（生成新版本）</Button>}
-    {version.status === "confirmed" && !detail.anchor && <Button disabled={busy} onClick={() => act("diaries/anchor", { diaryId: detail.id })}>为这一版生成存证</Button>}
+    {version.status !== "confirmed" && !detail.anchor && <>
+      <Button disabled title="需要双方确认这一版本后才能存证">为这一版生成存证</Button>
+      <p className="muted center">需要双方确认这一版本后才能生成存证；当前状态：{version.status === "awaiting" ? (myConfirmed ? "等待 TA 确认" : "等待你确认") : version.status === "draft" ? "私人草稿" : "已退回/撤回"}。</p>
+    </>}
+    {version.status === "confirmed" && !detail.anchor && <>
+      <Button disabled={busy} onClick={() => act("diaries/anchor", { diaryId: detail.id })}>为这一版生成存证</Button>
+      <p className="muted center">preview 模式无需连接钱包：生成的是本地承诺指纹（可导出核验），不会发起链上交易。</p>
+    </>}
     {detail.anchor && <Button className="ghost" onClick={() => onEvidence({ anchor: detail.anchor, business: "双方已确认的日记版本", recordId: detail.id })}>查看证据</Button>}
     <p className="muted">这一版内容会留下可核验的指纹；原文与附件保存在应用里，哈希无法恢复丢失的内容，请及时导出备份。</p>
   </Modal>;
@@ -234,13 +251,17 @@ function PromiseFlow({ open, onClose, view, user, busy, act, creating, setCreati
   const [scoring, setScoring] = useState(false);
   const [evidenceNote, setEvidenceNote] = useState("");
   const promise = view.us.promises.find(p => p.id === open) ?? null;
-  useEffect(() => { if (creating) { setContent(""); setDueAt(""); setCriteria(""); setResponsible("both"); setScoring(false); } }, [creating]);
+  const defaultDueAt = () => {
+    const d = new Date(view.modes.virtualNow + 3 * 86_400_000);
+    return d.toISOString().slice(0, 10);
+  };
+  useEffect(() => { if (creating) { setContent(""); setDueAt(defaultDueAt()); setCriteria(""); setResponsible("both"); setScoring(false); } }, [creating]);
 
   if (creating) return <Modal title="立下一个重要承诺" onClose={() => setCreating(false)}>
     <label className="field-label" htmlFor="promise-content">承诺内容（4–80 字）</label>
     <input id="promise-content" maxLength={80} value={content} placeholder="例如：每周留一个共同的晚上" onChange={e => setContent(e.target.value)} />
     <label className="field-label" htmlFor="promise-due">截止日期</label>
-    <input id="promise-due" type="date" value={dueAt} min={new Date(Date.now() + 24 * 3600_000 * 2).toISOString().slice(0, 10)} onChange={e => setDueAt(e.target.value)} />
+    <input id="promise-due" type="date" value={dueAt} min={todayOf(view.modes.virtualNow + 86_400_000)} onChange={e => setDueAt(e.target.value)} />
     <label className="field-label" htmlFor="promise-criteria">验收方式（2–60 字）</label>
     <input id="promise-criteria" maxLength={60} value={criteria} placeholder="例如：双方确认本次安排即可" onChange={e => setCriteria(e.target.value)} />
     <div className="choice-list">

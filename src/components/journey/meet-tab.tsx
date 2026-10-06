@@ -7,18 +7,18 @@ import type { TabId } from "./app-shell";
 
 const categories = ["穿着", "配饰", "手持物", "当前状态", "其他"] as const;
 
-export function MeetTab({ view, user, busy, act, switchTab, onRing }: {
+export function MeetTab({ view, user, busy, act, switchTab, onRing, onNeedAdult }: {
   view: V2StateView; user: string; busy: boolean;
   act(path: string, body?: Record<string, unknown>): Promise<boolean>;
   switchTab(tab: TabId): void;
   onRing(): void;
+  onNeedAdult(): void;
 }) {
   const [traits, setTraits] = useState<{ category: string; value: string }[]>(
     user === "a"
       ? [{ category: "穿着", value: "黑色外套" }, { category: "手持物", value: "拿着咖啡" }]
       : [{ category: "穿着", value: "白色上衣" }, { category: "配饰", value: "戴眼镜" }],
   );
-  const [single, setSingle] = useState(false);
   const [tick, setTick] = useState(0);
   useEffect(() => { const t = setInterval(() => setTick(v => v + 1), 1000); return () => clearInterval(t); }, []);
   useEffect(() => {
@@ -64,17 +64,12 @@ export function MeetTab({ view, user, busy, act, switchTab, onRing }: {
         <button className="text-button" onClick={() => setTraits(traits.length === 2 ? [...traits, { category: "其他", value: "" }] : traits.slice(0, 2))}>
           {traits.length === 2 ? "+ 添加一项" : "移除第三项"}
         </button>
-        {!declared && <label className="checkbox">
-          <input type="checkbox" checked={single} onChange={e => setSingle(e.target.checked)} />
-          我已年满 18 岁，愿意用演示身份认识新的人（成年声明，非真人核验）。
-        </label>}
-        <Button disabled={busy || traits.some(t => !t.value.trim()) || (!declared && !single)}
-          onClick={async () => {
-            if (!declared && !await act("declare-adult")) return;
-            await act("radar", { active: true, traits: traits.map(t => ({ ...t, value: t.value.trim() })) });
-          }}>
-          {busy ? "准备中…" : "开启 10 分钟心动雷达"}
-        </Button>
+        {declared
+          ? <Button disabled={busy || traits.some(t => !t.value.trim())}
+              onClick={() => act("radar", { active: true, traits: traits.map(t => ({ ...t, value: t.value.trim() })) })}>
+              {busy ? "准备中…" : "开启 10 分钟心动雷达"}
+            </Button>
+          : <Button className="secondary" onClick={onNeedAdult}>先完成成年声明（在我的资料中，仅一次）</Button>}
         <p className="muted center">{view.meet.zoneLabel} · 开启才会被发现，可随时关闭。</p>
       </Card>
       <BellHistory view={view} />
@@ -95,7 +90,8 @@ export function MeetTab({ view, user, busy, act, switchTab, onRing }: {
     {target ? <Card>
       <Chip tone="brand">发现一枚铃铛</Chip>
       <h3 style={{ marginTop: 8 }}>{target.traits.map(t => t.value).join(" · ")}</h3>
-      <p className="muted">是你刚刚注意到的人吗？雷达只显示临时特征，不显示昵称、头像、分数和历史关系。</p>
+      {target.bio && <p className="quote-sm" style={{ margin: "6px 0" }}>“{target.bio}”</p>}
+      <p className="muted">是你刚刚注意到的人吗？雷达只显示临时特征和这句话，不显示昵称、头像、分数和历史关系。</p>
       {view.meet.ringRoundUsed
         ? <Button disabled>{view.meet.waitingEcho ? "铃声已送出，等待回响" : "本轮已经摇过铃"}</Button>
         : <Button disabled={busy} onClick={onRing}>轻轻摇一下</Button>}

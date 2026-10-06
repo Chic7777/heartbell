@@ -2,7 +2,8 @@
 import type {
   AnchorEvidence, AttachmentRef, CommitmentPlan, GoalClaim, LedgerEntry,
   RelationshipStatus, RewardChoice, RunModes, ShareGrantV2, TimelineKind,
-  TrustSnapshotV2, V2Profile, VerificationLevel, Intention, PromiseResolutionResult, Benefit,
+  TrustSnapshotV2, VerificationLevel, Intention, PromiseResolutionResult, Benefit,
+  Orientation, V2Profile,
 } from "./v2-types";
 
 export interface ModesDto extends RunModes { virtualNow: number; realNow: number }
@@ -13,7 +14,7 @@ export interface MeetDto {
   myTraits: { category: string; value: string }[];
   zoneLabel: string;
   blockedByRelationship: boolean;
-  nearby: { userId: string; traits: { category: string; value: string }[] }[]; // 匿名，无长期资料
+  nearby: { userId: string; traits: { category: string; value: string }[]; bio: string }[]; // 匿名 + 一句话介绍（最小资料）
   bells: { id: string; from: string; to: string; message: string; status: string; createdAt: number; anonymous: boolean }[];
   ringRoundUsed: boolean;
   waitingEcho: boolean;
@@ -24,14 +25,26 @@ export interface TrustCardDto {
   summary: (TrustSnapshotV2 & { reasonLabel: string }) | null;
 }
 
+export interface PublicProfileDto {
+  nickname: string;
+  avatar: string;
+  ageWindow: string;
+  orientation: Orientation | null;
+  mbti: string | null;
+  interests: string[];
+  bio: string;
+  intention: Intention;
+  contacts: { label: string; value: string }[]; // 授权后单独返回，档案本身不含
+}
+
 export interface KnowConnectionDto {
   id: string;
   userId: string; // 已回响，可显示档案
-  profile: V2Profile | null;   // 揭晓后的资料（不含联系方式）
+  profile: PublicProfileDto | null;   // 揭晓后的资料（不含联系方式）
   intention: Intention | null;
   intentionLabel: string | null;
   appBindingStatus: "none" | "active" | "married";
-  contact: { value: string; granted: boolean } | null;
+  contacts: { label: string; value: string }[] | null; // 仅对方授权后返回
   trust: TrustCardDto;
   closed: boolean;
   createdAt: number;

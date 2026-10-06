@@ -11,13 +11,31 @@ export const intentionLabels: Record<Intention, string> = {
   not_now: "暂不寻求稳定关系",
 };
 
+export type Orientation = "women" | "men" | "everyone" | "not_say";
+export const orientationLabels: Record<Orientation, string> = {
+  women: "喜欢女生",
+  men: "喜欢男生",
+  everyone: "都喜欢",
+  not_say: "暂不说明",
+};
+export const mbtiOptions = ["INFP", "INFJ", "INTP", "INTJ", "ISFP", "ISFJ", "ISTP", "ISTJ", "ENFP", "ENFJ", "ENTP", "ENTJ", "ESFP", "ESFJ", "ESTP", "ESTJ"] as const;
+
+export interface ContactEntry {
+  id: string;
+  label: string; // 微信 / 手机号 / 自定义（≤5 栏）
+  value: string;
+}
+
 export interface V2Profile {
-  nickname: string;
+  nickname: string;       // 称呼
   avatar: string;
-  interests: string[];
-  bio: string;
+  ageWindow: string;      // 年龄窗口，如 "24–32"
+  orientation: Orientation | null; // 性取向（本人主动填写）
+  mbti: string | null;
+  interests: string[];    // 爱好标签
+  bio: string;            // 一句话介绍（响铃阶段的最小资料）
   intention: Intention;
-  contact: string | null; // 联系方式，仅授权后对特定连接可见
+  contacts: ContactEntry[]; // 联系方式（默认微信/手机号，可添加），仅授权后对特定连接可见
 }
 
 export interface VerificationLevel { label: string; verified: boolean }

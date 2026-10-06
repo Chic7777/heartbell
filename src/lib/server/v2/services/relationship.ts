@@ -175,18 +175,59 @@ export function declareAdult(state: V2State, viewer: string): void {
   state.users.get(viewer)!.adultDeclared = true;
 }
 
-export function updateMyProfile(state: V2State, viewer: string, patch: { intention?: unknown; bio?: unknown; contact?: unknown }): void {
+export function updateMyProfile(state: V2State, viewer: string, patch: Record<string, unknown>): void {
   const user = state.users.get(viewer)!;
+  const p = user.profile;
   if (patch.intention !== undefined) {
     if (!["serious", "open", "not_now"].includes(String(patch.intention))) throw badRequest("无效交往意向");
-    user.profile.intention = patch.intention as "serious" | "open" | "not_now";
+    p.intention = patch.intention as "serious" | "open" | "not_now";
+  }
+  if (patch.nickname !== undefined) {
+    const nickname = String(patch.nickname).trim();
+    if (nickname.length < 1 || nickname.length > 16) throw badRequest("称呼 1–16 字");
+    p.nickname = nickname;
+  }
+  if (patch.ageWindow !== undefined) {
+    const w = String(patch.ageWindow).trim();
+    if (w.length > 12) throw badRequest("年龄窗口最多 12 字符");
+    p.ageWindow = w;
+  }
+  if (patch.orientation !== undefined) {
+    if (patch.orientation === null || patch.orientation === "") p.orientation = null;
+    else if (!["women", "men", "everyone", "not_say"].includes(String(patch.orientation))) throw badRequest("无效性取向选项");
+    else p.orientation = patch.orientation as typeof p.orientation;
+  }
+  if (patch.mbti !== undefined) {
+    const m = patch.mbti === null || patch.mbti === "" ? null : String(patch.mbti).toUpperCase();
+    if (m !== null && !/^[EI][SN][TF][JP]$/.test(m)) throw badRequest("MBTI 格式无效");
+    p.mbti = m;
   }
   if (patch.bio !== undefined) {
-    if (typeof patch.bio !== "string" || patch.bio.length > 120) throw badRequest("介绍最多 120 字");
-    user.profile.bio = patch.bio.trim();
+    if (typeof patch.bio !== "string" || patch.bio.length > 120) throw badRequest("一句话介绍最多 120 字");
+    p.bio = patch.bio.trim();
   }
-  if (patch.contact !== undefined) {
-    if (patch.contact !== null && (typeof patch.contact !== "string" || patch.contact.length > 60)) throw badRequest("联系方式格式无效");
-    user.profile.contact = patch.contact === null ? null : (patch.contact as string).trim();
+  if (patch.interests !== undefined) {
+    if (!Array.isArray(patch.interests) || patch.interests.length > 8) throw badRequest("爱好标签最多 8 个");
+    const seen = new Set<string>();
+    p.interests = patch.interests.map(i => {
+      const tag = String(i).trim();
+      if (tag.length < 1 || tag.length > 10) throw badRequest("每个标签 1–10 字");
+      if (seen.has(tag)) throw badRequest("标签不能重复");
+      seen.add(tag);
+      return tag;
+    });
+  }
+  if (patch.contacts !== undefined) {
+    if (!Array.isArray(patch.contacts) || patch.contacts.length === 0 || patch.contacts.length > 5) throw badRequest("联系方式需 1–5 栏");
+    const seen = new Set<string>();
+    p.contacts = patch.contacts.map((c: { label?: unknown; value?: unknown }, i: number) => {
+      const label = String(c?.label ?? "").trim();
+      const value = String(c?.value ?? "").trim();
+      if (label.length < 1 || label.length > 12) throw badRequest("联系方式名称 1–12 字");
+      if (seen.has(label)) throw badRequest("联系方式名称不能重复");
+      seen.add(label);
+      if (value.length < 1 || value.length > 40) throw badRequest("联系方式内容 1–40 字");
+      return { id: `c-${viewer}-${i}-${label}`, label, value };
+    });
   }
 }

@@ -72,7 +72,7 @@ input:focus,textarea:focus,select:focus{outline:2px solid #B9436060;border-color
 .trust-meta small{font-size:10px;color:var(--muted)}
 /* 关系空间 */
 .us-hero{margin-top:14px;border-radius:var(--radius-card);padding:18px 16px;background:linear-gradient(150deg,#FFF6F0,#FBE8ED 70%);border:1px solid #F2DCE2;position:relative;overflow:hidden}
-.us-hero::after{content:"";position:absolute;right:-22px;top:-22px;width:110px;height:110px;border-radius:50%;background:#B9436012}
+.us-hero::after{content:"";position:absolute;right:-22px;top:-22px;width:110px;height:110px;border-radius:50%;background:#B9436012;pointer-events:none}
 .us-days{font-size:30px;font-family:var(--font-serif);color:var(--brand-deep)}
 .filter-row{display:flex;gap:8px;margin:14px 0 4px}
 .filter-row button{flex:1;border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 4px;font-size:12px;cursor:pointer;color:var(--muted);font-weight:600}
