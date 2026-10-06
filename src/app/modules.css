@@ -1,9 +1,39 @@
 .trait-row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px}
 .trait-row select{width:100%;min-width:0;border:1px solid #ebdde1;border-radius:10px;padding:10px 6px;background:#fffaf8;color:var(--ink);font:inherit;font-size:13px}
+.diary-new{display:block;width:100%;margin-top:16px;padding:14px;border:1.5px dashed #e5b9c6;background:#fff5f8;color:#c06d84;border-radius:14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.diary-new:hover{background:#ffedf3}
+.diary-list{display:grid;gap:10px;margin-top:14px}
+.diary-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid #f2e0e6;background:white;border-radius:16px;padding:13px 14px;cursor:pointer;font:inherit;color:var(--ink)}
+.diary-item:hover{border-color:#e6bcc9}
+.diary-icon{font-size:22px;flex-shrink:0}
+.diary-main{flex:1;min-width:0;display:grid;gap:3px}
+.diary-main strong{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.diary-main small{color:var(--muted);font-size:11px}
+.chip{flex-shrink:0;font-size:10px;color:#9a8791;background:#f6eef1;border-radius:20px;padding:4px 9px}
+.chip-hot{color:#b8546e;background:#ffe6ee;font-weight:700}
+.chip-chain{color:#3d7a52;background:#e2f3e7;font-weight:700}
+.kind-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.kind-options button{display:grid;justify-items:center;gap:4px;padding:11px 4px;border:1px solid #eddde2;background:white;border-radius:12px;color:var(--ink);cursor:pointer;font:inherit;font-size:11px}
+.kind-options button span{font-size:19px}
+.kind-options .chosen{border-color:var(--pink);background:#fff0f4;color:#bc637c}
+.field-label{display:block;font-size:11px;color:var(--muted);margin:12px 0 6px}
+textarea{width:100%;background:#fffaf8;border:1px solid #ebdde1;border-radius:10px;padding:11px;color:var(--ink);font:inherit;resize:vertical}
+textarea:focus,input:focus{outline:2px solid #df718780}
+.monument{background:#fff7f9;border:1px solid #f2dce4;border-radius:16px;padding:15px;margin-top:18px}
+.monument .reveal-avatar{font-size:44px;margin:6px}
+.monument-open{margin-top:0}
+.quote-sm{font-size:15px;color:var(--pink);line-height:1.8}
+.chain-panel{border-top:1px solid #f2e5e8;margin-top:16px;padding-top:6px}
+.chain-title{font-weight:700;margin:10px 0 4px}
+.chain-steps{list-style:none;margin:8px 0;padding:0;font-size:12.5px;line-height:2;color:var(--muted)}
+.chain-steps li.done{color:var(--ink)}
+.chain-steps .text-button{padding:0 6px}
+.chain-done{background:#f4faf5;border:1px solid #dcefe1;border-radius:12px;padding:10px;margin-top:10px}
+.tx-list{display:grid;gap:6px;margin-top:10px}
+.tx-link{font-size:12px;color:#b96e82}
 .checkbox{display:flex;align-items:center;gap:8px;font-size:13px;line-height:1.6}
 .checkbox input{width:18px;height:18px;accent-color:var(--pink);flex-shrink:0}
 .address{overflow-wrap:anywhere;font-size:11px;line-height:1.7;color:var(--muted)}
-.memory-card{background:#fff7f9;border:1px solid #f2dce4;border-radius:16px;padding:15px;margin-top:18px}
 .phone{display:flex;flex-direction:column;height:min(860px,calc(100dvh - 32px));min-height:0;margin:16px auto;padding:14px 0 0;overflow:hidden}
 .notch{flex-shrink:0;margin-bottom:16px}
 .app-header{padding:0 20px 15px;border-bottom:1px solid #f1e7e9;gap:12px;flex-shrink:0}

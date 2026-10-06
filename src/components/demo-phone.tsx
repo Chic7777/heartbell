@@ -3,8 +3,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Card, PhoneFrame } from "./ui";
 import { Modal } from "./modal";
 import { WalletPanel } from "./wallet-panel";
-import type { Bell, Profile, PublicUser, UserId, Trait, TraitCategory, Memory } from "../lib/types";
-interface View { self: PublicUser; nearby: PublicUser[]; bells: Bell[]; profile: Profile | null; eligibility: { declared: boolean }; memory: Memory | null; }
+import { DiaryTab } from "./diary-tab";
+import type { Bell, Diary, Profile, PublicUser, Trait, TraitCategory, UserId } from "../lib/types";
+interface View { self: PublicUser; nearby: PublicUser[]; bells: Bell[]; profile: Profile | null; eligibility: { declared: boolean }; diaries: Diary[]; wallets: Record<UserId, string | null>; }
 type Tab = "radar" | "echoes" | "memories";
 const categories: TraitCategory[] = ["穿着", "配饰", "手持物", "当前状态", "其他"];
 const phrases = ["想认识你。", "想和你聊一聊。", "想一起喝杯咖啡。"];
@@ -16,6 +17,7 @@ export function DemoPhone({ user }: { user: UserId }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [walletOpen, setWalletOpen] = useState(false);
+  const [walletAccount, setWalletAccount] = useState<string | null>(null);
   const [selected, setSelected] = useState(false);
   const [message, setMessage] = useState(phrases[0]);
   const [postponed, setPostponed] = useState<string[]>([]);
@@ -48,9 +50,11 @@ export function DemoPhone({ user }: { user: UserId }) {
   const target = view?.nearby[0];
   const alreadySent = sent.some(b => target?.radar.expiresAt && b.createdAt >= target.radar.expiresAt - 600_000);
   const waiting = sent.some(b => b.status === "pending");
+  const diaryWaiting = view?.diaries.some(d => d.status === "awaiting-consent" && !d.consent[user]) ?? false;
   function postpone() { if (incoming) setPostponed([...postponed, incoming.id]); }
+  function openWallet() { setWalletOpen(true); }
   return <PhoneFrame>
-    <header className="app-header"><div><span className="brand">♡ 心动铃铛</span><small className="user-label">用户 {user.toUpperCase()} · 演示模式</small></div><WalletPanel onOpenChange={setWalletOpen} /></header>
+    <header className="app-header"><div><span className="brand">♡ 心动铃铛</span><small className="user-label">用户 {user.toUpperCase()} · 演示模式</small></div><WalletPanel open={walletOpen} onOpenChange={setWalletOpen} onAccountChange={setWalletAccount} /></header>
     <div className="phone-scroll" ref={scroll}>
       {error && <p role="alert" className="error">{error}<button className="text-button" onClick={() => setError("")}>收起</button></p>}
       {!view ? <div className="empty-state">正在连接演示服务……</div> : <>
@@ -69,23 +73,17 @@ export function DemoPhone({ user }: { user: UserId }) {
           {target ? <Card><span className="badge">发现一枚铃铛</span><h3>{target.radar.traits.map(t => t.value).join(" · ")}</h3><p className="muted">是你刚刚注意到的人吗？</p><Button disabled={busy || alreadySent} onClick={() => setSelected(true)}>{alreadySent ? waiting ? "铃声已送出，等待回响" : "本轮已经摇过铃" : "向 TA 摇一下铃铛"}</Button></Card> : <div className="empty-state compact">还没有发现附近的铃铛<br /><span>让另一位演示用户也开启雷达吧。</span></div>}
         </>)}
         {tab === "echoes" && <><p className="eyebrow">每一次回应，都值得珍惜</p><h1>我的回响</h1>
-          {view.profile ? <Card><div className="reveal-avatar">{view.profile.avatar}</div><h2 className="center">你们的心动，有了回响。</h2><h3 className="center">{view.profile.nickname}</h3><p className="center">{view.profile.interests.join(" · ")}</p><p className="muted center">{view.profile.bio}</p><Button onClick={() => setTab("memories")}>纪念这次相遇</Button><p className="muted center">联系方式交换将在后续接入。</p></Card> : <>
+          {view.profile ? <Card><div className="reveal-avatar">{view.profile.avatar}</div><h2 className="center">你们的心动，有了回响。</h2><h3 className="center">{view.profile.nickname}</h3><p className="center">{view.profile.interests.join(" · ")}</p><p className="muted center">{view.profile.bio}</p><Button onClick={() => setTab("memories")}>写下第一页日记</Button><p className="muted center">联系方式交换将在后续接入。</p></Card> : <>
             {pending.map(b => <Card key={b.id}><h2>🔔 有人想认识你</h2><p>{b.message}</p><Button onClick={() => setPostponed(postponed.filter(id => id !== b.id))}>听听这次心动</Button></Card>)}
             {sent.map(b => <Card key={b.id}><h2>你送出的铃声</h2><p>{b.message}</p><p className="pink">{b.status === "pending" ? "等待回响" : "铃声已消散"}</p></Card>)}
             {!pending.length && !sent.length && <div className="empty-state">还没有回响<br /><span>从轻轻摇一下铃铛开始。</span><Button onClick={() => setTab("radar")}>去看看附近</Button></div>}
           </>}
         </>}
-        {tab === "memories" && <><p className="eyebrow">收藏两个愿意的瞬间</p><h1>纪念盒</h1>
-          {!view.profile ? <div className="empty-state">第一张纪念，等待一次回响。<Button onClick={() => setTab("radar")}>去遇见一枚铃铛</Button></div> : !view.memory ? <Card><div className="reveal-avatar">🔔</div><h2 className="center">留下第一次回响</h2><p className="muted center">邀请 TA，共同确认这次相遇。</p><Button disabled={busy} onClick={() => act({ action: "memory-create" })}>发起纪念邀请</Button></Card> : <Card><div className="memory-card"><span className="badge">纪念预览 · 未上链</span><div className="reveal-avatar">🔔 × 🔔</div><h2 className="center">{view.memory.title}</h2><p className="center">{new Date(view.memory.createdAt).toLocaleDateString("zh-CN")}</p><p className="center">“很高兴，你也听见了铃声。”</p><p className="center">A {view.memory.consent.a ? "已确认 ✓" : "等待确认"} · B {view.memory.consent.b ? "已确认 ✓" : "等待确认"}</p>
-            {!view.memory.consent[user] && <Button disabled={busy} onClick={() => act({ action: "memory-consent" })}>我愿意留下这份纪念</Button>}
-            {view.memory.status === "ready" && <Button disabled={busy} onClick={() => act({ action: "memory-simulate" })}>生成共同纪念预览</Button>}
-            {view.memory.status === "simulated" && <p className="pink center">共同纪念已生成 · 演示预览</p>}
-          </div><details className="demo-details"><summary>查看纪念记录</summary><p className="address">内容指纹：{view.memory.contentHash}</p><p>当前确认是模拟操作，没有链上交易或钱包签名。</p></details></Card>}
-        </>}
+        {tab === "memories" && <DiaryTab viewer={user} profile={view.profile} diaries={view.diaries} wallets={view.wallets} walletAccount={walletAccount} busy={busy} act={act} onOpenWallet={openWallet} onGoRadar={() => setTab("radar")} />}
       </>}
-      <details className="demo-details"><summary>演示说明</summary><p>位置与用户身份为模拟。勾选单身声明仅启用演示资格，没有生成或验证真实 ZK 证明，不能认证现实单身。钱包可真实连接，纪念仅预览，合约尚未部署。雷达图标不代表方向或距离。</p><a href="/">返回演示入口</a></details>
+      <details className="demo-details"><summary>演示说明</summary><p>位置与用户身份为模拟。勾选单身声明仅启用演示资格，没有生成或验证真实 ZK 证明，不能认证现实单身。钱包可真实连接；情侣日记在合约部署并绑定双方钱包后可真实上链，未就绪时仅预览、不生成模拟交易哈希。雷达图标不代表方向或距离。</p><a href="/">返回演示入口</a></details>
     </div>
-    <nav className="bottom-nav" aria-label="主要导航">{([{ id: "radar", icon: "◎", text: "心动雷达" }, { id: "echoes", icon: "♡", text: "我的回响" }, { id: "memories", icon: "◇", text: "纪念盒" }] as const).map(item => <button key={item.id} aria-current={tab === item.id ? "page" : undefined} className={tab === item.id ? "active" : ""} onClick={() => setTab(item.id)}><span>{item.icon}{item.id === "echoes" && pending.length > 0 && <i className="notification-dot" />}</span>{item.text}</button>)}</nav>
+    <nav className="bottom-nav" aria-label="主要导航">{([{ id: "radar", icon: "◎", text: "心动雷达" }, { id: "echoes", icon: "♡", text: "我的回响" }, { id: "memories", icon: "📖", text: "情侣日记" }] as const).map(item => <button key={item.id} aria-current={tab === item.id ? "page" : undefined} className={tab === item.id ? "active" : ""} onClick={() => setTab(item.id)}><span>{item.icon}{item.id === "echoes" && pending.length > 0 && <i className="notification-dot" />}{item.id === "memories" && diaryWaiting && <i className="notification-dot" />}</span>{item.text}</button>)}</nav>
     {selected && target && !walletOpen && !incoming && <Modal title="轻轻摇一下" onClose={() => setSelected(false)}><p>{target.radar.traits.map(t => t.value).join(" · ")}</p><p className="muted">选择一句你想对 TA 说的话。</p><div className="phrase-options">{phrases.map(phrase => <button key={phrase} className={message === phrase ? "chosen" : ""} aria-pressed={message === phrase} onClick={() => setMessage(phrase)}>{phrase}</button>)}</div><Button disabled={busy} onClick={async () => { if (await act({ action: "ring", message })) setSelected(false); }}>送出这次心动</Button>{error && <p className="error" role="alert">{error}</p>}</Modal>}
     {incoming && !walletOpen && <Modal title="叮——有人想认识你" onClose={postpone}><div className="reveal-avatar">🔔</div><p className="quote center">“{incoming.message}”</p><p className="muted">回响后，双方才会看到昵称、头像和兴趣。</p><Button disabled={busy} onClick={() => act({ action: "respond", bellId: incoming.id, status: "accepted" })}>我也想认识 TA</Button><Button className="secondary" disabled={busy} onClick={() => act({ action: "respond", bellId: incoming.id, status: "dismissed" })}>让铃声消散</Button><button className="text-button" onClick={postpone}>稍后决定</button>{error && <p className="error" role="alert">{error}</p>}</Modal>}
   </PhoneFrame>;

@@ -10,7 +10,7 @@ export function getState(): DemoState {
   globals.heartbellState ??= { users: {
     a: { id: "a", radar: { active: false, zone: "wuhan-demo", traits: [{ category: "穿着", value: "黑色外套" }, { category: "手持物", value: "拿着咖啡" }], expiresAt: null } },
     b: { id: "b", radar: { active: false, zone: "wuhan-demo", traits: [{ category: "穿着", value: "白色上衣" }, { category: "配饰", value: "戴眼镜" }], expiresAt: null } },
-  }, bells: [], eligibility: { a: false, b: false }, memory: null };
+  }, bells: [], eligibility: { a: false, b: false }, diaries: [], wallets: { a: null, b: null } };
   const state = globals.heartbellState;
   for (const user of Object.values(state.users)) {
     if (user.radar.expiresAt && user.radar.expiresAt <= Date.now()) user.radar.active = false;
