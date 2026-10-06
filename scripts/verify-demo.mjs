@@ -1,0 +1,34 @@
+import assert from "node:assert/strict";
+const base = process.env.DEMO_URL ?? "http://127.0.0.1:3000";
+async function call(viewer, action, expected = 200) {
+  const response = await fetch(`${base}/api/demo${action ? "" : `?viewer=${viewer}`}`, action ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ viewer, ...action }) } : undefined);
+  const data = await response.json();
+  assert.equal(response.status, expected, JSON.stringify(data));
+  return data.data;
+}
+for (const path of ["/", "/demo/a", "/demo/b"]) assert.equal((await fetch(base + path)).status, 200);
+const initial = await call("a");
+assert.equal(initial.profile, null, "Restart server before verification: expected fresh state.");
+await call("a", { action: "memory-create" }, 403);
+await call("a", { action: "radar", active: true, traits: [{ category: "invalid", value: "test" }, { category: "其他", value: "test" }] }, 400);
+for (const viewer of ["a", "b"]) await call(viewer, { action: "radar", active: true, traits: [{ category: "穿着", value: "绿色卫衣" }, { category: "手持物", value: "篮球" }] });
+await call("a", { action: "ring", message: "想认识你。" }, 403);
+for (const viewer of ["a", "b"]) await call(viewer, { action: "declare", single: true });
+await call("a", { action: "ring", message: "想认识你。" });
+await call("a", { action: "ring", message: "想认识你。" }, 409);
+const received = await call("b");
+assert.equal(received.profile, null);
+assert.equal(received.eligibility.zkVerified, false);
+await call("b", { action: "respond", bellId: received.bells[0].id, status: "accepted" });
+for (const viewer of ["a", "b"]) assert.ok((await call(viewer)).profile);
+await call("a", { action: "memory-create" });
+await call("a", { action: "memory-consent" });
+await call("a", { action: "memory-simulate" }, 409);
+await call("b", { action: "memory-consent" });
+assert.equal((await call("a")).memory.status, "ready");
+await call("a", { action: "memory-simulate" });
+const final = await call("b");
+assert.equal(final.memory.status, "simulated");
+assert.equal(final.memory.transactionHash, null);
+assert.match(final.memory.contentHash, /^0x[0-9a-f]{64}$/);
+console.log("PASS: pages, custom traits, eligibility gate, privacy, duplicate prevention, mutual reveal and two-person memory consent. No real ZK or chain transaction.");

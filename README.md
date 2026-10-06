@@ -1,2 +1,63 @@
-# heartbell
-A privacy-first social app for shy singles: discover nearby people, send anonymous heart signals, reveal profiles by mutual consent, and preserve shared memories on-chain.
+# 心动铃铛 · Heartbell
+
+给擦肩而过的心动，一次回应的机会。
+
+Next.js + TypeScript 团队基础框架。包含两用户演示、临时特征、模拟雷达、摇铃、回应及服务器控制的资料揭晓。无需数据库或钱包即可启动。
+
+## 启动
+
+需要 Node.js 20.9 或更新版本及 npm。
+
+```bash
+npm ci
+npm run dev
+```
+
+打开 http://localhost:3000，从首页分别打开 A、B 窗口，并将窗口调整为约 420px 宽。双方模拟资格声明 → 选择类别并输入特征 → 开启雷达 → A 摇铃 → B 回响 → 双方看到档案 → 创建纪念 → 双方确认 → 预览模拟纪念。
+
+```bash
+npm run typecheck
+npm run build
+npm start
+```
+
+重启服务、保持全新演示状态后运行 `npm run verify:demo`，验证资格门槛、资料权限和双方纪念同意。运行 `npm run contracts:compile` 检查 Solidity 并生成本地部署产物（不提交）。
+
+## 目录与分工
+
+| 位置 | 内容与负责人 |
+|---|---|
+| src/app/demo、src/components、src/app/globals.css | 前端页面、共用组件和视觉 |
+| src/app/api、src/lib/mock | 后端演示接口及临时存储 |
+| src/lib/types.ts、docs/API.md | 共用类型和接口，联调负责人协调 |
+| contracts | 合约负责人工作区 |
+| src/lib/wallet、src/components/wallet-panel.tsx | 浏览器钱包真实连接、网络切换 |
+| src/lib/chain | BOT Chain 配置、ABI、真实交易调用模块 |
+| src/lib/zk、docs/WEB3.md | 真实证明接口与接入任务 |
+| .env.example | 后续配置模板，不包含密钥 |
+| AGENTS.md | 所有 Agent 应遵守的协作规则 |
+
+## 已实现与限制
+
+- 手机界面采用三个底部入口：心动雷达、我的回响、纪念盒；顶部钱包按钮点击展开。雷达开启后切换到发现页，收到铃声弹层显示，回响后进入揭晓页。
+- 单身声明首次开启前填写，技术状态放在折叠演示说明里；模拟标识始终保留。页面使用固定手机外框和内部必要滚动，避免所有功能堆成长页。
+
+- A/B 独立演示身份，10 分钟雷达、类别与自定义特征、模拟资格声明、匿名铃声、回应、双方揭晓。
+- 两窗口每 1.2 秒同步状态；同一目标雷达轮次限制重复摇铃。
+- 长期资料由服务器控制，回响前不会返回给对方。
+- 已提供真实浏览器钱包授权及 BOT Chain 网络切换，无扩展时清楚提示。清除连接显示不撤销钱包网站授权。
+- 已提供纪念合约源码、编译命令、链上调用模块和双人确认预览。未部署合约，演示纪念不上链、不生成假交易哈希。
+- ZK 提供接口骨架，真实验证器未配置时拒绝验证；当前资格是模拟声明。尚无真实登录、GPS、真人验证和联系方式交换。
+- 内存数据重启后清空，仅适合本地单进程演示，不能作为生产存储或认证机制。
+- Supabase 仅预留环境变量，填写后不会自动启用。联调时由后端接入。
+
+## 队友下一步
+
+1. 前端：完善档案、特征选择、铃声选项、共振动画和纪念页面。
+2. 后端：登录、数据库持久化、实时订阅、资料和联系方式权限。
+3. 合约：按 docs/WEB3.md 部署、接入双方交易界面和结果；ZK 作为独立模块接入。
+4. 联调：统一接口、集成各分支、部署持久化版本、准备演示材料。
+
+从最新 main 创建任务分支 → 开发 → 验证 → Commit / Push → PR → 审核合并。勿将不同用户共用同一个身份状态。
+
+本地演示不需要设置环境变量。后续配置可复制 .env.example 为 .env.local；不得提交实际密钥。

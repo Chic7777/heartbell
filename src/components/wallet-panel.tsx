@@ -1,0 +1,33 @@
+"use client";
+import { useEffect, useState } from "react";
+import { Button } from "./ui";
+import { Modal } from "./modal";
+import { browserWallet, connectWallet, switchToBotChain } from "../lib/wallet/client";
+export function WalletPanel({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
+  const [open, setOpen] = useState(false);
+  const [account, setAccount] = useState<string | null>(null);
+  const [chain, setChain] = useState<number | null>(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  function toggle(value: boolean) { setOpen(value); onOpenChange(value); }
+  useEffect(() => {
+    const provider = window.ethereum;
+    const clear = () => { setAccount(null); setChain(null); };
+    provider?.on?.("accountsChanged", clear); provider?.on?.("chainChanged", clear);
+    return () => { provider?.removeListener?.("accountsChanged", clear); provider?.removeListener?.("chainChanged", clear); };
+  }, []);
+  async function run(switchNetwork: boolean) {
+    setBusy(true); setError("");
+    try { if (switchNetwork) await switchToBotChain(); setAccount(await connectWallet()); setChain(await browserWallet().getChainId()); }
+    catch (e) { setError(!window.ethereum ? "当前浏览器没有钱包扩展。请在安装了 MetaMask 的 Chrome 或 Edge 中打开此网址。你也可以关闭此窗口，继续体验演示。" : e instanceof Error ? e.message : "钱包操作失败"); }
+    finally { setBusy(false); }
+  }
+  return <><button className="wallet-trigger" onClick={() => toggle(true)} aria-haspopup="dialog">{account ? `${account.slice(0, 6)}…${account.slice(-4)}` : "连接钱包"}</button>
+    {open && <Modal title="我的钱包" onClose={() => toggle(false)}>
+      <p className="muted">钱包用于后续签名与链上纪念，体验当前演示无需连接。</p>
+      {account ? <><p className="address">{account}</p><p>网络：{chain === 677 ? "BOT Chain" : `Chain ${chain}`}</p><Button disabled={busy} onClick={() => run(true)}>切换到 BOT Chain</Button><Button className="secondary" onClick={() => { setAccount(null); setChain(null); }}>清除本页连接显示</Button></> : <Button disabled={busy} onClick={() => run(false)}>{busy ? "等待钱包回应…" : "连接浏览器钱包"}</Button>}
+      {error && <p className="error" role="alert">{error}</p>}
+      <details className="demo-details"><summary>钱包接入说明</summary><p>清除显示不会撤销钱包授权。A/B 为演示身份，尚未绑定钱包登录。同一浏览器可能共享钱包账户。纪念合约未部署，当前不会发送交易。</p></details>
+    </Modal>}
+  </>;
+}

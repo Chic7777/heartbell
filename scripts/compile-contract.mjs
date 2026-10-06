@@ -1,0 +1,10 @@
+import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import solc from "solc";
+const file = "HeartbellMemories.sol";
+const input = { language: "Solidity", sources: { [file]: { content: readFileSync(`contracts/${file}`, "utf8") } }, settings: { evmVersion: "paris", optimizer: { enabled: true, runs: 200 }, outputSelection: { "*": { "*": ["abi", "evm.bytecode.object"] } } } };
+const output = JSON.parse(solc.compile(JSON.stringify(input)));
+for (const error of output.errors ?? []) console.log(error.formattedMessage);
+if ((output.errors ?? []).some(e => e.severity === "error")) process.exit(1);
+mkdirSync("contracts/artifacts", { recursive: true });
+writeFileSync("contracts/artifacts/HeartbellMemories.json", JSON.stringify(output.contracts[file].HeartbellMemories, null, 2));
+console.log("Contract compiled successfully. No deployment or transaction performed.");
