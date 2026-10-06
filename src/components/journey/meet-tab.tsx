@@ -1,7 +1,7 @@
 "use client";
 // 相遇（计划书第 3 节 / UI-02/03）：特征、雷达、铃声列表与关系中停止雷达。
 import { useEffect, useState } from "react";
-import { Button, Card, Chip, EmptyState, RingIcon, countdownText } from "../ui";
+import { Button, Card, Chip, EmptyState, RingIcon, StageArt, countdownText } from "../ui";
 import type { V2StateView } from "../../lib/domain/view-dtos";
 import type { TabId } from "./app-shell";
 
@@ -33,6 +33,7 @@ export function MeetTab({ view, user, busy, act, switchTab, onRing }: {
       <p className="eyebrow">听见心动</p>
       <h1>你们的故事<br />正在继续</h1>
       <p className="muted">已有有效关系时，陌生人恋爱雷达已停止。发现新的人之前，先把眼前的关系好好走完。</p>
+      <StageArt stage="us" />
       <Card><EmptyState title="雷达已安静" hint="服务端已拦截摇铃与开启请求，不只是隐藏按钮。" />
         <Button onClick={() => switchTab("us")}>去我们的空间</Button>
       </Card>
@@ -45,6 +46,7 @@ export function MeetTab({ view, user, busy, act, switchTab, onRing }: {
       <p className="eyebrow">听见心动</p>
       <h1>听见一次心动</h1>
       <p className="muted">给刚刚注意到的人，一次回应的机会。留下两三个短暂特征，让心动的人认出你。</p>
+      <StageArt stage="meet" />
       <Card>
         <h3>今天的你</h3>
         <div className="traits" style={{ display: "grid", gap: 8, marginTop: 8 }}>
@@ -86,7 +88,7 @@ export function MeetTab({ view, user, busy, act, switchTab, onRing }: {
     </div>
     <p className="muted">{view.meet.zoneLabel} · 本轮最长 10 分钟</p>
     <div className="radar" role="img" aria-label="心动雷达示意，不代表方向或距离">
-      <div className="radar-core"><RingIcon /></div>
+      <div className="radar-core" aria-hidden="true"><span className="hb-ring" style={{ display: "inline-flex", width: 40, height: 40, color: "var(--brand)" }}><RingIcon /></span></div>
       {target && <span className="radar-dot">♡</span>}
     </div>
     <div className="countdown">{countdownText(remaining)}</div>

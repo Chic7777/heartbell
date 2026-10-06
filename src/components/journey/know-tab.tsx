@@ -1,7 +1,7 @@
 "use client";
 // 了解（计划书第 4 节 / UI-05/06）：意向、应用内状态、履约参考、联系方式独立授权、邀请关系。
 import { useState } from "react";
-import { Button, Card, Chip, EmptyState, zhDate, countdownText } from "../ui";
+import { Button, Card, Chip, EmptyState, StageArt, zhDate, countdownText } from "../ui";
 import { Modal } from "../modal";
 import type { KnowConnectionDto, V2StateView } from "../../lib/domain/view-dtos";
 import type { TabId } from "./app-shell";
@@ -21,6 +21,7 @@ export function KnowTab({ view, user, busy, act, switchTab }: {
     return <>
       <p className="eyebrow">慢慢了解</p>
       <h1>先看看彼此<br />想要怎样的关系</h1>
+      <StageArt stage="know" />
       <EmptyState title="还没有认识任何人" hint="从轻轻摇一下铃铛开始。这里不做高分推荐，也不按分数隐藏任何人。"
         action={<Button onClick={() => switchTab("meet")}>去相遇</Button>} />
       {closedOnes.length > 0 && <Card className="tight">

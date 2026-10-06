@@ -1,7 +1,7 @@
 "use client";
 // 相守（计划书第 6 节 / UI-11..14）：演示版完整状态流 —— 投入、冷静期、审核、领取、失效、例外。
 import { useEffect, useState } from "react";
-import { Button, Card, Chip, EmptyState, RoseIcon, anchorStatusChip, countdownText, zhDate } from "../ui";
+import { Button, Card, Chip, EmptyState, RoseIcon, StageArt, anchorStatusChip, countdownText, zhDate } from "../ui";
 import { Modal } from "../modal";
 import type { V2StateView } from "../../lib/domain/view-dtos";
 import type { AnchorEvidence } from "../../lib/domain/v2-types";
@@ -36,7 +36,7 @@ export function FutureTab({ view, user, busy, act, switchTab }: {
     <p><span className="chip warning">恋爱保险概念演示 · 使用演示点数</span></p>
 
     {!plan && !view.future.eligible && <>
-      <div className="plan-hero"><div className="envelope">💌</div>
+      <div className="plan-hero"><StageArt stage="future" />
         <p className="muted">相守计划为共同的未来增加仪式感：双方自愿投入演示点数，达成共同目标后领取奖励。</p>
       </div>
       <ul className="rule-list">{view.future.rules.map(r => <li key={r}>{r}</li>)}</ul>
@@ -46,7 +46,7 @@ export function FutureTab({ view, user, busy, act, switchTab }: {
 
     {!plan && view.future.eligible && <>
       <div className="plan-hero">
-        <div className="envelope">💌</div>
+        <StageArt stage="future" />
         <h3>相守计划 · 演示</h3>
         <p className="muted">你投入 100 点，TA 投入 100 点（初始各 1000 演示点）。<br />达成：返还 + 约定奖励；普通结束：投入失效；冷静期 24 小时可退回。</p>
         <p className="muted points">我的余额：{view.future.myBalance} 点 · 奖励预算池：{view.future.rewardPoolBalance} 点 · 玫瑰券库存：{view.future.roseStock} 张</p>

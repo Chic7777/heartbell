@@ -2,9 +2,8 @@
 // V2 应用壳：四栏（相遇/了解/我们/相守）+ 头像进入“我的”（计划书 7.2/7.3）。
 // A/B 双窗口状态独立；?tab= 保存当前栏目，返回和刷新恢复位置。
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { PhoneFrame, Button, ErrorBanner } from "../ui";
+import { PhoneFrame, Button, ErrorBanner, BellIcon, BookIcon, ChatIcon, GiftIcon, HeartbellLogo } from "../ui";
 import { Modal } from "../modal";
-import { BellIcon, BookIcon, ChatIcon, GiftIcon } from "../ui";
 import { fetchState, friendlyError, postV2 } from "../../lib/client/v2-api";
 import type { V2StateView } from "../../lib/domain/view-dtos";
 import { MeetTab } from "./meet-tab";
@@ -89,7 +88,7 @@ export function JourneyShell({ user }: { user: "a" | "b" }) {
 
   return <PhoneFrame>
     <header className="app-header">
-      <div className="brand">心动铃铛<small>{user === "a" ? "小铃" : "阿响"} · 演示窗口 {user.toUpperCase()}</small></div>
+      <div className="brand"><HeartbellLogo size={32} /><span>心动铃铛<small>{user === "a" ? "小铃" : "阿响"} · 演示窗口 {user.toUpperCase()}</small></span></div>
       <button className="avatar-button" aria-label="打开我的" onClick={() => setMeOpen(true)}>
         {view?.me.profile.avatar ?? "♡"}{badges.us && <i className="dot" />}
       </button>
@@ -120,6 +119,7 @@ export function JourneyShell({ user }: { user: "a" | "b" }) {
     <MeDrawer open={meOpen} onClose={() => setMeOpen(false)} view={view} busy={busy} act={act} needsAdult={!!needsAdult} />
 
     {ringOpen && view && <Modal title="轻轻摇一下" onClose={() => setRingOpen(false)}>
+      <div className="ring-bell-hero" aria-hidden="true"><span className="hb-ring" style={{ display: "inline-flex", width: 46, height: 46, color: "var(--brand)" }}><BellIcon /></span></div>
       <p>{view.meet.nearby[0]?.traits.map(t => t.value).join(" · ")}</p>
       <p className="muted">选择一句你想对 TA 说的话。同轮次对同一个人只能摇一次。</p>
       <div className="phrase-options">
@@ -131,7 +131,7 @@ export function JourneyShell({ user }: { user: "a" | "b" }) {
     </Modal>}
 
     {incoming && <Modal title="叮——有人想认识你" onClose={() => setPostponed(p => [...p, incoming.id])}>
-      <div className="reveal-avatar">🔔</div>
+      <div className="reveal-avatar" aria-hidden="true"><span className="hb-ring" style={{ display: "inline-flex", width: 34, height: 34, color: "var(--brand)" }}><BellIcon /></span></div>
       <p className="center" style={{ fontSize: 18, color: "var(--brand)" }}>“{incoming.message}”</p>
       <p className="muted center">回响后，双方才会看到昵称、头像和兴趣。回响只代表愿意认识，不代表更多。</p>
       <Button disabled={busy} onClick={() => act("respond", { bellId: incoming.id, status: "accepted" })}>我也想认识 TA</Button>

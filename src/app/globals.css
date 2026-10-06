@@ -19,8 +19,8 @@
   --radius-button: 14px;
   --shadow-card: 0 8px 28px rgb(69 34 47 / 6%);
   --shadow-sheet: 0 20px 80px rgb(69 34 47 / 24%);
-  --font-serif: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
-  --font-sans: "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+  --font-sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -50,5 +50,5 @@ p { margin: 6px 0; font-size: 15px; line-height: 24px; }
 .eyebrow { font-size: 11px; letter-spacing: 3px; color: var(--brand); margin: 22px 0 2px; font-weight: 600; }
 .error-banner { color: var(--danger); background: var(--danger-soft); border: 1px solid #F2C7D0; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.6; margin: 10px 0; display: flex; gap: 8px; align-items: flex-start; }
 .error-banner button { margin-left: auto; flex-shrink: 0; }
-:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+:where(button, a, input, textarea, select, summary, [tabindex]):focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

@@ -19,24 +19,50 @@ export function ErrorBanner({ message, onDismiss }: { message: string; onDismiss
   return <div role="alert" className="error-banner"><span>{message}</span><button className="text-button" onClick={onDismiss}>收起</button></div>;
 }
 
-// 统一线性图标（计划书 7.1：不用尺寸不一的 emoji 充当整套图标）
+// 插画与 Logo（视觉资产包 public/visuals/heartbell/；演示用 <img> 避免 image optimizer 依赖）。
+export function HeartbellLogo({ size = 34, className = "" }: { size?: number; className?: string }) {
+  return <img src="/visuals/heartbell/logo-primary.png" alt="心动铃铛" width={size} height={size} className={`hb-logo ${className}`} />;
+}
+export function StageArt({ stage, className = "" }: { stage: "meet" | "know" | "us" | "future"; className?: string }) {
+  const art = {
+    meet: "hero-meet.png",
+    know: "hero-know.png",
+    us: "hero-us.png",
+    future: "hero-future.png",
+  }[stage];
+  return <img src={`/visuals/heartbell/${art}`} alt="" aria-hidden="true" width={1254} height={1254} className={`hb-art ${className}`} />;
+}
+
+// 统一线性图标（视觉资产包 icons/*.svg，stroke=currentColor）。
+function Icon({ children }: { children: ReactNode }) {
+  return <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{children}</svg>;
+}
 export function BellIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" /><path d="M10 20a2.2 2.2 0 0 0 4 0" /><path d="M12 3v-1" /></svg>;
+  return <Icon><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" /><path d="M10 21h4" /><path d="M12 2V1" /></Icon>;
 }
 export function ChatIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z" /><path d="M9 11h6M9 14h4" /></svg>;
+  return <Icon><path d="M5 3h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-6 4V5a2 2 0 0 1 2-2Z" /><path d="M7 8h10M7 12h7" /></Icon>;
 }
 export function BookIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v18H6a2 2 0 0 0-2 2z" /><path d="M4 19a2 2 0 0 1 2-2h14" /><path d="M9 7h6" /></svg>;
+  return <Icon><path d="M12 5c-3-2-7-2-10-1v16c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1Zm0 0v16" /><path d="M5 8h3M16 8h3" /></Icon>;
 }
 export function GiftIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="9" width="17" height="12" rx="2" /><path d="M3.5 13h17M12 9v12" /><path d="M12 9C9 9 7 7.8 7 6a2 2 0 0 1 4-1c.6 1.4 1 4 1 4zM12 9c3 0 5-1.2 5-3a2 2 0 0 0-4-1c-.6 1.4-1 4-1 4z" /></svg>;
+  return <Icon><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M5 12v9h14v-9M12 8v13" /><path d="M12 8H8a3 3 0 1 1 3-3l1 3Zm0 0h4a3 3 0 1 0-3-3l-1 3Z" /></Icon>;
 }
 export function RoseIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4.5" /><path d="M12 12.5V21M12 17c-2.5 0-4.5-1.5-5-3.5M12 19c2.5 0 4.5-1.5 5-3.5" /></svg>;
+  return <Icon><path d="M12 15v7M12 19c-4 0-6-2-7-4M12 20c4 0 6-2 7-4" /><path d="M12 15c-5-1-8-5-6-10l3 2 3-5 3 5 3-2c2 5-1 9-6 10Z" /></Icon>;
 }
 export function RingIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="6" /><circle cx="12" cy="14" r="2.5" /><path d="M9 8l3-5 3 5" /></svg>;
+  return <Icon><circle cx="12" cy="14" r="6" /><circle cx="12" cy="14" r="2.5" /><path d="M9 8l3-5 3 5" /></Icon>;
+}
+export function HeartIcon() {
+  return <Icon><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></Icon>;
+}
+export function CheckIcon() {
+  return <Icon><path d="m5 12 4 4L19 6" /></Icon>;
+}
+export function ClockIcon() {
+  return <Icon><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></Icon>;
 }
 
 // 三维度状态（计划书 7.5）：业务 / 存证 / 来源 分开呈现，不用一个对勾包办。

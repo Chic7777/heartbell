@@ -1,7 +1,7 @@
 "use client";
 // 我们（计划书第 5 节 / UI-08/09/10）：关系空间、日记版本、双方确认、承诺与归档。
 import { useCallback, useEffect, useState } from "react";
-import { Button, Card, Chip, EmptyState, BookIcon, GiftIcon, BellIcon, anchorStatusChip, zhDate } from "../ui";
+import { Button, Card, Chip, EmptyState, BookIcon, GiftIcon, BellIcon, StageArt, anchorStatusChip, zhDate } from "../ui";
 import { Modal } from "../modal";
 import { getV2, postV2 } from "../../lib/client/v2-api";
 import { demoImageLibrary } from "../../lib/repositories/demo-images";
@@ -33,6 +33,7 @@ export function UsTab({ view, user, busy, act, switchTab }: {
     return <>
       <p className="eyebrow">一起记录</p>
       <h1>我们</h1>
+      <StageArt stage="us" />
       <EmptyState title="确认关系后，一起写下第一天" hint="共同日记、重要承诺和纪念时间线，都属于你们的关系空间。"
         action={<Button onClick={() => switchTab("know")}>去了解并邀请关系</Button>} />
       {view.us.archives.length > 0 && <Card className="tight">
