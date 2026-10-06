@@ -1,1 +1,54 @@
-:root{--pink:#df7187;--ink:#44373e;--muted:#95858e;--cream:#fffaf6}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 10%,#fce4e9,transparent 45%),#f5efed;color:var(--ink);font-family:Arial,"Microsoft YaHei",sans-serif}button,input{font:inherit}a{color:var(--pink)}h1{font-size:36px;line-height:1.25;letter-spacing:-1px;margin:12px 0}h2{font-size:18px;margin:0 0 12px}h3{font-size:16px}p{line-height:1.7;font-size:14px}.phone{max-width:420px;min-height:100vh;margin:24px auto;padding:18px 24px 30px;background:var(--cream);border:7px solid white;border-radius:38px;box-shadow:0 24px 80px #77505c18}.notch{width:90px;height:5px;border-radius:9px;background:#e9dedf;margin:0 auto 24px}header,.section-title{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:700}.badge{font-size:11px;background:#f5eaf3;color:#a07ba4;padding:5px 9px;border-radius:20px}.eyebrow{font-size:11px;letter-spacing:3px;color:var(--pink);margin-top:30px}.muted{color:var(--muted);font-size:12px}.notice{font-size:12px;line-height:1.8;padding:12px 15px;background:#f5edf6;border-radius:14px;color:#94779c;margin:20px 0}.card{background:white;border:1px solid #f2e5e8;border-radius:22px;padding:20px;margin-top:18px;box-shadow:0 5px 20px #b5819110}.button{display:block;width:100%;border:0;border-radius:14px;background:var(--pink);color:white;padding:14px 12px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;margin-top:12px;font-size:13px}.button:disabled{opacity:.5;cursor:default}.secondary{background:#f8edf0;color:#b76a80}.traits{display:grid;gap:8px}input{width:100%;background:#fffaf8;border:1px solid #ebdde1;border-radius:10px;padding:11px;color:var(--ink)}input:focus{outline:2px solid #df718780}.radar{width:220px;height:220px;margin:20px auto;border-radius:50%;position:relative;background:repeating-radial-gradient(circle,#fceff2 0px,#fceff2 35px,#edcbd5 36px,#fceff2 37px);border:1px solid #edcbd5}.radar-core{position:absolute;inset:90px;font-size:28px}.radar-dot{position:absolute;top:40px;right:35px;background:white;color:var(--pink);border-radius:50%;width:35px;height:35px;text-align:center;line-height:35px;box-shadow:0 0 0 8px #df718718;animation:pulse 2s infinite}.person{border-top:1px solid #f2e5e8;padding-top:6px}.center{text-align:center}.pink{color:var(--pink)}.error{color:#a22a47;background:#ffe8ef;padding:10px;border-radius:10px}.quote{font-size:20px;color:var(--pink)}.reveal-avatar{text-align:center;font-size:52px;margin:10px}footer{text-align:center;font-size:11px;line-height:2;color:var(--muted);margin-top:28px}.landing{max-width:680px;margin:12vh auto;padding:30px}.landing h1{font-size:56px}.entry-links{display:flex;gap:16px;margin:25px 0}.entry-links .button{flex:1}@keyframes pulse{50%{box-shadow:0 0 0 16px #df718708}}@media(max-width:480px){.phone{margin:0;border:0;border-radius:0}.landing{margin:30px auto;padding:24px}.landing h1{font-size:40px}.entry-links{flex-direction:column}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+/* 心动铃铛 V2 · 奶油色手账 + 玫瑰红印章（计划书 7.1 节视觉规格） */
+:root {
+  --bg: #FFF8F3;
+  --surface: #FFFFFF;
+  --brand: #B94360;
+  --brand-deep: #93324B;
+  --brand-soft: #FBE8ED;
+  --ink: #352B30;
+  --muted: #786971;
+  --line: #ECDCE1;
+  --success: #27684F;
+  --success-soft: #E7F2EC;
+  --warning: #8C5B17;
+  --warning-soft: #F9EFDC;
+  --danger: #A72C43;
+  --danger-soft: #FBE7EB;
+  --paper: #FFFDF9;
+  --radius-card: 20px;
+  --radius-button: 14px;
+  --shadow-card: 0 8px 28px rgb(69 34 47 / 6%);
+  --shadow-sheet: 0 20px 80px rgb(69 34 47 / 24%);
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --font-sans: "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 15% 8%, #FBE8ED, transparent 42%),
+    radial-gradient(circle at 88% 92%, #F7E8DE, transparent 45%),
+    var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--brand); }
+h1, h2, h3, .serif { font-family: var(--font-serif); font-weight: 700; }
+h1 { font-size: 28px; line-height: 36px; margin: 10px 0 8px; letter-spacing: 0.5px; }
+h2 { font-size: 20px; line-height: 28px; margin: 0 0 10px; }
+h3 { font-size: 17px; margin: 0 0 6px; }
+p { margin: 6px 0; font-size: 15px; line-height: 24px; }
+.num, .date, .points { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); font-size: 12px; line-height: 18px; }
+.center { text-align: center; }
+.pink { color: var(--brand); }
+.eyebrow { font-size: 11px; letter-spacing: 3px; color: var(--brand); margin: 22px 0 2px; font-weight: 600; }
+.error-banner { color: var(--danger); background: var(--danger-soft); border: 1px solid #F2C7D0; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.6; margin: 10px 0; display: flex; gap: 8px; align-items: flex-start; }
+.error-banner button { margin-left: auto; flex-shrink: 0; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

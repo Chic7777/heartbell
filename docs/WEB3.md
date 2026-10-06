@@ -1,59 +1,82 @@
-# 钱包、ZK 与上链接入分工
+# 钱包、承诺登记与上链接入说明
 
-## 钱包：已提供真实连接
+## 模式矩阵
 
-src/lib/wallet/client.ts 通过浏览器 EIP-1193 扩展和 viem 连接账户；WalletPanel 提供连接、网络切换、错误提示。账户/网络变化后清空显示，再重新连接，避免误用旧账户。
+```text
+APP_MODE=demo|live                  默认 demo
+CHAIN_MODE=preview|bot_testnet|bot_mainnet   默认 preview（无需钱包/密钥即可演示）
+REWARD_MODE=demo|partner            默认 demo
+CLAIM_VERIFIER_MODE=demo|manual|provider    默认 demo
+```
 
-目前钱包不绑定演示 A/B、不产生登录会话。不自动签名、不自动交易。清除页面显示不会撤销钱包中的网站权限。两个窗口可能共享扩展账户，双人真实演示应使用不同浏览器或隔离配置、不同钱包。
+- `preview`：存证任务保留**本地承诺指纹**（commitment + salt 私有保存），状态 `unconfigured`。不生成假交易哈希、假区块高度或伪浏览器链接。
+- 真实链模式要求同时配置 `CHAIN_RPC_URL` 与 `NEXT_PUBLIC_COMMITMENT_REGISTRY_ADDRESS`，否则启动时报配置错误，不自动降级假成功。
+- 模式由服务端环境变量决定，客户端 query 参数不能切换奖励/审核模式。
 
-后端后续通过挑战消息、钱包签名验证和安全会话绑定账户，不可信任 viewer 参数。
+## V2 承诺登记合约（本轮新增，未部署）
 
-## 链上纪念：源码与调用模块已提供，未部署
+`contracts/HeartbellCommitmentRegistry.sol`：
 
-BOT 主网配置来源：https://dev-docs.botchain.ai/docs/Developers/quick-guide/
+```solidity
+event CommitmentRecorded(bytes32 indexed commitment, uint64 recordedAt);
+function record(bytes32 commitment) external;          // 仅受控 writer，拒绝零承诺/重复
+function recordedAt(bytes32) external view returns (uint64);  // 只增不改
+function rotateWriter(address) external;               // 仅管理员
+function setPaused(bool) external;                     // 仅管理员
+function transferAdmin(address) / acceptAdmin()        // 两步式转移
+```
 
-- Chain ID：677；代币 BOT。
-- RPC：https://rpc.botchain.ai
-- 浏览器：https://scan.botchain.ai
-- 测试网使用另一套配置（968），不得混用主网地址和测试币。
+- 交易输入、存储与事件**不含**用户钱包、普通签名、关系类型或链下关系 ID（本地 EVM 测试断言 record calldata 仅 36 字节、事件 topic 仅承诺哈希）。
+- 不提供删除、修改历史、资金接收或转账接口；合约不保存关系、分数或保险余额。
+- 编译：`npm run contracts:compile`（solc 0.8.37，EVM paris，与 V1 一致）。行为测试：`node scripts/contract-check.mjs`（@ethereumjs/evm 真实执行编译产物，26 项）。
+- 旧 `HeartbellMemories.sol` 保留为 V1 兼容只读；V2 使用独立 ABI 与地址，旧公开双地址历史不可通过新方案消除。
 
-使用自己的 HeartbellMemories 合约，不假设链上已有 EAS。
+## V2 承诺计算协议（`src/lib/chain/commitment.ts`）
 
-部署：Remix 载入源码 → 选择 0.8.24 或以上编译器及 Paris EVM → 先本地或测试网部署与验证 → 由团队安排主网部署 → 将公开合约地址填入 .env.local → 重新构建/启动。
+```text
+payload = { schema:"heartbell.record.v2", recordType, recordId, version,
+            relationshipId, businessOccurredAt, previousVersionCommitment,
+            participants, content, attachmentHashes, rulesVersion }
+payloadBytes = UTF8(JCS(payload))            // RFC 8785 风格键排序；整数-only
+contentDigest = SHA256(payloadBytes)
+commitment = SHA256( UTF8("HEARTBELL_V2"||0x00) || salt(32B) || contentDigest(32B) )
+```
 
-交易（情侣日记流程）：双方回响后，一方写日记（节点类型、日期、标题、一句话）→ 对方确认 → 双方各自在应用内绑定钱包地址 → 每人调用 approveDiaryOnChain(contentHash, 双方地址) → 等待收据 → 前端把交易哈希回报演示服务 → 两笔都回报后纪念碑卡片标记完成并展示浏览器链接。
+- salt 为每次登记独立生成的 32 字节密码学随机秘密，不写入公开链、不用公开编号替代。
+- 字节串拼接（非十六进制文本）；字符串以用户确认时的确切 Unicode 内容冻结。
+- recordId / relationshipId / previousVersionCommitment / recordType 仅在私有 payload 中，不作为事件参数。
+- 独立复算验证（verify:v2 T13）：同一 payload+salt 重算一致；改一个字、换一张图、改一个 salt 字节均不匹配。
+- 证据包导出：`GET /api/v2/export?recordId=`（payload + salt + anchor 信息 + 验证说明），仅记录参与者可导出。
 
-src/lib/chain/memory.ts 检查账户、网络、模拟执行和交易收据，返回交易哈希、浏览器链接、confirmed。双方地址在计算纪念 ID 前统一按小写排序，确保两个人各自发起时得到同一个 ID；单方交易成功只是本人批准，不等于这一页完成。合约未部署或钱包未就绪时，前端只展示链下预览，不发送交易、不生成模拟哈希。
+## 存证任务流（`src/lib/server/v2/services/anchor.ts`）
 
-纪念 ID = keccak256(abi.encode(contentHash, participantA, participantB))，双方顺序已规范化。日记内容指纹由服务端按节点类型、日期、标题、一句话和随机 id 生成，避免猜测；客户端不可指定指纹。
+```text
+冻结 payload → 生成 salt/commitment → 服务端校验授权 → outbox 入队（幂等：
+同一 (recordId, version) 只有一个任务）→ 按模式处理 → 失败保留任务可重试
+（恢复同一任务，不换承诺）
+```
 
-钱包绑定（wallet-bind）是演示记录：服务器无法验证请求方真的控制该地址，正式版必须由钱包登录会话绑定。diary-onchain 回报只做哈希格式校验，正式版应由后端按 RPC 回执核验。
+关系建立/结束、双方确认的日记版本、计划条款、审核结论与结算结果会自动生成存证任务。UI 区分**业务确认状态**与**存证状态**（未存证 / 预览·本地指纹 / 链上已核验 / 写入失败）。
 
-当前页面已接入上述流程；真实交易需要先完成合约部署与双方钱包准备。还需账户绑定到登录会话、链状态自动刷新与异常恢复、日记持久化。
+## 真实链接入（待办，本轮未执行）
 
-本版采用每人各发一次交易，不是两份离线签名加一次代付。后者可后续优化。
+以下条件齐备后方可启用 `CHAIN_MODE=bot_testnet|bot_mainnet`：
 
-隐私边界：纪念明文不写上链，但钱包地址、双方关联和时间仍然公开。不要宣传为匿名关系链。
+1. 部署 `HeartbellCommitmentRegistry`（建议先测试网 968），记录网络、合约地址、部署 tx、编译参数（solc 0.8.37 / paris）、writer 地址。
+2. 配置 `.env.local`：`CHAIN_RPC_URL`、`NEXT_PUBLIC_COMMITMENT_REGISTRY_ADDRESS`、`CHAIN_WRITER_PRIVATE_KEY`（仅服务端，禁止 NEXT_PUBLIC_）。
+3. 在 `anchor.ts` 的 `submitToRegistry` 完成真实提交链路：viem `createPublicClient` 模拟执行 `record(commitment)` → 受控 writer 发送 → `waitForTransactionReceipt`（CONFIRMATIONS=2，按目标链调整）→ 服务端核验链 ID、回执 status、to 合约、`CommitmentRecorded(commitment)` 事件来源与（必要时）`recordedAt` 读数对照。客户端上报的哈希不可直接采信。
+4. outbox 以 (chainId, contract, commitment) 唯一；进程崩溃后先查已有哈希与链上记录再考虑重发；重查发现重组时退回待核验。
+5. BOT Chain 参数（2026-10-07 核对官方文档）：主网 677 `https://rpc.botchain.ai` / `https://scan.botchain.ai`；测试网 968 `https://rpc.bohr.life` / `https://scan.bohr.life`。部署前重查。
 
-## ZK：接口已提供，真实密码学尚未接入
+## 钱包
 
-src/lib/zk/adapter.ts 定义 Semaphore V4 证明输入及验证接口。未配置验证器时直接拒绝，不返回伪造成功。演示单身声明不经过该接口，也不标为 ZK 验证。
+`src/lib/wallet/client.ts` + 我的抽屉内 WalletPanel：真实浏览器钱包连接与网络切换。钱包仅用于真实存证签名（preview 模式无需钱包）；钱包断开只影响签名，不影响已保存日记。双窗口真实双钱包演示请使用不同浏览器或隔离配置。
 
-证明负责人接手：
+## ZK（未接入）
 
-1. 接入 Semaphore 身份、群组与证明库，身份秘密保留在设备。
-2. 根据可信成员登记和关系状态维护资格群组，不能用模拟 A/B 做生产身份。
-3. 生成与目标、雷达轮次和消息绑定的证明，统一 scope/message 编码。
-4. 服务端使用认可的群组根及预期 scope/message，拒绝随意指定根及过期根。
-5. 数据库唯一约束原子保存 nullifier，防止并发重放；模拟重复检查不能代替它。
-6. 恋爱状态变化后更新成员及根策略，拒绝旧资格。
-
-默认方案：后端链下验证 ZK，纪念独立上链。钱包、真人、现实单身、应用内资格是不同概念。
-
-官方说明：https://docs.semaphore.pse.dev/
+`src/lib/zk/adapter.ts` 保持 fail-closed：验证器未配置时拒绝，不返回伪造成功。演示成年声明不经过该接口。接入任务不变（Semaphore 身份/群组/nullifier 原子存储等）。
 
 ## 验证边界
 
-本版检查类型、Next 构建、Solidity 编译和模拟双人流程。没有部署、消耗 BOT，未验证钱包弹窗、真实交易和 Semaphore 证明。
-
-部署前需执行测试：非参与者、重复批准、相同账户、错误内容、单方/双方状态，以及目标网络联调。
+本轮实际完成：合约编译、本地 EVM 行为测试（权限/零承诺/重复/暂停/轮换/两步转移/无身份数据断言）、承诺协议独立复算（含篡改检测）、preview 模式端到端演示、链故障模拟与恢复。
+**未做**：真实网络部署、真实交易、回执核验联调、Semaphore。以上待办不能用伪造链接代替。

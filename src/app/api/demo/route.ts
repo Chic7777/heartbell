@@ -3,6 +3,8 @@ import { getState, getRevealedProfile, isUserId } from "../../../lib/mock/store"
 import type { DiaryKind, UserId } from "../../../lib/types";
 import { createHash } from "node:crypto";
 export const dynamic = "force-dynamic";
+// LEGACY（V1 演示接口）：仅供迁移期 verify:demo 使用；live 模式禁写。
+function liveModeBlocked(): boolean { return process.env.APP_MODE === "live"; }
 const messages = ["想认识你。", "想和你聊一聊。", "想一起喝杯咖啡。"];
 const diaryKinds: DiaryKind[] = ["first-echo", "anniversary", "trip", "ordinary-day", "promise"];
 const isAddressLike = (value: unknown): value is string => typeof value === "string" && /^0x[0-9a-fA-F]{40}$/.test(value);
@@ -38,6 +40,7 @@ export async function POST(request: Request) {
   try { body = await request.json(); } catch { return NextResponse.json({ error: "无效 JSON" }, { status: 400 }); }
   if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "请求必须为对象" }, { status: 400 });
   if (!isUserId(body.viewer)) return NextResponse.json({ error: "无效演示身份" }, { status: 400 });
+  if (liveModeBlocked()) return NextResponse.json({ error: "旧演示接口已在 live 模式禁用，请使用 /api/v2" }, { status: 403 });
   const state = getState();
   const viewer: UserId = body.viewer;
   const other = viewer === "a" ? "b" : "a";

@@ -1,63 +1,99 @@
 # 数据与接口约定
 
-共享类型：`src/lib/types.ts`。修改字段前与前后端负责人协调。
+共享类型：旧演示 `src/lib/types.ts`（V1）；V2 领域类型 `src/lib/domain/v2-types.ts`、视图 DTO `src/lib/domain/view-dtos.ts`。修改字段前与前后端负责人协调。
 
-## 已提供的开发接口
+## V2 接口（`/api/v2`，本轮主要入口）
 
-`GET /api/demo?viewer=a`（或 b）返回 `{ mode: "mock", data: { self, nearby, bells, profile, eligibility, diaries, wallets } }`。
+统一响应 `{ data, requestId, mode }`；错误 `{ error: { code, message, retryable }, requestId }`。
+错误码包括 `BAD_REQUEST`、`UNAUTHENTICATED`、`FORBIDDEN`、`NOT_FOUND`、`VERSION_CONFLICT`、`CONSENT_REQUIRED`、`ALREADY_BOUND`、`INSUFFICIENT_BALANCE`、`REWARD_UNAVAILABLE`、`CLAIM_PENDING`、`PLAN_STATE`、`RADAR_REQUIRED` 等。
 
-- self：自己的雷达状态。
-- nearby：双方雷达开启时返回另一位用户的临时特征，不含长期资料。
-- bells：涉及自己的铃声。
-- profile：双方回响后返回对方档案，否则为 null。权限检查在服务器端执行。
-- eligibility：模拟声明状态；zkVerified 始终为 false。
-- diaries：回响后可见的情侣日记数组，否则为空数组。每页包含 kind、date、title、message、author、contentHash、status（awaiting-consent / ready / rejected）、consent 与 chain（双方确认交易哈希及完成时间，来自前端回报）。
-- wallets：回响后返回双方绑定的演示钱包地址（小写），未绑定为 null。仅用于组装上链参数，不是登录认证。
+**会话**：P0 使用 `viewer=a|b` 本地演示身份（请求体或 query 参数）。所有成员资格、授权、状态与并发校验仍在服务端执行；live 模式必须替换为服务端可信会话，不能信任请求中的身份参数（实现集中在 `src/lib/server/v2/session.ts` 以便替换）。
 
-`POST /api/demo` 请求体：
+### 视图（GET）
 
-```json
-{"viewer":"a","action":"radar","active":true,"traits":[{"category":"穿着","value":"绿色卫衣"},{"category":"手持物","value":"篮球"}]}
+| 接口 | 说明 |
+|---|---|
+| `GET /api/v2/state?viewer=a` | 轮询端点（1.2s）：按权限裁剪的全部视图。回响前不含对方档案；联系方式仅在有效授权时返回；私人草稿仅作者可见 |
+| `GET /api/v2/me?viewer=a` | 本人档案、余额、授权列表、账本 |
+| `GET /api/v2/diaries/detail?id=&viewer=` | 日记版本明细（仅关系成员） |
+| `GET /api/v2/trust/summary?subjectId=b&viewer=a` | 受众读取履约摘要：需 subject→audience 有效授权，否则 403；每次读取校验版本与撤销状态 |
+| `GET /api/v2/export?recordId=&viewer=` | 证据包导出（payload + salt + anchor 信息），仅记录参与者 |
+
+### 相遇（POST）
+
+| 接口 | 要点 |
+|---|---|
+| `POST /declare-adult` | 成年演示声明（非真人核验） |
+| `POST /radar` `{active, traits[2-3]}` | 已有有效关系时服务端 403 拦截（MEET-06）；特征 1–20 字 |
+| `POST /ring` `{message}` | 三句预设；同轮次同对象一次（服务端计算轮次）；需双方雷达开启 |
+| `POST /respond` `{bellId, status}` | accepted 建立连接；dismissed 消散；10 分钟过期 |
+| `POST /connection-close` `{connectionId}` | 关闭连接：停止新铃声与互访，保留本人记录 |
+
+### 授权与关系（POST）
+
+| 接口 | 要点 |
+|---|---|
+| `POST /share-grants` `{scope}` | scope: `profile_contact` / `trust_summary`；受众=已回响连接对方；72h；幂等刷新 |
+| `POST /share-grants/revoke` `{grantId}` | 立即撤销后续读取 |
+| `POST /relationships/propose` | 需已回响连接；双方均无有效绑定与待处理邀请；72h 过期 |
+| `POST /relationships/accept` `{relationshipId}` | 服务端原子绑定（同时接受两份只能成功一份）；生成开始事件存证任务与系统纪念节点 |
+| `POST /relationships/decline` / `cancel` | 提案期拒绝/取消 |
+| `POST /relationships/end` `{relationshipId, reason}` | 本人单方退出，立即生效；不等待对方/链上/计划结算；在途计划转例外复核或失效等待 |
+
+### 我们：日记与承诺（POST）
+
+| 接口 | 要点 |
+|---|---|
+| `POST /diaries` | 标题 1–40 字、正文 1–3000 字、≤6 张演示图、日期不晚于今天；visibility draft/shared |
+| `POST /diaries/version` `{diaryId, expectedVersion, ...}` | 修改生成新版本；旧确认不复用；expectedVersion 不一致返回 VERSION_CONFLICT |
+| `POST /diaries/share` / `confirm` / `return` / `withdraw` | 草稿发送；确认绑定具体版本；退回需新版本；作者可撤回 |
+| `POST /diaries/anchor` `{diaryId}` | 需双方确认当前版本；commitment 服务端生成（不接受客户端指定）；preview 下状态=unconfigured（本地指纹，无假交易） |
+| `POST /promises` | 内容 4–80 字；禁止限制人身自由类承诺；计分项：≥24h 提前、每关系 ≤10 项、每自然日 ≤1 项 |
+| `POST /promises/confirm` / `return` | 双方确认生效 |
+| `POST /promises/resolutions` `{result, note}` | 责任人提交履约证据（fulfilled 需对方确认；unfulfilled 本人确认即成立） |
+| `POST /promises/resolutions/confirm` `{subjectUserId, outcome}` | 对方确认证据（fulfilled）或共同豁免（waived） |
+| `POST /promises/resolutions/dispute` | 申诉：结果转 disputed，摘要冻结为"申诉中"，等待人工复核 |
+
+### 相守（POST）
+
+| 接口 | 要点 |
+|---|---|
+| `POST /plans` `{targetType, rewardChoice, beneficiary}` | 每关系至多 1 个有效计划；条款服务端固定（客户端伪造奖励选项被规范化） |
+| `POST /plans/accept` `{planId, expectedRevision, termsConfirmed}` | 全部检查（双方成年声明、双方余额 ≥100、奖励预留）通过后一次性扣点激活，无半激活状态 |
+| `POST /plans/cancel` `{reasonType: normal/exception}` | 冷静期内取消退款；冷静期后普通结束进入 7 天异议窗口（有在途申请则 409）；例外转复核 |
+| `POST /plans/claims` `{targetOccurredAt, evidenceNote}` | 目标须在 [冷静期结束, 到期]；去重（每计划一个在途申请）；宽限期内仍可提交到期前目标 |
+| `POST /benefits/redeem` `{benefitId, idempotencyKey}` | 仅受益人；幂等（重复点击/并发只结算一次）：返还双方本金 + 独立奖励预算发放 |
+| `POST /disputes` `{targetType, targetId, note}` | 申诉冻结结算（例外复核），不冻结退出权 |
+
+### 存证与演示台
+
+| 接口 | 要点 |
+|---|---|
+| `POST /anchors/retry` `{recordId}` | 失败任务恢复（同一任务，不换承诺）；仅记录参与者 |
+| `GET /api/v2/admin/snapshot` | 演示台视图（仅 APP_MODE=demo） |
+| `POST /admin/reset` · `POST /admin/advance-time {ms}` · `POST /admin/chain-fault {active}` | 场景重置 / 虚拟业务时间（不修改系统或链上时间）/ 链故障模拟 |
+| `POST /admin/claims/decision` `{claimId, decision: approve/need_more/reject}` | 演示审核；approve 后 7 天争议期；婚姻目标仅 active 关系转 married |
+| `POST /admin/exception/resolve` `{planId, decision: refund/forfeit/back_to_review}` | 例外复核结论 |
+| `POST /admin/trust-dispute/resolve` `{promiseId, finalResult}` | 履约争议人工复核（刷新摘要版本） |
+
+### 履约分（服务端计算，计划书 4.3）
+
+```text
+n = s + f；eligible = s + f + pending（waived 排除）
+若 n < 3，或 coverage = n/eligible < 0.8，或存在未决申诉：score = null
+否则 score = round(100 × (s + 1) / (n + 2))
 ```
 
-```json
-{"viewer":"a","action":"ring","message":"想一起喝杯咖啡。"}
-```
+数据源锁定"最近一段已结束的正式关系"（endedAt 降序），不回退旧高分。结算/申诉变化生成新摘要版本并撤销旧版本；接收方每次打开都向服务端校验。
 
-```json
-{"viewer":"b","action":"respond","bellId":"实际铃声ID","status":"accepted"}
-```
+## 旧演示接口（LEGACY）
 
-回应状态还支持 dismissed。成功返回 `{ mode: "mock", data: { ok: true } }`；错误返回 `{ error: "说明" }` 和 400/409 状态码。
+`GET/POST /api/demo?viewer=a|b` 为 V1 迁移期接口，仅供 `verify:demo` 回归使用；live 模式下写操作返回 403。字段说明见 git 历史版本本文档；`diary-onchain` 仅做哈希格式校验的旧限制不变，V2 已用服务端承诺协议取代。
 
-类别只允许：穿着、配饰、手持物、当前状态、其他。共两到三项，每项内容 1–20 字。
-
-新增 POST 操作：
-
-| action | 额外字段 | 含义 |
-|---|---|---|
-| declare | single: true | 模拟单身声明，不生成真实证明 |
-| diary-create | kind, date, title, message | 回响后写一页日记；作者自动确认，等待对方 |
-| diary-consent | diaryId | 当前演示用户确认这一页；双方确认后 status=ready |
-| diary-reject | diaryId | 对方婉拒这一页，status=rejected，不上链 |
-| wallet-bind | address | 绑定当前演示用户的钱包地址（0x + 40 位十六进制），仅演示记录 |
-| diary-onchain | diaryId, txHash | 前端真实钱包交易成功后回报交易哈希；双方都回报后记录完成时间 |
-
-日记校验：kind 限 first-echo / anniversary / trip / ordinary-day / promise；date 为不晚于今天的 YYYY-MM-DD；标题 1–20 字、一句话 1–60 字（trim 后）。contentHash 为服务端按内容生成的 SHA-256 指纹，包含随机 id，客户端不可指定。
-
-未声明不能摇铃（403）；未回响不能写日记（403）；单人确认不能回报上链（409）；同一用户对同一页重复回报被拒（409）。演示服务不连接链上节点，diary-onchain 只做哈希格式校验（0x + 64 位十六进制），无法独立证明交易真实发生；正式版应由后端按交易回执核验后再入库。
-
-`POST /api/eligibility` 是真实证明验证预留入口，当前始终返回 501、mode=unconfigured、zkVerified=false。正式接入后需按 docs/WEB3.md 校验可信根和防重放，不能把模拟声明作为成功证明。
+`POST /api/eligibility` 仍为真实 ZK 证明预留入口（未配置返回 501，zkVerified=false）。
 
 ## 使用边界
 
-这是两用户本地演示接口。viewer 是可手动指定的演示身份，不是登录认证。内存状态只适用于单进程，不适用于多实例或 serverless 持久化。前端每 1.2 秒轮询，尚未接入 Supabase 实时订阅。
-
-## 后续正式接口任务
-
-- 从可信登录会话取得用户身份，禁止信任请求中的 viewer。
-- 使用数据库和实时订阅，处理雷达过期及临时特征清理。
-- 拒绝状态对发送者映射为消散，不暴露明确拒绝记录。
-- 联系方式增加独立的双向同意记录，未同意不得返回。
-- 情侣日记已采用双方分别调用合约 approveMemory 的方案（两次交易），钱包签署交易代表确认。正式版需由后端核验链上双方批准状态与交易回执后再入库；演示回报不能替代链上核验。日记按内容指纹存证，钱包地址、双方关联和时间仍然公开，隐私方案见团队《关系上链隐私与退出机制研究》。
-- ZK 验证真实资格证明、限定重复信号范围，关系变化后更新资格并拒绝旧证明。
+- viewer 是本地演示身份切换，不是登录认证；内存状态单进程、重启清空。
+- 演示台、时间推进、审核模拟仅 APP_MODE=demo 开放，正式环境服务端拒绝。
+- 真实链模式（CHAIN_MODE≠preview）需要 CHAIN_RPC_URL 与合约地址，缺失时报配置错误而非假成功。
