@@ -19,7 +19,7 @@ import { createChain, ABI } from './chain.mjs';
 import { searchRadar } from './radar.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-const profileSchema = z.object({name:z.string().trim().min(1).max(40),city:z.string().max(60),gender:z.string().max(30),age:z.string().max(30),interests:z.array(z.string().max(30)).max(8),statement:z.string().max(200),intention:z.string().max(60),discoverable:z.boolean()}).strict();
+const profileSchema = z.object({name:z.string().trim().min(1).max(40),city:z.string().max(60),gender:z.string().max(30),age:z.string().max(30),interests:z.array(z.string().max(30)).max(8),statement:z.string().max(200),intention:z.string().max(60),discoverable:z.boolean(),avatarUrl:z.string().trim().max(300).default('').refine(v=>{if(!v)return true;try{const u=new URL(v);return u.protocol==='https:'&&!u.username&&!u.password;}catch{return false;}},'avatarUrl must be an HTTPS image URL without credentials'),occupation:z.string().trim().max(80).default('')}).strict();
 const keySchema = z.object({kty:z.literal('EC'),crv:z.literal('P-256'),x:z.string().regex(/^[A-Za-z0-9_-]{43}$/),y:z.string().regex(/^[A-Za-z0-9_-]{43}$/)}).strict();
 const envelopeSchema = z.object({scope:z.string().regex(/^(personal|[1-9]\d*)$/),type:z.enum(['note','photo','video','vow','goal']),ciphertext:z.string().min(16).max(2000000).regex(/^[A-Za-z0-9+/=]+$/),iv:z.string().regex(/^[A-Za-z0-9+/]{16}$/),hash:z.string().regex(/^0x[a-fA-F0-9]{64}$/).optional()}).strict();
 const keyMessage = (origin,address,key) => `Consensus Bell encryption key\nOrigin: ${origin}\nAddress: ${address}\nPublic key: ${JSON.stringify(key)}`;
@@ -37,7 +37,8 @@ export async function createApp(options={}) {
     CREATE TABLE IF NOT EXISTS proofs(hash TEXT PRIMARY KEY, address TEXT, relation TEXT, body TEXT);
     CREATE TABLE IF NOT EXISTS relations(id TEXT, address TEXT, PRIMARY KEY(id,address));
     CREATE TABLE IF NOT EXISTS radar_locations(address TEXT PRIMARY KEY,lat REAL,lon REAL,at INTEGER);
-    CREATE TABLE IF NOT EXISTS radar_saved(owner TEXT,target TEXT,PRIMARY KEY(owner,target));`);
+    CREATE TABLE IF NOT EXISTS radar_saved(owner TEXT,target TEXT,PRIMARY KEY(owner,target));
+    CREATE TABLE IF NOT EXISTS journey_paths(address TEXT PRIMARY KEY,path TEXT NOT NULL);`);
   // Retain only coarse ~11km cells, including positions from earlier versions.
   db.exec('UPDATE radar_locations SET lat=ROUND(lat*10)/10.0,lon=ROUND(lon*10)/10.0');
   const auth=createAuth(db,origin),chain=createChain(config),rate=new Map(),locationRate=new Map();
@@ -63,7 +64,7 @@ export async function createApp(options={}) {
   const handleRequest=async(req,res)=>{
     const url=new URL(req.url,origin);
       res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');
-      res.setHeader('Content-Security-Policy',`default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://auth.privy.io; media-src 'self' data: blob:; connect-src 'self' https://auth.privy.io https://api.privy.io https://explorer-api.walletconnect.com ${new URL(config.rpc||origin).origin}; frame-src 'self' https://auth.privy.io; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'`);
+      res.setHeader('Content-Security-Policy',`default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://auth.privy.io https://api.privy.io https://explorer-api.walletconnect.com ${new URL(config.rpc||origin).origin}; frame-src 'self' https://auth.privy.io; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'`);
     try {
       const method=req.method;
       if(/^\/(?:auth\/session|wallets\/|profiles\/me|relationships\/|stories(?:\/|$)|connections(?:\/|$)|vows\/|bonds\/|user-operations(?:\/|$)|proof\/|agent\/jobs|consents$|notifications\/)/.test(url.pathname))url.pathname='/api'+url.pathname;
@@ -132,6 +133,10 @@ export async function createApp(options={}) {
           const row=db.prepare('SELECT body FROM profiles WHERE address=?').get(target);
           if(target===address||!row||!JSON.parse(row.body).discoverable)return reply(res,404,{error:'该用户目前没有公开资料。'});
           if(body.saved)db.prepare('INSERT OR IGNORE INTO radar_saved VALUES(?,?)').run(address,target);else db.prepare('DELETE FROM radar_saved WHERE owner=? AND target=?').run(address,target);return reply(res,200,{ok:true});
+        }
+        if(url.pathname==='/api/journey'){
+          if(method==='GET')return reply(res,200,{path:db.prepare('SELECT path FROM journey_paths WHERE address=?').get(address)?.path||''});
+          if(method==='PUT'){const body=z.object({path:z.enum(['radar','direct'])}).strict().parse(await readBody(req));db.prepare('INSERT INTO journey_paths VALUES(?,?) ON CONFLICT(address) DO UPDATE SET path=excluded.path').run(address,body.path);return reply(res,200,{path:body.path});}
         }
         if(url.pathname==='/api/ring'){
           const archived=url.searchParams.get('id')||'0';if(!/^\d+$/.test(archived))return reply(res,400,{error:'Invalid Ring ID'});
