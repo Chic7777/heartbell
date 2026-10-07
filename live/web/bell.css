@@ -191,3 +191,15 @@ body[data-shell="gateway"] .demo-bar,body[data-shell="gateway"] #tabs{display:no
 .bell-face{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 .bell-me-avatars .bell-face{width:var(--size-80);height:var(--size-80);box-shadow:0 8px 24px rgba(217,140,149,.22)}
 .radar-avatar .bell-face,.bell-portrait .bell-face,.bell-profile-hero .bell-face,.bell-chat-header .bell-face{width:100%;height:100%;object-fit:cover}
+.bell-me-row{display:flex;align-items:center;gap:var(--size-12);width:100%;text-align:left;background:none;border:0;padding:var(--size-12);border-radius:var(--size-16);cursor:pointer;transition:background var(--bell-fast)}
+.bell-me-row:hover{background:var(--bell-blush)}
+.bell-me-row>.bell-icon:last-child{color:var(--muted);flex:none}
+.bell-me-row-icon{width:var(--size-40);height:var(--size-40);border-radius:50%;background:var(--bell-blush);color:var(--bell-deep-rose);display:grid;place-items:center;flex:none}
+.bell-me-row-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--size-2)}
+.bell-me-row-top{display:flex;align-items:center;gap:var(--size-8);flex-wrap:wrap}
+.bell-me-row-top b{font-size:var(--size-14);color:var(--ink,#171717)}
+.bell-me-row-body small{color:var(--muted);font-size:var(--size-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bell-me-row-body .bell-hash{font-variant-numeric:tabular-nums}
+.bell-me-pill{display:inline-flex;align-items:center;font-size:var(--size-11);font-weight:500;border-radius:var(--size-999);padding:var(--size-2) var(--size-10)}
+.bell-me-pill.blush{background:var(--bell-blush);color:var(--bell-deep-rose)}
+.bell-me-pill.ok{background:rgba(46,158,99,.14);color:var(--sage-deep,#2E9E63)}
