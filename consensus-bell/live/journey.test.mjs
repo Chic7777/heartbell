@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {view,escape,short,head,btn,notice,input,submit} from './web/view.js';
 import {emptyProfile,updateIdentity,onboardingView,carryIdentityDraft} from './web/onboarding.js';
 import {storyItems,mediaCounts} from './web/journey.js';
-import {createJourneyActions} from './web/journey-actions.js';
+import {createJourneyActions,witnessDesign} from './web/journey-actions.js';
 const helpers={escape,short,head,btn,notice,input,submit};
 
 test('four-step identity preserves input, choices and explicit visibility',()=>{
@@ -39,7 +39,29 @@ test('encrypted goal edit refuses unreadable or unauthorized content',async()=>{
 });
 test('journey pages escape content and separate visitor identity from real account records',()=>{
   const base={preview:true,identityStep:1,previewProfile:null,identityDraft:null,previewMemories:[],user:null,relation:null,profile:{name:'PRIVATE'},memories:[],proofs:[],history:[],candidates:[],config:{explorer:''},radarFilters:{city:'',intention:'',radius:0},formatAmount:()=> '0'};
-  for(const route of ['identity','path','journey-index','invite-page','invitation-preview','ceremony','story','vows','bond','vault','witness','witness-detail','privacy']){const html=view({...base,route});assert.match(html,/访客预览/);assert.doesNotMatch(html,/PRIVATE|VISITOR_VIEW_ONLY|Minted|Block #/);}
+  for(const route of ['identity','path','journey-index','invite-page','invitation-preview','ceremony','story','vows','bond','vault','witness','witness-detail','witness-configurator','privacy']){const html=view({...base,route});assert.match(html,/访客预览/);assert.doesNotMatch(html,/PRIVATE|VISITOR_VIEW_ONLY|Minted|Block #/);}
   const html=view({...base,route:'story',previewMemories:[{id:'draft',type:'note',at:new Date().toISOString(),content:{title:'<script>alert(1)</script>',text:'<img onerror=x>'}}]});assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);
   assert.match(view({...base,route:'witness-detail'}),/外观预览/);assert.match(view({...base,route:'bond'}),/预算不是余额/);
+});
+
+test('Witness design is an escaped local preference with validated choices',async()=>{
+  const state={preview:true},routes=[],messages=[];const forbidden=()=>{throw new Error('design must not call backend');};
+  const controller=createJourneyActions({state,navigate:r=>routes.push(r),toast:m=>messages.push(m),api:forbidden,refresh:forbidden,saveContent:forbidden,helpers});
+  const data=new FormData();data.set('material','Silver');data.set('style','Orbit');data.set('engraving','<script>test</script>');
+  assert.equal(await controller.form({dataset:{form:'witness-design'}},data),true);assert.equal(state.witnessDesign.material,'Silver');assert.equal(state.witnessDesign.style,'Orbit');assert.equal(routes.at(-1),'witness-configurator');
+  assert.match(messages[0],/不下单/);assert.throws(()=>witnessDesign({material:'invalid'}),/材质/);assert.throws(()=>witnessDesign({style:'invalid'}),/风格/);assert.throws(()=>witnessDesign({engraving:'字'.repeat(41)}),/40/);
+  const html=view({...state,route:'witness-configurator'});assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);assert.match(html,/data-material="Silver"/);assert.match(html,/data-style="Orbit"/);
+});
+test('Witness browsing filters actual design options without exposing account data',async()=>{
+  const state={preview:true},controller=createJourneyActions({state,helpers});await controller.action({dataset:{action:'witness-tab',value:'physical'}});
+  const html=view({...state,route:'witness'});assert.match(html,/Physical Ring/);assert.match(html,/Memory Object/);assert.doesNotMatch(html,/<h2>Digital Ring/);
+  await assert.rejects(controller.action({dataset:{action:'witness-tab',value:'unknown'}}),/未知/);
+});
+
+test('direct binding reviews validated addresses without creating an invitation',async()=>{
+  const state={preview:true},routes=[],forbidden=()=>{throw new Error('review must not send transaction');};
+  const controller=createJourneyActions({state,navigate:r=>routes.push(r),api:forbidden,refresh:forbidden,helpers});
+  const data=new FormData();data.set('address','0x'+'a'.repeat(40));
+  assert.equal(await controller.form({dataset:{form:'direct-bind'}},data),true);assert.equal(state.inviteAddress,data.get('address'));assert.equal(routes.at(-1),'invite-page');
+  data.set('address','0x'+'0'.repeat(40));await assert.rejects(controller.form({dataset:{form:'direct-bind'}},data),/有效/);
 });

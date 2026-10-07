@@ -1,5 +1,12 @@
 import {emptyProfile,updateIdentity} from './onboarding.js';
 import {goalCategories} from './journey.js';
+export function witnessDesign(fields){
+  const material=String(fields.material||'Rose Gold'),style=String(fields.style||'Eternal'),engraving=String(fields.engraving||'').trim();
+  if(!['Rose Gold','Silver','White Gold','Black Titanium'].includes(material))throw new Error('未知材质');
+  if(!['Eternal','Minimal','Orbit'].includes(style))throw new Error('未知风格');
+  if(Array.from(engraving).length>40)throw new Error('铭文最多 40 个字。');
+  return {material,style,engraving};
+}
 export function createJourneyActions({state,navigate,modal,toast,api,refresh,saveContent,fileMedia,memoryForm,helpers}){
   const {escape:e,btn,notice,input,submit}=helpers;
   const rows=()=>state.preview?(state.previewMemories||[]):state.memories;
@@ -7,12 +14,14 @@ export function createJourneyActions({state,navigate,modal,toast,api,refresh,sav
   return {
     async action(target){
       const action=target.dataset.action;
-      if(['path','journey-index','invite-page','invitation-preview','ceremony','privacy'].includes(action)){navigate(action);return true;}
+      if(['path','journey-index','invite-page','invitation-preview','ceremony','privacy','witness-configurator','direct-bind'].includes(action)){navigate(action);return true;}
+      if(action==='identity-step-preview'){const step=Number(target.dataset.step);if(![1,2,3,4].includes(step))throw new Error('未知身份步骤');const profile=state.preview?state.previewProfile:state.profile;state.identityStep=step;state.identityDraft=state.identityDraft||{...emptyProfile(),...profile,interests:[...(profile?.interests||[])]};navigate('identity');return true;}
       if(action==='identity'){const profile=state.preview?state.previewProfile:state.profile;state.identityStep=1;state.identityDraft={...emptyProfile(),...profile,interests:[...(profile?.interests||[])]};navigate('identity');return true;}
       if(action==='journey-back'){navigate(target.dataset.route||'home');return true;}
       if(action==='identity-back'){const form=document.querySelector('[data-form="identity-step"]');if(form)state.identityDraft=updateIdentity(state.identityDraft,state.identityStep,Object.fromEntries(new FormData(form)));state.identityStep=Math.max(1,state.identityStep-1);navigate('identity');return true;}
       if(action==='identity-interest'){const draft=state.identityDraft||{...emptyProfile(),...state.profile},value=target.dataset.value;if(draft.interests.includes(value))draft.interests=draft.interests.filter(i=>i!==value);else{if(draft.interests.length>=8)throw new Error('最多选择八项兴趣。');draft.interests=[...draft.interests,value];}state.identityDraft=draft;return true;}
       if(action==='story-filter'){state.storyFilter=target.dataset.value;return true;}
+      if(action==='witness-tab'){if(!['digital','physical'].includes(target.dataset.value))throw new Error('未知见证类型');state.witnessTab=target.dataset.value;return true;}
       if(action==='witness-detail'){state.witnessKind=target.dataset.value;navigate('witness-detail');return true;}
       if(action==='witness-material'){if(!['Rose Gold','Silver','White Gold','Black Titanium'].includes(target.dataset.value))throw new Error('未知材质');state.material=target.dataset.value;return true;}
       if(action==='witness-requirements'){modal('真实见证尚待接入',notice('数字见证需要已部署、可核验的铸造合约；实体戒指与记忆物件需要真实制作、定价、订单、退款及履约服务。当前只保留外观偏好，不铸造、不下单、不收费。')+btn('返回设计','close'));return true;}
@@ -54,6 +63,8 @@ export function createJourneyActions({state,navigate,modal,toast,api,refresh,sav
         else{await saveContent(content,'goal',form.dataset.id);await refresh();toast('目标规划已加密保存，未移动资金。');}
         dialogClose();navigate('bond');return true;
       }
+      if(kind==='direct-bind'){const address=value('address');if(!/^0x[0-9a-fA-F]{40}$/.test(address)||/^0x0{40}$/i.test(address))throw new Error('请填写对方有效的完整钱包地址。');state.inviteAddress=address;navigate('invite-page');return true;}
+      if(kind==='witness-design'){state.witnessDesign=witnessDesign(Object.fromEntries(data));state.material=state.witnessDesign.material;toast('外观预览已更新，仅本页保留，不铸造、不下单。');navigate('witness-configurator');return true;}
       if(kind==='privacy'){
         if(state.preview){toast('这里只预览设置，未修改真实资料。');return true;}
         if(!state.profile)throw new Error('先完成身份资料。');await api('/api/profile',{method:'PUT',body:{...state.profile,discoverable:data.has('discoverable')}});await refresh();toast('公开范围已更新。');return true;

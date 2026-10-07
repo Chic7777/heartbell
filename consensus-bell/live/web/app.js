@@ -4,10 +4,16 @@ import {candidateDetail} from './radar.js';
 import {createJourneyActions} from './journey-actions.js';
 import {carryIdentityDraft} from './onboarding.js';
 import {walletAction,chainIdentity,encryptionPeer} from './aa-action.js';
-const {BrowserProvider,Contract,parseEther,formatEther,keccak256,toUtf8Bytes,ZeroAddress,isAddress}=window.ethers;
-const state={user:null,profile:null,relation:null,route:'home',memories:[],proofs:[],candidates:[],radar:null,radarFilters:{city:'',intention:'',radius:0},radarError:'',radarScanning:false,radarExpanded:false,history:[],config:null,error:'',balance:'0',formatAmount:formatEther};
+import {icon,agentCard,proofSheet,transactionStepper} from './components.js';
+import {loadWalletSDK} from './wallet-sdk.js';
+let BrowserProvider,Contract,parseEther,formatEther,keccak256,toUtf8Bytes,ZeroAddress,isAddress;
+async function walletSDK(){const sdk=await loadWalletSDK();({BrowserProvider,Contract,parseEther,formatEther,keccak256,toUtf8Bytes,ZeroAddress,isAddress}=sdk);state.formatAmount=formatEther;}
+
+const state={user:null,profile:null,relation:null,route:'home',memories:[],proofs:[],candidates:[],radar:null,radarFilters:{city:'',intention:'',radius:0},radarError:'',radarScanning:false,radarExpanded:false,history:[],config:null,error:'',balance:'0',formatAmount:()=> '0'};
 state.preview=new URLSearchParams(location.search).get('preview')==='1';
-Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',witnessKind:'digital',material:'Rose Gold'});
+Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',witnessKind:'digital',material:'Rose Gold',witnessTab:'digital',witnessDesign:null});
+const routeNames=['home','path','direct-bind','identity','discover','echo-results','echo-detail','echo-chat','invite-page','invitation-preview','waiting','acceptance','ceremony','story','vows','bond','vault','witness','witness-detail','witness-configurator','me','privacy','relationship-settings','archived','proofs','history','journey-index'];
+const requestedRoute=location.hash.slice(1);if(routeNames.includes(requestedRoute))state.route=requestedRoute;
 let provider,signer,privyBridge,privyAdapter,busy=false,epoch=0,radarRevision=0,refreshing=false,selectedArchive='0',focusBeforeDialog;
 const app=document.querySelector('#app'),tabs=document.querySelector('#tabs'),dialog=document.querySelector('#sheet');
 export async function api(url,options={}){
@@ -19,21 +25,22 @@ function walletDetails(){
   if(!state.user||state.preview||state.authProvider!=='privy'||!['me','proofs'].includes(state.route))return '';
   return `<details class="card"><summary>我的真实钱包 · Privy</summary><p>邮箱签名钱包</p><p class="small">${escape(state.user)}</p><p>Ring 智能账户 · 链 ${escape(state.config.chainId)}</p><p class="small">${escape(state.chainAddress)}</p>${notice('邀请对方时使用智能账户地址。操作由此账户支付 BOT Gas；需要先充值。')}${!privyAdapter?btn('重新连接邮箱签名器','login-privy','','light'):''}${(state.userOperations||[]).map(op=>`<div class="proof-row"><span>${escape(op.action.action)} · ${escape(op.status)}</span><span>${escape(short(op.transactionHash||op.userOpHash))}</span></div>`).join('')}${btn('刷新链上回执','refresh','','light')}</details>`;
 }
-function navRoute(){if(['path','identity','discover','invite-page','invitation-preview','ceremony','journey-index'].includes(state.route))return 'home';if(['vault','witness','witness-detail','privacy','proofs','history'].includes(state.route))return 'me';return state.route;}
+function navRoute(){if(['path','direct-bind','identity','discover','invite-page','invitation-preview','ceremony','journey-index','echo-results','echo-detail','echo-chat','waiting','acceptance'].includes(state.route))return 'home';if(['vault','witness','witness-detail','witness-configurator','privacy','proofs','history','relationship-settings','archived'].includes(state.route))return 'me';return state.route;}
 function tabIcon(route){const paths={home:'M3 10l9-7 9 7v10H3z M9 20v-7h6v7',story:'M5 3h14v18H5z M8 8h8 M8 12h8 M8 16h4',vows:'M12 21S2 14 2 7a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 7-10 14-10 14z',bond:'M3 8h18v12H3z M8 8V4h8v4 M3 13h18',me:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M4 21v-2a8 8 0 0 1 16 0v2'};return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[route]}"></path></svg>`;}
-function render(){app.innerHTML='<div class="page">'+view(state)+walletDetails()+(state.user&&!state.preview&&state.route==='me'?'<div class="actions">'+btn('登记本机加密密钥','setup-keys','','light')+'</div>':'')+'</div>';document.querySelector('#account').textContent=state.preview?'访客浏览 · 未登录':state.user?short(state.user):'尚未登录';document.querySelector('#wallet').textContent=state.user?'退出':'连接钱包';tabs.innerHTML=(state.user||state.preview)?['home','story','vows','bond','me'].map((r,i)=>`<button data-action="${r}" class="${navRoute()===r?'active':''}" ${navRoute()===r?'aria-current="page"':''}>${tabIcon(r)}<span>${['Ring','Story','Vow','Bond','Me'][i]}</span></button>`).join(''):'';if(busy)document.querySelectorAll('button').forEach(b=>b.disabled=true);}
-function navigate(route){if(dialog.open)dialog.close();state.route=route;render();app.scrollTop=0;app.focus({preventScroll:true});}
+function render(){document.title='Consensus Bell · '+({home:'Our Ring',story:'Our Story',vows:'Our Vows',bond:'Our Bond',me:'Your Space'}[state.route]||state.route);app.dataset.route=state.route;app.innerHTML='<div class="page">'+(state.transaction?transactionStepper(state.transaction):'')+view(state)+(['story','vows'].includes(state.route)?(state.agentDraft?agentCard(state.agentDraft.text)+btn('撤回这次授权','agent-revoke','','light'):state.user&&!state.preview?'<div class="actions">'+btn(icon('spark')+' 请 Bell 帮我整理草稿','agent-request','','light')+'</div>':''):'')+walletDetails()+(state.user&&!state.preview&&state.route==='me'?'<div class="actions">'+btn('登记本机加密密钥','setup-keys','','light')+'</div>':'')+'</div>';document.querySelector('#account').textContent=state.preview?'访客浏览 · 未登录':state.user?short(state.user):'尚未登录';document.querySelector('#wallet').textContent=state.user?'退出':'连接钱包';tabs.innerHTML=(state.user||state.preview)?['home','story','vows','bond','me'].map((r,i)=>`<button data-action="${r}" class="${navRoute()===r?'active':''}" ${navRoute()===r?'aria-current="page"':''}>${tabIcon(r)}<span>${['Ring','Story','Vow','Bond','Me'][i]}</span></button>`).join(''):'';if(busy)document.querySelectorAll('button').forEach(b=>b.disabled=true);}
+function navigate(route){if(dialog.open)dialog.close();state.route=route;history.replaceState(null,'','#'+route);render();app.scrollTop=0;app.focus({preventScroll:true});}
+function progress(stage,values={}){state.transaction={...state.transaction,stage,...values};const current=app.querySelector('.bell-transaction');if(current)current.outerHTML=transactionStepper(state.transaction);else app.querySelector('.page')?.insertAdjacentHTML('afterbegin',transactionStepper(state.transaction));}
 function modal(title,body){focusBeforeDialog=document.activeElement;dialog.innerHTML=`<div class="dialog-top"><h2 id="sheet-title">${title}</h2><button class="icon" data-action="close" aria-label="关闭">×</button></div>${body}`;dialog.showModal();}
 dialog.addEventListener('close',()=>{if(focusBeforeDialog?.isConnected)focusBeforeDialog.focus();});
 const journey=createJourneyActions({state,navigate,modal,toast,api,refresh,saveContent,fileMedia,memoryForm,helpers:{escape,short,btn,head,input,notice,submit}});
-function resetJourney(){Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',material:'Rose Gold',witnessKind:'digital'});}
+function resetJourney(){Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',material:'Rose Gold',witnessKind:'digital',witnessTab:'digital',witnessDesign:null,echoAddress:null,chatDraft:'',connections:[],transaction:null,agentDraft:null,agentGrant:null,agentKind:null});}
 const peer=()=>encryptionPeer(state.relation,state.user,chainIdentity(state));
 const scope=()=>state.relation?.id&&state.relation.id!=='0'?state.relation.id:'personal';
 async function refresh(){
   if(!state.user||refreshing)return;refreshing=true;const session=epoch,searchRevision=radarRevision;
   const address=state.user;
   try {
-    const [profile,proofs,radar,history,userOperations]=await Promise.all([api('/api/profile'),api('/api/transactions'),api('/api/radar?'+new URLSearchParams(state.radarFilters)).catch(error=>({candidates:[],total:0,hasLocation:false,error:error.message})),api('/api/relations'),state.authProvider==='privy'?api('/api/userops'):Promise.resolve([])]);
+    const [profile,proofs,radar,history,userOperations,connections]=await Promise.all([api('/api/profile'),api('/api/transactions'),api('/api/radar?'+new URLSearchParams(state.radarFilters)).catch(error=>({candidates:[],total:0,hasLocation:false,error:error.message})),api('/api/relations'),state.authProvider==='privy'?api('/api/userops'):Promise.resolve([]),api('/api/connections')]);
     if(epoch!==session)return;
     let relation=null,error='';
     try{relation=await api((state.authProvider==='privy'?'/api/relationships/current':'/api/ring')+'?id='+selectedArchive);}
@@ -42,7 +49,8 @@ async function refresh(){
     const currentScope=relation?.id&&relation.id!=='0'?relation.id:'personal';
     const rows=await api('/api/memories?scope='+currentScope);const partner=encryptionPeer(relation,address,chainIdentity(state));
     const memories=await Promise.all(rows.map(async m=>{try{return {...m,content:await decrypt(m.body,partner)};}catch(error){return {...m,error:'无法解密：'+error.message};}}));
-    if(epoch!==session)return;Object.assign(state,{profile:profile.profile,proofs,history,userOperations,relation,error,memories,balance:relation?.balances?formatEther(Object.values(relation.balances).reduce((sum,v)=>sum+BigInt(v),0n)):'0'});
+    if(epoch!==session)return;const mergedProofs=[...proofs,...userOperations.filter(op=>op.status==='CONFIRMED'&&op.result?.success&&op.transactionHash).map(op=>({hash:op.transactionHash,block:op.result.block,chainId:state.config.chainId,actions:op.result.events.map(event=>event.name),confirmedAt:new Date(op.updatedAt).toISOString()}))];
+    Object.assign(state,{profile:profile.profile,proofs:mergedProofs.filter((p,i,rows)=>rows.findIndex(row=>row.hash===p.hash)===i),history,userOperations,connections:connections.connections,relation,error,memories,balance:relation?.balances?formatEther(Object.values(relation.balances).reduce((sum,v)=>sum+BigInt(v),0n)):'0'});
     if(searchRevision===radarRevision)Object.assign(state,{candidates:radar.candidates,radar,radarError:radar.error||''});
     if(!state.profile&&state.route==='home')state.route='identity';render();
   }finally{refreshing=false;}
@@ -56,6 +64,7 @@ async function scanRadar(){
 }
 function login(){modal('开启你的真实账户',notice('邮箱登录会创建由你控制的嵌入式钱包。已有钱包也可直接签名登录。')+(state.config.privy?.appId?btn('邮箱登录 · Privy','login-privy'):'')+btn('连接已有钱包','login-injected','','light'));}
 async function loginPrivy(){
+  await walletSDK();
   const visitorDraft=state.preview?state.previewProfile:null,operation=++epoch;
   dialog.close();toast('正在加载安全邮箱登录…');
   const module=await import('/privy.js');privyBridge=await module.mountPrivy(state.config);
@@ -69,6 +78,7 @@ async function loginPrivy(){
   toast('邮箱钱包已验证。Ring 使用智能账户 '+short(state.chainAddress));
 }
 async function loginInjected(){
+  await walletSDK();
   const visitorDraft=state.preview?state.previewProfile:null;
   dialog.close();
   if(!window.ethereum?.request)throw new Error('请先安装支持 EVM 的浏览器钱包，再连接。此入口不会生成演示钱包。');
@@ -88,29 +98,36 @@ async function logout(){
   finally{clearEncryption();state.user=null;state.chainAddress=null;state.authProvider=null;privyAdapter=null;state.profile=null;state.relation=null;state.memories=[];state.proofs=[];state.userOperations=[];resetRadar();resetJourney();provider=null;signer=null;selectedArchive='0';navigate('home');}
 }
 async function transact(method,args=[],value){
+  if(dialog.open)dialog.close();progress('preparing',{label:({createInvitation:'Ring Invitation',acceptInvitation:'Create Our Ring',proposePrivateVow:'Our Vow',confirmVow:'Confirm Our Vow',deposit:'Our Bond'}[method]||'共同确认'),hash:null,error:null,message:'正在核对真实链上状态与费用。'});
+  try{
   if(!state.config.chainConfigured)throw new Error('先配置真实 BOT RPC 与已部署合约。当前没有可提交的链上目标。');
   if(state.authProvider==='privy'){
     if(!privyAdapter)throw new Error('请重新通过邮箱连接钱包，以确认当前签名器。');
     const operation=epoch,prepared=await api('/api/userops/prepare',{method:'POST',body:walletAction(method,args,value)});
+    progress('signature',{message:'请在你的钱包中核对并签名。'});
     const signed=await privyAdapter.signPrepared(prepared);if(operation!==epoch)throw new Error('账户已变化，操作未提交。');
     let result=await api('/api/userops/submit',{method:'POST',body:signed});
+    progress('submitted',{hash:result.userOpHash,message:'操作已提交，正在等待链上执行。'});
     toast('智能账户操作已提交，等待真实链上回执：'+short(result.userOpHash));
     const deadline=Date.now()+120000;
-    while(!['CONFIRMED','FAILED'].includes(result.status)&&Date.now()<deadline){await new Promise(resolve=>setTimeout(resolve,2000));if(operation!==epoch)throw new Error('账户已变化，请在原账户查看交易记录。');result=await api('/api/userops/'+result.id);}
+    while(!['CONFIRMED','FAILED'].includes(result.status)&&Date.now()<deadline){await new Promise(resolve=>setTimeout(resolve,2000));if(operation!==epoch)throw new Error('账户已变化，请在原账户查看交易记录。');result=await api('/api/userops/'+result.id);if(result.status==='INCLUDED')progress('included',{hash:result.transactionHash,message:'已进入区块，正在等待确认。'});}
     if(result.status==='FAILED')throw new Error(result.error||'智能账户操作未成功，状态未修改。');
     if(result.status!=='CONFIRMED'||!result.transactionHash)throw new Error('操作仍等待链上确认，请稍后查看 Proof History；不会重复发送。');
-    selectedArchive='0';await refresh();toast('智能账户操作已由链上确认：'+short(result.transactionHash));return;
+    progress('confirmed',{hash:result.transactionHash,message:'操作已成功执行，并达到所需区块确认。'});selectedArchive='0';await refresh();toast('智能账户操作已由链上确认：'+short(result.transactionHash));return;
   }
   if(!window.ethereum?.request)throw new Error('请连接你的浏览器钱包。');
   provider=new BrowserProvider(window.ethereum);signer=await provider.getSigner();if((await signer.getAddress()).toLowerCase()!==state.user.toLowerCase())throw new Error('钱包账户与当前登录会话不一致，请重新登录。');
   const network=await provider.getNetwork();if(network.chainId!==BigInt(state.config.chainId)){await provider.send('wallet_switchEthereumChain',[{chainId:'0x'+state.config.chainId.toString(16)}]);provider=new BrowserProvider(window.ethereum);signer=await provider.getSigner();}
   if((await provider.getNetwork()).chainId!==BigInt(state.config.chainId))throw new Error('钱包仍未连接到正确的链。');
   if(await provider.getCode(state.config.contract)==='0x')throw new Error('配置地址没有合约代码，停止提交。');
+  progress('signature',{message:'请在你的钱包中核对并签名。'});
   const bell=new Contract(state.config.contract,state.config.abi,signer),transaction=await bell[method](...args,...(value!==undefined?[{value}]:[]));
+  progress('submitted',{hash:transaction.hash,message:'已提交，等待真实交易回执。'});
   toast('交易已提交，等待两次区块确认：'+short(transaction.hash));
-  const receipt=await transaction.wait(2);if(!receipt||receipt.status!==1)throw new Error('交易没有成功，界面状态未修改。');
+  const included=await transaction.wait(1);if(!included||included.status!==1)throw new Error('交易未成功执行。');progress('included',{hash:included.hash,message:'已进入区块，等待第二次确认。'});const receipt=await transaction.wait(2);if(!receipt||receipt.status!==1)throw new Error('交易没有成功，界面状态未修改。');
   try{await api('/api/transactions',{method:'POST',body:{hash:receipt.hash}});}catch(error){toast('链上已确认，但记录同步失败：'+error.message);}
-  selectedArchive='0';await refresh();toast('交易已由链上确认。');
+  progress('confirmed',{hash:receipt.hash,message:'双方共同选择已由链上确认。'});selectedArchive='0';await refresh();toast('交易已由链上确认。');
+  }catch(error){progress('failed',{error:error.shortMessage||error.message,message:''});throw error;}
 }
 function memoryForm(id){const m=(state.preview?state.previewMemories||[]:state.memories).find(m=>m.id===id);if(id&&!m?.content)throw new Error('无法解密正文，不能覆盖未知内容。');modal(id?'修改记忆':'Keep a memory',`<form class="form" data-form="memory" ${id?`data-id="${escape(id)}"`:''}>${input('标题','title',m?.content?.title||'','required maxlength="80"')}<label for="f-text">一句话，或一封信</label><textarea id="f-text" name="text" maxlength="4000">${escape(m?.content?.text||'')}</textarea><label for="f-image">照片或短视频 · 最大 1MB</label><input type="file" id="f-image" name="image" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm">${notice(state.preview?'仅保留本页未上传草稿，不是账户或链上记录。':'内容先在本机加密，再保存到当前账号或你们的 Ring。')}${submit(state.preview?'保留本页草稿':'加密并保存')}</form>`);}
 async function fileMedia(file){if(!file?.size)return {image:'',video:''};if(file.size>1024*1024||!['image/jpeg','image/png','image/webp','video/mp4','video/webm'].includes(file.type))throw new Error('请选择不超过 1MB 的 JPEG、PNG、WebP、MP4 或 WebM。');const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('媒体读取失败'));reader.readAsDataURL(file);});return file.type.startsWith('video/')?{image:'',video:data}:{image:data,video:''};}
@@ -119,14 +136,25 @@ async function action(target){
   const action=target.dataset.action;
   if(await journey.action(target))return;
   if(action==='preview'){state.preview=true;navigate('home');return;}
-  if(['home','story','vows','bond','me','identity','vault','witness','proofs','history'].includes(action)){navigate(action);return;}
+  if(['echo-detail','echo-chat'].includes(action)){state.echoAddress=target.dataset.inbox?null:target.dataset.address||state.echoAddress;if(!state.preview&&action==='echo-chat')state.connections=(await api('/api/connections')).connections;navigate(action);return;}
+  if(action==='discover'){if(state.user)await refresh();navigate('discover');return;}
+  if(routeNames.includes(action)){navigate(action);return;}
+  if(action==='help'){modal('从相遇，到共同生活',notice('通过邮箱或钱包创建账户，填写身份后可寻找共鸣。邀请与接受均由各自的钱包签名。记忆在本机加密，交易证明来自真实链上回执。')+btn('开始创建身份','identity'));return;}
+  if(action==='wallet-info'){modal('Wallet & Smart Account',state.user?notice('邮箱签名钱包：'+escape(state.user)+'<br>智能账户：'+escape(state.chainAddress||state.user))+btn('查看链上记录','proofs','','light'):notice('连接后，邮箱签名钱包和智能账户会显示在这里。')+btn('连接钱包','login'));return;}
+  if(action==='proof-detail'){const proof=state.proofs.find(p=>p.hash===target.dataset.hash);if(!proof)throw new Error('真实交易证明尚未加载。');modal('On-chain Proof',proofSheet(proof,state.config));return;}
   if(state.preview&&!['login','login-privy','login-injected','logout','close','discover'].includes(action)){toast('访客模式仅供浏览，此操作需要先连接钱包。');return;}
   switch(action){
+    case 'echo-connect':{const candidate=state.candidates.find(c=>c.address===target.dataset.address);if(!candidate)throw new Error('请先选择真实的公开资料。');await api('/api/connections',{method:'POST',body:{recipient:candidate.address}});state.connections=(await api('/api/connections')).connections;state.echoAddress=candidate.address;navigate('echo-chat');toast('连接请求已保存，等待对方回应。');break;}
+    case 'connection-respond':await api('/api/connections/'+encodeURIComponent(target.dataset.id)+'/respond',{method:'POST',body:{decision:target.dataset.decision}});state.connections=(await api('/api/connections')).connections;navigate('echo-chat');break;
+    case 'agent-request':state.agentKind=state.route==='vows'?'vow-draft':'story-draft';modal('让 Bell 帮你整理一句话',notice('仅在你同意后，根据你自己的公开资料生成结构化草稿。不会读取私人记忆；不会自动保存或提交链上誓言。授权十分钟后到期，也可立即撤回。')+btn('同意并生成可编辑草稿','agent-consent-confirm','','rose')+btn('暂不使用','close','','light'));break;
+    case 'agent-consent-confirm':{const grant=await api('/api/consents',{method:'POST',body:{scope:'agent:'+state.agentKind,resourceId:'profile',expiresAt:Date.now()+600000}});state.agentGrant=grant.grant.id;const response=await api('/api/agent/jobs',{method:'POST',body:{skill:state.agentKind,resourceId:'profile',points:[]}});state.agentDraft=response.job.output;dialog.close();toast('规则模板草稿已生成，你可以修改后再决定使用。');break;}
+    case 'agent-revoke':if(state.agentGrant)await api('/api/consents',{method:'DELETE',body:{id:state.agentGrant}});state.agentGrant=null;state.agentDraft=null;toast('已撤回这次草稿授权。');break;
+    case 'agent-use':case 'agent-edit':{if(!state.agentDraft)throw new Error('草稿尚未生成。');if(state.agentKind==='vow-draft'){if(state.relation?.status!=='ACTIVE')throw new Error('先建立活动 Ring，才能提交真实誓言。');modal('Our Vow', '<form class="form" data-form="vow"><label for="agent-vow">核对并编辑誓言</label><textarea id="agent-vow" name="text" maxlength="200" required>'+escape(state.agentDraft.text.slice(0,200))+'</textarea>'+submit('由我核对并提出誓言')+'</form>');}else{memoryForm();document.querySelector('#f-title').value=state.agentDraft.title;document.querySelector('#f-text').value=state.agentDraft.text;}break;}
     case 'login':login();break;case 'login-privy':await loginPrivy();break;case 'login-injected':await loginInjected();break;case 'logout':await logout();break;case 'close':dialog.close();break;case 'refresh':await refresh();break;
     case 'discover':await refresh();navigate('discover');break;
     case 'radar-expand':state.radarExpanded=!state.radarExpanded;break;
-    case 'radar-detail':{const candidate=state.candidates.find(c=>c.address===target.dataset.address);if(!candidate)throw new Error('候选资料已变化，请重新探测。');modal('Possible Echo',candidateDetail(candidate));break;}
-    case 'radar-save':{const candidate=state.candidates.find(c=>c.address===target.dataset.address);if(!candidate)throw new Error('候选资料已变化。');await api('/api/radar/saved',{method:'PUT',body:{address:candidate.address,saved:!candidate.saved}});await scanRadar();break;}
+    case 'radar-detail':{state.echoAddress=target.dataset.address;navigate('echo-detail');break;}
+        case 'radar-save':{const candidate=state.candidates.find(c=>c.address===target.dataset.address);if(!candidate)throw new Error('候选资料已变化。');await api('/api/radar/saved',{method:'PUT',body:{address:candidate.address,saved:!candidate.saved}});await scanRadar();break;}
     case 'radar-location':modal('允许 O 帮你寻找附近的人？',notice('仅在你确认后请求浏览器定位。服务器丢弃精确坐标，只保存约 11km 网格的粗略区域，有效期 24 小时。附近筛选与距离均为区域间估算；其他人可能据此了解你所在的大致区域，不是匿名或精准导航。每分钟最多更新一次，可随时撤回删除。定位和资料未经独立核验。')+btn('同意并开启定位','radar-location-confirm')+btn('暂不开启','close','','light'));break;
     case 'radar-location-confirm':{if(!navigator.geolocation)throw new Error('当前环境不支持定位，可继续按城市与兴趣寻找。');const session=epoch;const position=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,()=>reject(new Error('未获取到定位授权，请按城市筛选。')),{enableHighAccuracy:false,timeout:10000,maximumAge:0}));if(session!==epoch)throw new Error('账号已变化，请重新开启定位。');await api('/api/radar/location',{method:'PUT',body:{lat:position.coords.latitude,lon:position.coords.longitude,consent:true}});dialog.close();await scanRadar();toast('附近定位已开启，有效期 24 小时。');break;}
     case 'radar-revoke-location':await api('/api/radar/location',{method:'DELETE'});state.radarFilters.radius=0;await scanRadar();toast('已删除位置，不再计算附近距离。');break;
@@ -171,8 +199,9 @@ async function run(operation){
   }
 }
 document.addEventListener('click',e=>{const target=e.target.closest('[data-action]');if(target)run(()=>action(target));});
+window.addEventListener('hashchange',()=>{const route=location.hash.slice(1);if(routeNames.includes(route))navigate(route);});
 document.querySelector('#wallet').addEventListener('click',()=>run(()=>state.user?logout():login()));
-document.addEventListener('submit',e=>{const form=e.target.closest('[data-form]');if(!form)return;e.preventDefault();const data=new FormData(form),value=k=>String(data.get(k)||'').trim();run(async()=>{if(await journey.form(form,data))return;if(state.preview){toast('此操作需要登录，预览不会上传或发起交易。');return;}
+document.addEventListener('submit',e=>{const form=e.target.closest('[data-form]');if(!form)return;e.preventDefault();const data=new FormData(form),value=k=>String(data.get(k)||'').trim();run(async()=>{if(form.dataset.form==='chat-draft'){state.chatDraft=value('message');toast('只保留本页草稿，未发送。');return;}if(await journey.form(form,data))return;if(state.preview){toast('此操作需要登录，预览不会上传或发起交易。');return;}
   switch(form.dataset.form){
     case 'radar':state.radarFilters={city:value('city'),intention:value('intention'),radius:Number(value('radius'))};state.radarExpanded=false;await scanRadar();break;
     case 'profile':{const profile={name:value('name'),city:value('city'),gender:value('gender'),age:value('age'),interests:value('interests').split(/[,，]/).map(v=>v.trim()).filter(Boolean),statement:value('statement'),intention:value('intention'),discoverable:data.has('discoverable')};await api('/api/profile',{method:'PUT',body:profile});await refresh();navigate('home');toast('资料已保存到你的真实钱包账户。');break;}
@@ -184,5 +213,5 @@ document.addEventListener('submit',e=>{const form=e.target.closest('[data-form]'
 });});
 window.ethereum?.on?.('accountsChanged',()=>{if(state.user&&state.authProvider!=='privy'){++epoch;clearEncryption();state.user=null;state.chainAddress=null;state.authProvider=null;state.profile=null;state.relation=null;state.memories=[];resetRadar();resetJourney();render();api('/api/logout',{method:'POST'}).catch(()=>toast('钱包已切换，请重新签名登录。'));}});
 window.ethereum?.on?.('chainChanged',()=>{if(state.authProvider!=='privy'){provider=null;signer=null;}});
-try{state.config=await api('/api/config');try{const session=state.preview?null:await api('/api/session');state.user=session?.address;state.chainAddress=session?.chainAddress||state.user;state.authProvider=session?.authProvider||'wallet';}catch{state.user=null;}if(state.user){try{await initializeEncryption({account:state.user,api,config:state.config});}catch(error){toast(error.message);}await refresh();}render();}catch(error){state.error=error.message;app.innerHTML=head('服务尚未就绪',escape(error.message));}
+try{state.config=await api('/api/config');try{const session=state.preview?null:await api('/api/session/status');state.user=session?.address;state.chainAddress=session?.chainAddress||state.user;state.authProvider=session?.authProvider||'wallet';}catch{state.user=null;}if(state.user){await walletSDK();try{await initializeEncryption({account:state.user,api,config:state.config,deferRegistration:true});}catch(error){toast(error.message);}await refresh();}render();}catch(error){state.error=error.message;app.innerHTML=head('服务尚未就绪',escape(error.message));}
 setInterval(()=>{if(state.user&&!busy&&!refreshing&&!dialog.open&&!['identity','discover'].includes(state.route))refresh().catch(error=>{state.error=error.message;render();});},15000);

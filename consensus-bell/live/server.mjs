@@ -1,3 +1,4 @@
+import {gzipSync} from 'node:zlib';
 import Fastify from 'fastify';
 import { createAA } from './aa.mjs';
 import { createDomainV2 } from './domain-v2.mjs';
@@ -80,7 +81,9 @@ export async function createApp(options={}) {
           db.prepare('INSERT INTO session_providers VALUES(?,?)').run(sessionHash(result.token),result.provider==='privy.io'?'privy':result.provider);
           res.setHeader('Set-Cookie',cookie(result.token));return reply(res,200,{address:result.address,userId:result.userId,provider:result.provider});
         }
-        const address=auth.user(req.headers.cookie);if(!address)return reply(res,401,{error:'Sign in with your wallet first'});
+        const address=auth.user(req.headers.cookie);
+        if(url.pathname==='/api/session/status'&&method==='GET'){if(!address)return reply(res,200,{authenticated:false});const token=(req.headers.cookie||'').split(';').map(value=>value.trim()).find(value=>value.startsWith('cb_session='))?.slice(11);const provider=token?db.prepare('SELECT provider FROM session_providers WHERE token=?').get(sessionHash(token))?.provider:null;return reply(res,200,{authenticated:true,address,authProvider:provider||'injected',chainAddress:provider==='privy'?aa.identity(address):address});}
+        if(!address)return reply(res,401,{error:'Sign in with your wallet first'});
         if(url.pathname==='/api/notifications/stream'&&method==='GET'){
           res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-store','Connection':'keep-alive'});
           res.write('event: ready\ndata: {}\n\n');
@@ -164,11 +167,11 @@ export async function createApp(options={}) {
         }
         return reply(res,404,{error:'API endpoint not found'});
       }
-      const files={'/':'web/index.html','/index.html':'web/index.html','/app.js':'web/app.js','/aa-action.js':'web/aa-action.js','/view.js':'web/view.js','/radar.js':'web/radar.js','/radar.css':'web/radar.css','/crypto.js':'web/crypto.js','/onboarding.js':'web/onboarding.js','/journey.js':'web/journey.js','/journey-actions.js':'web/journey-actions.js','/journey.css':'web/journey.css','/complete.css':'../ui/complete.css','/ethers.js':'node_modules/ethers/dist/ethers.umd.min.js'};
+      const files={'/':'web/index.html','/index.html':'web/index.html','/app.js':'web/app.js','/app.bundle.js':'web/app.bundle.js','/app.bundle.js.map':'web/app.bundle.js.map','/aa-action.js':'web/aa-action.js','/view.js':'web/view.js','/radar.js':'web/radar.js','/radar.css':'web/radar.css','/crypto.js':'web/crypto.js','/onboarding.js':'web/onboarding.js','/journey.js':'web/journey.js','/journey-actions.js':'web/journey-actions.js','/journey.css':'web/journey.css','/bell.css':'web/bell.css','/app.css':'web/app.css','/components.js':'web/components.js','/wallet-sdk.js':'web/wallet-sdk.js','/community.js':'web/community.js','/settings.js':'web/settings.js','/complete.css':'../ui/complete.css','/ethers.js':'node_modules/ethers/dist/ethers.umd.min.js'};
       files['/privy.js']='web/privy.js';files['/aa-action.js']='web/aa-action.js';
       let file=files[url.pathname];if(/^\/assets\/[a-zA-Z0-9._-]+$/.test(url.pathname))file='../ui'+url.pathname;
       if(!file||!['GET','HEAD'].includes(method)){res.writeHead(404);res.end('Not found');return;}
-      const bytes=await readFile(path.join(root,file));const type={'.html':'text/html','.js':'text/javascript','.css':'text/css','.jpg':'image/jpeg','.png':'image/png'}[path.extname(file)]||'application/octet-stream';res.writeHead(200,{'Content-Type':type,'Cache-Control':'no-cache'});res.end(bytes);
+      const bytes=await readFile(path.join(root,file));const type={'.html':'text/html','.js':'text/javascript','.css':'text/css','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2','.svg':'image/svg+xml'}[path.extname(file)]||'application/octet-stream';const compressed=(req.headers['accept-encoding']||'').split(',').some(value=>value.trim().split(';')[0]==='gzip')&&type.startsWith('text/');res.writeHead(200,{'Content-Type':type,'Cache-Control':'no-cache',Vary:'Accept-Encoding',...(compressed?{'Content-Encoding':'gzip'}:{})});res.end(compressed?gzipSync(bytes):bytes);
     }catch(error){const status=error instanceof z.ZodError?400:error.status||400;reply(res,status,{error:error instanceof z.ZodError?'Invalid request fields':error.message});}
   };
   const fastify=Fastify({logger:false});

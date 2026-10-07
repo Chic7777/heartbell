@@ -1,17 +1,19 @@
-const { verifyMessage, getAddress } = window.ethers;
+import {loadWalletSDK} from './wallet-sdk.js';
 let keys, account, api, config;
 const database = () => new Promise((resolve,reject)=>{const r=indexedDB.open('consensus-bell-encryption',1);r.onupgradeneeded=()=>r.result.createObjectStore('keys');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
 async function stored(address,value) {
   const db=await database();
   try{return await new Promise((resolve,reject)=>{const tx=db.transaction('keys',value?'readwrite':'readonly'),store=tx.objectStore('keys');const r=value?store.put(value,address.toLowerCase()):store.get(address.toLowerCase());tx.oncomplete=()=>resolve(r.result);tx.onerror=()=>reject(tx.error);});}finally{db.close();}
 }
-const certificate = (address,key) => `Consensus Bell encryption key\nOrigin: ${config.origin}\nAddress: ${getAddress(address)}\nPublic key: ${JSON.stringify(key)}`;
-export function validateKey(record,expected,origin=config.origin){if(!record||getAddress(record.address)!==getAddress(expected))throw new Error('加密密钥不属于目标钱包，已停止读取。');const message=`Consensus Bell encryption key\nOrigin: ${origin}\nAddress: ${getAddress(record.address)}\nPublic key: ${JSON.stringify(record.key)}`;if(getAddress(verifyMessage(message,record.signature))!==getAddress(expected))throw new Error('对方的加密密钥签名无效，已停止读取。');return record.key;}
+const certificate = (address,key) => `Consensus Bell encryption key\nOrigin: ${config.origin}\nAddress: ${window.ethers.getAddress(address)}\nPublic key: ${JSON.stringify(key)}`;
+export function validateKey(record,expected,origin=config.origin){if(!record||window.ethers.getAddress(record.address)!==window.ethers.getAddress(expected))throw new Error('加密密钥不属于目标钱包，已停止读取。');const message=`Consensus Bell encryption key\nOrigin: ${origin}\nAddress: ${window.ethers.getAddress(record.address)}\nPublic key: ${JSON.stringify(record.key)}`;if(window.ethers.getAddress(window.ethers.verifyMessage(message,record.signature))!==window.ethers.getAddress(expected))throw new Error('对方的加密密钥签名无效，已停止读取。');return record.key;}
 export async function initializeEncryption(context) {
+  await loadWalletSDK();
   ({account,api,config}=context);keys=await stored(account);
   const remote=await api('/api/key');
   if(keys&&remote){const actual=await crypto.subtle.exportKey('jwk',keys.publicKey);if(actual.x!==remote.key.x||actual.y!==remote.key.y)throw new Error('本机密钥与账户登记不一致，请使用原设备。');validateKey(remote,account);return;}
   if(!keys&&remote)throw new Error('该钱包已有加密密钥，请使用首次创建密钥的浏览器。新设备恢复尚未接入。');
+  if(!context.signer?.signMessage){if(context.deferRegistration)return;throw new Error('请重新连接钱包，签名登记本机加密密钥后使用私人记忆。');}
   if(!keys){keys=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},false,['deriveKey']);await stored(account,keys);}
   const raw=await crypto.subtle.exportKey('jwk',keys.publicKey),key={kty:raw.kty,crv:raw.crv,x:raw.x,y:raw.y};
   const signature=await context.signer.signMessage(certificate(account,key));await api('/api/key',{method:'PUT',body:{key,signature}});

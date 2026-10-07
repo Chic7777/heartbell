@@ -1,20 +1,25 @@
 import {radarView} from './radar.js';
 import {journeyView} from './journey.js';
+import {icon,avatar,settingRow,agentCard} from './components.js';
+import {communityView} from './community.js';
+import {settingsView} from './settings.js';
 import {chainIdentity} from './aa-action.js';
 export const escape = value => String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const short = value => value?value.slice(0,6)+'…'+value.slice(-4):'';
 export const btn = (label,action,attrs='',cls='') => `<button class="btn ${cls}" data-action="${action}" ${attrs}>${label}</button>`;
 export const head = (title,sub='') => `<div class="head"><h1>${title}</h1><p>${sub}</p></div>`;
 export const input = (label,name,value='',attrs='') => `<label for="f-${name}">${label}</label><input id="f-${name}" name="${name}" value="${escape(value)}" ${attrs}>`;
-export const ring = status => `<div class="ring-hero ${status==='ARCHIVED'?'archived':status==='ENDING'?'ending':status==='INVITED'?'waiting':''}"><img src="/assets/ring-float.jpg" width="280" height="280" alt="关系戒指"></div>`;
+export const ring = status => `<div class="ring-hero ${status==='ARCHIVED'?'archived':status==='ENDING'?'ending':status==='INVITED'?'waiting':''}"><img src="/assets/ring-float.webp" width="280" height="280" fetchpriority="high" alt="关系戒指"></div>`;
 export const notice = text => `<div class="notice">${text}</div>`;
 export const submit = label => `<div class="actions"><button class="btn" type="submit">${label}</button></div>`;
 const statusLabel = {UNAVAILABLE:'链上状态尚未读取',NONE:'未建立关系',INVITED:'收到邀请',WAITING:'等待对方签名',ACTIVE:'关系已建立',ENDING:'等待结束确认',ARCHIVED:'已归档'};
 export function view(state) {
-  if(state.preview)state={...state,user:null,profile:state.previewProfile||null,relation:null,memories:[],proofs:[],candidates:[],history:[],error:''};
+  if(state.preview)state={...state,user:null,profile:state.previewProfile||null,relation:null,memories:[],proofs:[],candidates:[],connections:[],echoAddress:null,history:[],error:''};
   if(state.user||state.preview||state.previewOnly){
-    const optimized=journeyView(state,{escape,short,btn,head,input,notice,submit,ring});
-    if(optimized!==undefined)return (state.preview?notice('访客预览 · 不加载真实账号数据。你输入的内容仅作为当前页面未上传草稿。'):'')+optimized;
+    const extra=communityView(state)??settingsView(state,{escape,short,btn,head,input,notice,submit,ring,icon,avatar,settingRow,agentCard});
+    if(extra!==undefined)return (state.preview?notice('访客预览 · 尚未登录，不加载私人记录。'):'')+extra;
+    const optimized=journeyView(state,{escape,short,btn,head,input,notice,submit,ring,icon,avatar,settingRow,agentCard});
+    if(optimized!==undefined)return (state.preview?notice('访客预览 · 本页草稿未上传'):'')+optimized;
   }
   if(state.preview){
     const banner=notice('访客预览 · 尚未登录。这里不加载真实用户、私人记忆或链上账户数据。保存、匹配和邀请需要钱包认证。');
@@ -25,7 +30,7 @@ export function view(state) {
     return banner+view(previewState);
   }
   const {user,profile,relation,route,memories,proofs,candidates,config,error}=state;
-  if(!user)return `<div class="gateway"><p class="eyebrow">CONSENSUS BELL</p>${ring('NONE')}${head('Forever begins<br>with one mutual yes.','Two signatures. One ring. A shared history.')}<div class="actions">${btn('邮箱或钱包登录','login')}${btn('先逛逛 · 跳过钱包','preview','','light')}${notice('邮箱登录会创建真实嵌入式钱包，也可连接已有钱包。访客浏览不创建账号。')}</div></div>`;
+  if(!user)return `<div class="gateway"><p class="eyebrow">Consensus Bell</p><p class="gateway-sub">A shared space for two people</p>${ring('NONE')}${head('Forever begins<br>with one mutual yes.','Two signatures. One ring. A shared history.')}<div class="actions">${btn('Begin · 开始','login','','rose')}${btn('先逛逛 · 跳过钱包','preview','','light')}${notice('邮箱登录会创建真实嵌入式钱包，也可连接已有钱包。访客浏览不创建账号。')}</div></div>`;
   const top=`<div class="top"><span class="eyebrow">CONSENSUS BELL</span><span class="small muted">${state.previewOnly?'访客预览':escape(profile?.name||short(user))}</span></div>`;
   const banner=error?notice(escape(error)):'';
   const chainUser=chainIdentity(state),r=relation||{id:'0',status:'UNAVAILABLE'},peer=r.a?(r.a.toLowerCase()===chainUser.toLowerCase()?r.b:r.a):null;

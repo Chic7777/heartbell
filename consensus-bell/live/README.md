@@ -1,3 +1,7 @@
+# Current UI delivery
+
+The current Stitch UI, build steps, real-data behavior and verified limitations are documented in [STITCH_UI_VERIFICATION.md](./STITCH_UI_VERIFICATION.md). Current wallet/AA backend and BOT Testnet verification are documented in [BACKEND_V2.md](./BACKEND_V2.md). The older EOA-entry notes below are retained as historical implementation context; the current delivery documents take precedence.
+
 # Backend v2
 
 后端已增加 Fastify、智能账户/ERC-4337、有限额 Paymaster、RingSBT、Echo、授权任务、私密 Vault 与 SSE。完整接口、配置、验证与当前限制见 [BACKEND_V2.md](./BACKEND_V2.md)。下面说明保留的 EOA Web 入口。
