@@ -1,0 +1,189 @@
+<script>
+(function(){
+  const STATUSBAR = '<div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold"><span>9:41</span><div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div></div>';
+  const TABS = [
+    ['ring','ph-heart','Ring','12'],
+    ['story','ph-images','Story','13'],
+    ['vow','ph-hand-heart','Vow','14'],
+    ['bond','ph-vault','Bond','16'],
+    ['me','ph-user','Me','20'],
+  ];
+  function injectChrome(){
+    document.querySelectorAll('[data-statusbar]').forEach(el=>{ el.outerHTML = STATUSBAR; });
+    document.querySelectorAll('[data-tabbar]').forEach(el=>{
+      const active = el.getAttribute('data-tabbar');
+      const pulse = el.hasAttribute('data-pulse');
+      const inner = TABS.map(([k,ic,label,go])=>
+        '<button class="tb '+(k===active?'on':'')+'" data-go="'+go+'"><i class="ph-light '+ic+'"></i>'+label+'</button>'
+      ).join('');
+      const wrap = document.createElement('div');
+      wrap.className = 'tabbar absolute bottom-0 inset-x-0 bg-white/92 backdrop-blur border-t border-[#171717]/[0.06] pt-[9px] flex z-30';
+      wrap.style.height = '78px';
+      wrap.innerHTML = (pulse?'<div class="absolute top-0 inset-x-0 h-[2px] bg-[linear-gradient(90deg,transparent,rgba(78,207,139,0.55),transparent)]" style="animation:tabpulse 2.6s ease-in-out infinite"></div>':'') + inner;
+      el.replaceWith(wrap);
+    });
+    document.querySelectorAll('[data-homebar]').forEach(el=>{
+      el.outerHTML = '<div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717] z-40"></div>';
+    });
+    if(!document.getElementById('tabpulse-kf')){
+      const st = document.createElement('style');
+      st.id='tabpulse-kf';
+      st.textContent='@keyframes tabpulse{0%,100%{opacity:.25}50%{opacity:1}}';
+      document.head.appendChild(st);
+    }
+  }
+
+  function wireByText(){
+    const wires = [
+      ['s01','Begin','02'],['s02','Next','03'],['s03','Next','04'],['s04','Next','05'],
+      ['s05','Create My Identity','05b'],['s07','Ring','08a'],['s08a','Send Invitation','08b'],
+      ['s09','Accept','10'],['s10','Sign & Accept','11'],['s11','Enter Our Ring','12'],
+    ];
+    wires.forEach(([s,label,go])=>{
+      const scope = document.getElementById(s); if(!scope) return;
+      const btn = Array.from(scope.querySelectorAll('button')).find(b=>b.textContent.trim()===label);
+      if(btn){ btn.setAttribute('data-go',go); btn.style.cursor='pointer'; }
+    });
+    // 06: two big path cards — climb to the rounded overflow-hidden card container
+    [['Find Someone','07'],['Bind My Person','10']].forEach(([label,go])=>{
+      const p = Array.from(document.querySelectorAll('#s06 p')).find(x=>x.textContent.trim()===label);
+      let node = p, target = null, guard = 0;
+      while(node && guard++ < 8){
+        const cls = String(node.className||'');
+        if(node.tagName==='DIV' && cls.includes('overflow-hidden') && cls.includes('rounded')){ target = node; break; }
+        node = node.parentElement;
+      }
+      (target||p).setAttribute('data-go',go);
+      (target||p).style.cursor='pointer';
+    });
+    // 05b: any click advances
+    const s5b = document.getElementById('s05b');
+    if(s5b){ s5b.querySelector('.phone').addEventListener('click',()=>{ location.hash='#s06'; }); }
+  }
+
+  function navigate(go){
+    const t = document.getElementById('s'+go);
+    if(!t) return;
+    t.scrollIntoView({behavior:'smooth',block:'center'});
+    t.classList.add('flash');
+    setTimeout(()=>t.classList.remove('flash'),1600);
+  }
+  document.addEventListener('click',e=>{
+    const g = e.target.closest('[data-go]');
+    if(g){ e.preventDefault(); navigate(g.getAttribute('data-go')); }
+    const pf = e.target.closest('[data-proof-trigger]');
+    if(pf){
+      const screen = pf.closest('.screen');
+      const sheet = screen && screen.querySelector('.proofsheet');
+      if(sheet){ sheet.classList.remove('hidden'); gsap.fromTo(sheet.querySelector('.proof-card'),{y:60,autoAlpha:0},{y:0,autoAlpha:1,duration:.45,ease:'power3.out'}); }
+    }
+    if(e.target.closest('[data-close-proof]')){
+      const sheet = e.target.closest('.proofsheet');
+      if(sheet){ gsap.to(sheet.querySelector('.proof-card'),{y:50,autoAlpha:0,duration:.3,ease:'power2.in',onComplete:()=>sheet.classList.add('hidden')}); }
+    }
+  });
+  window.addEventListener('hashchange',()=>{
+    const id = location.hash.replace('#','');
+    if(id) navigate(id.replace('s',''));
+  });
+
+  function sharedAnims(){
+    document.querySelectorAll('[data-anim="orbit"]').forEach(el=>{
+      gsap.to(el,{rotation:360,duration:26,repeat:-1,ease:'none'});
+    });
+    document.querySelectorAll('[data-anim="ring"]').forEach(el=>{
+      gsap.to(el,{y:-9,duration:3.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      gsap.to(el,{rotation:5,duration:10,repeat:-1,yoyo:true,ease:'sine.inOut'});
+    });
+  }
+
+  function injectProofsheets(){
+    document.querySelectorAll('.screen').forEach(screen=>{
+      const trig = screen.querySelector('[data-proof-trigger]');
+      if(!trig || screen.querySelector('.proofsheet')) return;
+      const action = trig.getAttribute('data-proof-action') || 'Ring Created';
+      const sheet = document.createElement('div');
+      sheet.className = 'proofsheet absolute inset-0 z-50 hidden';
+      sheet.innerHTML =
+        '<div class="absolute inset-0 bg-[#171717]/25 backdrop-blur-[2px]" data-close-proof></div>'+
+        '<div class="proof-card absolute inset-x-3 bottom-3 rounded-[26px] bg-white p-5 shadow-[0_-8px_30px_rgba(23,23,23,0.16)]">'+
+          '<div class="w-9 h-1 rounded-full bg-[#171717]/15 mx-auto"></div>'+
+          '<div class="flex items-center justify-between mt-3.5"><p class="serif text-[19px]">Proof</p>'+
+          '<span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><i class="ph-light ph-seal-check text-[14px]"></i>Verified</span></div>'+
+          '<div class="mt-1.5">'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Network</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>BOT Chain</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Relation</span><span>#1024</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Action</span><span>'+action+'</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Initiated by</span><span>Alice</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Confirmed by</span><span>Sophie</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Block</span><span>8,431,966</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px]"><span class="text-[#171717]/45">Tx</span><span>0xf392…91ab</span></div>'+
+          '</div>'+
+          '<button class="pill pill-line h-[44px] mt-1 gap-1.5" data-close-proof style="width:100%">View Explorer <i class="ph-light ph-arrow-up-right text-[14px]"></i></button>'+
+        '</div>';
+      screen.appendChild(sheet);
+    });
+  }
+
+  function vowConfirm(){
+    const btn = document.getElementById('b15-confirm');
+    const done = document.getElementById('b15-done');
+    const count = document.getElementById('b15-count');
+    const status = document.getElementById('b15-status');
+    if(!btn) return;
+    btn.addEventListener('click',()=>{
+      btn.classList.add('hidden');
+      done.classList.remove('hidden');
+      gsap.fromTo(done,{autoAlpha:0,y:14},{autoAlpha:1,y:0,duration:.5,ease:'power3.out'});
+      gsap.fromTo('.b15-pulse-c',{attr:{r:10},opacity:.9},{attr:{r:48},opacity:0,duration:1.8,repeat:-1,ease:'power1.out'});
+      const obj = {v:7};
+      gsap.to(obj,{v:8,duration:.9,ease:'power2.out',onUpdate:()=>{ count.textContent = Math.round(obj.v); }});
+      if(status){
+        status.innerHTML = '<span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Confirmed</span>'+
+          '<div class="flex items-center ml-1">'+
+          '<img src="assets/alice.jpg" class="w-[22px] h-[22px] rounded-full object-cover border-2 border-white" alt="Alice">'+
+          '<img src="assets/sophie.jpg" class="w-[22px] h-[22px] rounded-full object-cover border-2 border-white -ml-1.5" alt="Sophie"></div>'+
+          '<p class="text-[12px] text-[#171717]/50">Oct 10, 2026 · just now</p>';
+      }
+    });
+  }
+
+  function misc(){
+    const info = document.getElementById('b17-info');
+    const tech = document.getElementById('b17-tech');
+    if(info && tech){ info.addEventListener('click',()=>tech.classList.toggle('hidden')); }
+    const label = document.getElementById('b19-mat-label');
+    document.querySelectorAll('#s19 .mat').forEach(m=>{
+      m.addEventListener('click',()=>{
+        document.querySelectorAll('#s19 .mat').forEach(x=>x.classList.remove('on'));
+        m.classList.add('on');
+        if(label) label.textContent = m.getAttribute('title');
+      });
+    });
+    document.querySelectorAll('.filter-chip').forEach(c=>{
+      c.addEventListener('click',()=>{
+        c.parentElement.querySelectorAll('.filter-chip').forEach(x=>{
+          x.classList.remove('on','bg-[#171717]','text-white');
+          x.classList.add('border','border-[#171717]/10','text-[#171717]/55');
+        });
+        c.classList.add('on','bg-[#171717]','text-white');
+        c.classList.remove('border-[#171717]/10','text-[#171717]/55');
+      });
+    });
+    document.querySelectorAll('.zoom-ctl button').forEach(b=>{
+      b.addEventListener('click',()=>{
+        document.querySelectorAll('.zoom-ctl button').forEach(x=>x.classList.remove('on'));
+        b.classList.add('on');
+        document.documentElement.style.setProperty('--zoom', b.getAttribute('data-zoom'));
+      });
+    });
+  }
+
+  injectChrome();
+  injectProofsheets();
+  wireByText();
+  sharedAnims();
+  vowConfirm();
+  misc();
+})();
+</script>

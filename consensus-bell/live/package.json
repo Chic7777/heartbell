@@ -1,0 +1,23 @@
+{
+  "name": "consensus-bell-live",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "build": "node build-privy.mjs",
+    "setup:privy": "npm --prefix ./privy-client install",
+    "test": "node --test *.test.mjs",
+    "check:bot": "node network-check.mjs"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "ethers": "6.17.0",
+    "fastify": "^5.12.5",
+    "jose": "^6.2.12",
+    "permissionless": "0.4.1",
+    "viem": "2.57.3",
+    "zod": "4.1.12"
+  }
+}

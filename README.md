@@ -74,3 +74,9 @@ CLAIM_VERIFIER_MODE=demo|manual|provider    # 默认 demo
 ## 分工与规则
 
 见 `AGENTS.md`。从最新 main 创建小任务分支；不提交密钥；正式权限必须在服务端校验。详细实现状态、验证证据与待接入项见 `docs/V2-IMPLEMENTATION.md`。
+
+## Consensus Bell 后端与账户抽象项目
+
+此分支新增独立可运行模块 [consensus-bell](consensus-bell/README.md)，含 Privy、ERC-4337 后端、Foundry 合约及完整界面。它保留现有 Next.js 项目，尚未替换原 src/app/api 服务层。BOT 公共测试网968已完成八笔 UserOperation 的 Ring / Vow / Bond / 结束提现链路；[真实交易与验证](consensus-bell/live/RING_TESTNET_VERIFICATION.md)。主网677未广播；本轮链上参与者是两个独立测试签名账户。
+
+运行：进入 consensus-bell/live 执行 npm ci；进入 privy-client 执行 npm ci，返回 live 执行 npm run build 与 npm start。配置参考 .env.testnet.example；不需要提交 Privy App Secret 或钱包私钥。

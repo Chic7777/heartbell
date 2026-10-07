@@ -1,0 +1,2873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consensus Bell · UI 全集（20 屏 + 组件）</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<style>
+  :root{
+    --cream:#FFF9F7; --rose:#E98F93; --ink:#171717; --green:#4ECF8B; --green-text:#2E9E63;
+    --amber:#F2A65A; --amber-text:#B8732F; --rose-gold:#C98877; --blush:#E7B7A8;
+    --card-shadow:0 1px 2px rgba(23,23,23,.03),0 8px 24px rgba(23,23,23,.04);
+    --hairline:rgba(23,23,23,.06);
+  }
+  html{scroll-behavior:smooth}
+  body{background:#F2E9E4;font-family:Inter,'PingFang SC',system-ui,sans-serif;color:#171717;
+       background-image:radial-gradient(80% 40% at 50% 0%,rgba(233,143,147,.10),rgba(242,233,228,0) 60%);}
+  .serif{font-family:'Noto Serif SC',serif}
+  .gallery-top{max-width:1720px;margin:0 auto;padding:44px 40px 8px}
+  .gallery{max-width:1720px;margin:0 auto;display:flex;flex-wrap:wrap;gap:36px 28px;justify-content:center;padding:28px 32px 80px}
+  .board{zoom:var(--zoom,0.78)}
+  .board-label{display:flex;align-items:baseline;gap:10px;margin:0 4px 10px}
+  .board-label .en{font-size:13px;font-weight:600;letter-spacing:.01em}
+  .board-label .zh{font-size:12px;color:rgba(23,23,23,.45)}
+  .phone{width:390px;height:844px;border-radius:42px;overflow:hidden;position:relative;background:var(--cream);
+         border:1px solid rgba(23,23,23,.09);
+         box-shadow:0 2px 6px rgba(23,23,23,.05),0 30px 70px -18px rgba(23,23,23,.22);}
+  .screen{width:100%;height:100%;overflow:hidden;position:relative}
+  .board.flash .phone{outline:3px solid var(--rose);outline-offset:5px}
+  .zoom-ctl button{border:1px solid rgba(23,23,23,.14);border-radius:999px;padding:5px 14px;font-size:12px;color:rgba(23,23,23,.6);background:rgba(255,255,255,.6)}
+  .zoom-ctl button.on{background:#171717;color:#fff;border-color:#171717}
+  .zx{transition:outline-color .3s}
+  /* proof sheet shared */
+  .proofsheet .row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:12.5px;border-bottom:1px solid var(--hairline)}
+  .proofsheet .row:last-of-type{border-bottom:0}
+  .proofsheet .row .k{color:rgba(23,23,23,.45)}
+  /* tab bar */
+  .tabbar .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;letter-spacing:.02em;color:rgba(23,23,23,.35)}
+  .tabbar .tb.on{color:#171717}
+  .tabbar .tb i{font-size:22px}
+  /* generic hairline card */
+  .card{background:#fff;border-radius:24px;box-shadow:var(--card-shadow)}
+  .flat{border:1px solid var(--hairline);border-radius:20px;background:#fff}
+  .pill{height:54px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;width:100%}
+  .pill-dark{background:#171717;color:#fff}
+  .pill-line{border:1px solid rgba(23,23,17,.15)}
+  .chip{height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:12px}
+  [data-go]{cursor:pointer}
+</style>
+</head>
+<body>
+<header class="gallery-top">
+  <div class="flex items-end justify-between flex-wrap gap-6 border-b border-[#171717]/10 pb-8">
+    <div>
+      <p class="text-[12px] tracking-[0.28em] uppercase text-[#171717]/45">Consensus Bell · UI Full Set</p>
+      <h1 class="serif text-[46px] leading-[1.1] mt-3">Our Ring <span class="text-[#171717]/30">/</span> 我们的戒指</h1>
+      <p class="mt-3 text-[14px] text-[#171717]/55 max-w-[640px] leading-relaxed">
+        恋爱产品在上，协议在底层。极简 · 温暖 · 克制 · 一点奢侈品感 —— 全部 20 屏 + Proof Drawer 组件，iPhone 390×844。
+      </p>
+      <div class="flex gap-2 mt-4 flex-wrap">
+        <span class="chip bg-white border border-[#171717]/10 text-[#171717]/60">四色系统 · #FFF9F7 / #E98F93 / #171717 / #4ECF8B</span>
+        <span class="chip bg-white border border-[#171717]/10 text-[#171717]/60">Noto Serif SC × Inter</span>
+        <span class="chip bg-white border border-[#171717]/10 text-[#171717]/60">Emotion · Action · Proof</span>
+        <span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>BOT Chain</span>
+      </div>
+    </div>
+    <div class="text-right">
+      <p class="text-[12px] text-[#171717]/45 mb-2">缩放</p>
+      <div class="zoom-ctl flex gap-2 justify-end">
+        <button data-zoom="0.6">60%</button>
+        <button data-zoom="0.78" class="on">78%</button>
+        <button data-zoom="1">100%</button>
+      </div>
+      <p class="text-[11px] text-[#171717]/40 mt-3 leading-5">点击任意主按钮可在页面间跳转<br>「View Proof」可展开链上证明抽屉</p>
+    </div>
+  </div>
+</header>
+<main class="gallery">
+<section class="board" id="s00" data-zh="设计系统">
+<div class="board-label"><span class="en">00 · Design Tokens</span><span class="zh">设计系统</span></div>
+<div class="phone"><div class="screen">
+<div class="sans bg-[#FFF9F7] text-[#171717] px-20 py-20">
+    <div class="flex items-end justify-between border-b border-[#171717]/10 pb-10">
+        <div>
+            <p class="text-[12px] tracking-[0.24em] uppercase text-[#171717]/45">
+                Consensus Bell · Design Tokens v2
+            </p>
+            <h1 class="serif text-[64px] leading-[1.05] mt-4 font-normal">
+                Our Ring
+                <span class="text-[#171717]/30">
+                    /
+                </span>
+                我们的戒指
+            </h1>
+            <p class="mt-4 text-[16px] text-[#171717]/55 max-w-[560px]">
+                Minimal, warm and restrained. A love product first — the protocol quietly keeps the record underneath.
+            </p>
+        </div>
+        <div class="text-right text-[13px] text-[#171717]/45 leading-6">
+            <p>
+                iPhone 390 × 844
+            </p>
+            <p>
+                Emotion · Action · Proof
+            </p>
+            <p class="flex items-center justify-end gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]">
+                </span>
+                BOT Chain
+            </p>
+        </div>
+    </div>
+    <!-- Colors -->
+    <section class="mt-14 grid grid-cols-12 gap-8">
+        <div class="col-span-3">
+            <p class="text-[12px] tracking-[0.2em] uppercase text-[#171717]/45">
+                01 · Color
+            </p>
+            <p class="serif text-[26px] mt-3 leading-snug">
+                Four colors.
+                <br/>
+                Nothing louder.
+            </p>
+            <p class="text-[13px] text-[#171717]/50 mt-3 leading-relaxed">
+                Neutral steps are opacity tints of Ink. Warm Amber is reserved for “Pending” only.
+            </p>
+        </div>
+        <div class="col-span-9 grid grid-cols-4 gap-5">
+            <div class="rounded-[24px] bg-white p-3 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <div class="h-[150px] rounded-[18px] bg-[#FFF9F7] border border-[#171717]/[0.06]">
+                </div>
+                <p class="mt-4 px-2 text-[15px] font-medium">
+                    Cream
+                </p>
+                <p class="px-2 text-[12px] text-[#171717]/45 mt-0.5">
+                    #FFF9F7 · Background
+                </p>
+            </div>
+            <div class="rounded-[24px] bg-white p-3 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <div class="h-[150px] rounded-[18px] bg-[#E98F93]">
+                </div>
+                <p class="mt-4 px-2 text-[15px] font-medium">
+                    Rose
+                </p>
+                <p class="px-2 text-[12px] text-[#171717]/45 mt-0.5">
+                    #E98F93 · Accent
+                </p>
+            </div>
+            <div class="rounded-[24px] bg-white p-3 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <div class="h-[150px] rounded-[18px] bg-[#171717]">
+                </div>
+                <p class="mt-4 px-2 text-[15px] font-medium">
+                    Ink
+                </p>
+                <p class="px-2 text-[12px] text-[#171717]/45 mt-0.5">
+                    #171717 · Text & Primary
+                </p>
+            </div>
+            <div class="rounded-[24px] bg-white p-3 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <div class="h-[150px] rounded-[18px] bg-[#4ECF8B]">
+                </div>
+                <p class="mt-4 px-2 text-[15px] font-medium">
+                    On-chain
+                </p>
+                <p class="px-2 text-[12px] text-[#171717]/45 mt-0.5">
+                    #4ECF8B · Confirmed
+                </p>
+            </div>
+            <div class="col-span-4 flex items-center gap-3 mt-1">
+                <div class="flex-1 h-12 rounded-[14px] bg-[#171717] flex items-center px-4 text-[11px] text-white/80">
+                    Ink 100
+                </div>
+                <div class="flex-1 h-12 rounded-[14px] bg-[#171717]/60 flex items-center px-4 text-[11px] text-white">
+                    60 · Secondary
+                </div>
+                <div class="flex-1 h-12 rounded-[14px] bg-[#171717]/40 flex items-center px-4 text-[11px] text-white">
+                    40 · Tertiary
+                </div>
+                <div class="flex-1 h-12 rounded-[14px] bg-[#171717]/10 flex items-center px-4 text-[11px] text-[#171717]/60">
+                    10 · Hairline
+                </div>
+                <div class="flex-1 h-12 rounded-[14px] bg-white border border-[#171717]/[0.06] flex items-center px-4 text-[11px] text-[#171717]/60">
+                    Card #FFF
+                </div>
+                <div class="flex-1 h-12 rounded-[14px] bg-[#F2A65A]/15 flex items-center gap-2 px-4 text-[11px] text-[#B8732F]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#F2A65A]">
+                    </span>
+                    Pending only
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Typography -->
+    <section class="mt-16 grid grid-cols-12 gap-8 border-t border-[#171717]/10 pt-14">
+        <div class="col-span-3">
+            <p class="text-[12px] tracking-[0.2em] uppercase text-[#171717]/45">
+                02 · Typography
+            </p>
+            <p class="serif text-[26px] mt-3 leading-snug">
+                Letters for vows.
+                <br/>
+                Sans for doing.
+            </p>
+            <p class="text-[13px] text-[#171717]/50 mt-3 leading-relaxed">
+                Noto Serif SC / 思源宋体 for titles & emotional copy. Inter / PingFang SC for function, body and buttons.
+            </p>
+        </div>
+        <div class="col-span-9 grid grid-cols-2 gap-5">
+            <div class="rounded-[28px] bg-white p-8 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <p class="text-[11px] tracking-[0.2em] uppercase text-[#171717]/40">
+                    Serif · Noto Serif SC
+                </p>
+                <div class="mt-6 space-y-5">
+                    <div class="flex items-baseline justify-between">
+                        <span class="serif text-[44px] leading-none">
+                            127
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            Display / 44–64 · 400
+                        </span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <span class="serif text-[30px] leading-tight">
+                            Our Story
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            H1 / 30 · 400
+                        </span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <span class="serif text-[22px]">
+                            我们的誓言
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            H2 / 22 · 400
+                        </span>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-6">
+                        <span class="serif text-[17px] leading-relaxed text-[#171717]/80">
+                            “Forever begins with one mutual yes.”
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40 shrink-0">
+                            Quote / 17
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-[28px] bg-white p-8 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <p class="text-[11px] tracking-[0.2em] uppercase text-[#171717]/40">
+                    Sans · Inter / PingFang SC
+                </p>
+                <div class="mt-6 space-y-5">
+                    <div class="flex items-baseline justify-between">
+                        <span class="text-[17px] font-medium">
+                            Sign & Accept
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            Title / 17 · 500
+                        </span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <span class="text-[15px] font-medium">
+                            Button label
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            Button / 15 · 500
+                        </span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <span class="text-[14px] text-[#171717]/70">
+                            Body copy for functional info
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            Body / 14 · 400
+                        </span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <span class="text-[12px] text-[#171717]/50">
+                            Caption · Oct 7, 2026
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            Caption / 12
+                        </span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <span class="text-[10px] tracking-[0.18em] uppercase text-[#171717]/40">
+                            BOT Chain · Block #8,431,902
+                        </span>
+                        <span class="text-[11px] text-[#171717]/40">
+                            Proof / 10 · caps
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Radius, shadow, spacing -->
+    <section class="mt-16 grid grid-cols-12 gap-8 border-t border-[#171717]/10 pt-14">
+        <div class="col-span-3">
+            <p class="text-[12px] tracking-[0.2em] uppercase text-[#171717]/45">
+                03 · Shape & Depth
+            </p>
+            <p class="serif text-[26px] mt-3 leading-snug">
+                Large cards.
+                <br/>
+                Barely lifted.
+            </p>
+            <p class="text-[13px] text-[#171717]/50 mt-3 leading-relaxed">
+                One hero + 2–4 functional areas per screen. White on cream; shadow only separates, never floats.
+            </p>
+        </div>
+        <div class="col-span-9 grid grid-cols-3 gap-5">
+            <div class="rounded-[28px] bg-white p-7 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <p class="text-[11px] tracking-[0.2em] uppercase text-[#171717]/40">
+                    Radius
+                </p>
+                <div class="mt-6 flex items-end gap-2.5 [&>div>div]:!w-12 [&>div>div]:!h-12">
+                    <div class="text-center">
+                        <div class="w-14 h-14 rounded-[14px] border border-[#171717]/20">
+                        </div>
+                        <p class="text-[11px] mt-2 text-[#171717]/50">
+                            14 · chip
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-14 h-14 rounded-[20px] border border-[#171717]/20">
+                        </div>
+                        <p class="text-[11px] mt-2 text-[#171717]/50">
+                            20 · row
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-14 h-14 rounded-[24px] border border-[#171717]/20">
+                        </div>
+                        <p class="text-[11px] mt-2 text-[#171717]/50">
+                            24 · card
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-14 h-14 rounded-[28px] border border-[#171717]/20">
+                        </div>
+                        <p class="text-[11px] mt-2 text-[#171717]/50">
+                            28 · hero
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-5 h-[54px] rounded-full bg-[#171717] text-white flex items-center justify-center text-[15px] font-medium">
+                    Pill · Buttons
+                </div>
+            </div>
+            <div class="rounded-[28px] bg-[#FFF9F7] border border-[#171717]/[0.05] p-7">
+                <p class="text-[11px] tracking-[0.2em] uppercase text-[#171717]/40">
+                    Shadow
+                </p>
+                <div class="mt-6 h-[104px] rounded-[24px] bg-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] flex items-center justify-center text-[12px] text-[#171717]/50">
+                    Soft · 0 1 2 / 3% + 0 8 24 / 4%
+                </div>
+                <div class="mt-4 h-[54px] rounded-[20px] bg-white border border-[#171717]/[0.06] flex items-center justify-center text-[12px] text-[#171717]/50">
+                    Flat · 1px hairline 6%
+                </div>
+            </div>
+            <div class="rounded-[28px] bg-white p-7 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                <p class="text-[11px] tracking-[0.2em] uppercase text-[#171717]/40">
+                    Spacing · 4pt
+                </p>
+                <div class="mt-6 space-y-2.5">
+                    <div class="flex items-center gap-3">
+                        <div class="h-2.5 w-1 bg-[#E98F93] rounded-full">
+                        </div>
+                        <span class="text-[11px] text-[#171717]/50">
+                            4 · hairline gaps
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="h-2.5 w-2 bg-[#E98F93] rounded-full">
+                        </div>
+                        <span class="text-[11px] text-[#171717]/50">
+                            8 · icon / label
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="h-2.5 w-4 bg-[#E98F93] rounded-full">
+                        </div>
+                        <span class="text-[11px] text-[#171717]/50">
+                            16 · inside cards
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="h-2.5 w-6 bg-[#E98F93] rounded-full">
+                        </div>
+                        <span class="text-[11px] text-[#171717]/50">
+                            24 · screen margin
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="h-2.5 w-10 bg-[#E98F93] rounded-full">
+                        </div>
+                        <span class="text-[11px] text-[#171717]/50">
+                            40 · between sections
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="h-2.5 w-16 bg-[#E98F93] rounded-full">
+                        </div>
+                        <span class="text-[11px] text-[#171717]/50">
+                            64 · breathing room
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Layers + motion -->
+    <section class="mt-16 grid grid-cols-12 gap-8 border-t border-[#171717]/10 pt-14">
+        <div class="col-span-3">
+            <p class="text-[12px] tracking-[0.2em] uppercase text-[#171717]/45">
+                04 · Layers & Motion
+            </p>
+            <p class="serif text-[26px] mt-3 leading-snug">
+                Love on top.
+                <br/>
+                Proof underneath.
+            </p>
+        </div>
+        <div class="col-span-9">
+            <div class="grid grid-cols-3 gap-5">
+                <div class="rounded-[24px] bg-white p-6 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <div class="flex items-center gap-2 text-[#E98F93] text-[20px]">
+                        <i class="ph-light ph-heart">
+                        </i>
+                    </div>
+                    <p class="serif text-[19px] mt-3">
+                        Emotion Layer
+                    </p>
+                    <p class="text-[13px] text-[#171717]/50 mt-1.5 leading-relaxed">
+                        Ring, photos, Vows, Story, words. What you see every day.
+                    </p>
+                </div>
+                <div class="rounded-[24px] bg-white p-6 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <div class="text-[20px]">
+                        <i class="ph-light ph-hand-tap">
+                        </i>
+                    </div>
+                    <p class="serif text-[19px] mt-3">
+                        Action Layer
+                    </p>
+                    <p class="text-[13px] text-[#171717]/50 mt-1.5 leading-relaxed">
+                        Invite · Accept · Confirm · Deposit · Mint. One clear pill.
+                    </p>
+                </div>
+                <div class="rounded-[24px] bg-white p-6 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <div class="text-[20px] text-[#4ECF8B]">
+                        <i class="ph-light ph-seal-check">
+                        </i>
+                    </div>
+                    <p class="serif text-[19px] mt-3">
+                        Proof Layer
+                    </p>
+                    <p class="text-[13px] text-[#171717]/50 mt-1.5 leading-relaxed">
+                        Block, timestamp, signature, hash. Hidden until “View Proof”.
+                    </p>
+                </div>
+            </div>
+            <div class="grid grid-cols-5 gap-4 mt-5">
+                <div class="rounded-[24px] bg-white p-5 text-center shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <svg class="w-16 h-16 mx-auto" viewbox="0 0 80 80">
+                        <circle cx="40" cy="40" fill="none" id="b00-tk-ring" r="24" stroke="#C98877" stroke-dasharray="120 31" stroke-width="5">
+                        </circle>
+                    </svg>
+                    <p class="text-[13px] font-medium mt-2">
+                        Ring
+                    </p>
+                    <p class="text-[11px] text-[#171717]/45">
+                        slow rotate · 40s
+                    </p>
+                </div>
+                <div class="rounded-[24px] bg-white p-5 text-center shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <svg class="w-16 h-16 mx-auto" viewbox="0 0 80 80">
+                        <circle cx="40" cy="40" fill="none" r="24" stroke="#171717" stroke-opacity=".2">
+                        </circle>
+                        <circle cx="40" cy="40" fill="none" r="14" stroke="#171717" stroke-opacity=".5">
+                        </circle>
+                    </svg>
+                    <p class="text-[13px] font-medium mt-2">
+                        Circle
+                    </p>
+                    <p class="text-[11px] text-[#171717]/45">
+                        containers & avatars
+                    </p>
+                </div>
+                <div class="rounded-[24px] bg-white p-5 text-center shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <svg class="w-16 h-16 mx-auto" viewbox="0 0 80 80">
+                        <g id="b00-tk-orbit">
+                            <ellipse cx="40" cy="40" fill="none" rx="30" ry="12" stroke="#171717" stroke-opacity=".18">
+                            </ellipse>
+                            <circle cx="70" cy="40" fill="#E98F93" r="3">
+                            </circle>
+                        </g>
+                    </svg>
+                    <p class="text-[13px] font-medium mt-2">
+                        Orbit
+                    </p>
+                    <p class="text-[11px] text-[#171717]/45">
+                        one light trail
+                    </p>
+                </div>
+                <div class="rounded-[24px] bg-white p-5 text-center shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <svg class="w-16 h-16 mx-auto" viewbox="0 0 80 80">
+                        <circle cx="40" cy="40" fill="none" id="b00-tk-pulse" r="10" stroke="#4ECF8B" stroke-width="1.5">
+                        </circle>
+                        <circle cx="40" cy="40" fill="#4ECF8B" r="4">
+                        </circle>
+                    </svg>
+                    <p class="text-[13px] font-medium mt-2">
+                        Pulse
+                    </p>
+                    <p class="text-[11px] text-[#171717]/45">
+                        block confirmed
+                    </p>
+                </div>
+                <div class="rounded-[24px] bg-white p-5 text-center shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+                    <svg class="w-16 h-16 mx-auto" viewbox="0 0 80 80">
+                        <path d="M40 16 A24 24 0 0 0 40 64" fill="none" id="b00-tk-l" stroke="#C98877" stroke-linecap="round" stroke-width="5">
+                        </path>
+                        <path d="M40 16 A24 24 0 0 1 40 64" fill="none" id="b00-tk-r" stroke="#E7B7A8" stroke-linecap="round" stroke-width="5">
+                        </path>
+                    </svg>
+                    <p class="text-[13px] font-medium mt-2">
+                        Merge
+                    </p>
+                    <p class="text-[11px] text-[#171717]/45">
+                        two halves close
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Components -->
+    <section class="mt-16 grid grid-cols-12 gap-8 border-t border-[#171717]/10 pt-14">
+        <div class="col-span-3">
+            <p class="text-[12px] tracking-[0.2em] uppercase text-[#171717]/45">
+                05 · Components
+            </p>
+            <p class="serif text-[26px] mt-3 leading-snug">
+                Quiet parts.
+            </p>
+        </div>
+        <div class="col-span-9 grid grid-cols-2 gap-5">
+            <div class="rounded-[28px] bg-white p-7 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] space-y-3">
+                <div class="h-[54px] rounded-full bg-[#171717] text-white flex items-center justify-center text-[15px] font-medium">
+                    Primary · Sign & Accept
+                </div>
+                <div class="h-[54px] rounded-full border border-[#171717]/15 flex items-center justify-center text-[15px] font-medium">
+                    Secondary · Decline
+                </div>
+                <div class="h-[44px] flex items-center justify-center text-[14px] text-[#171717]/60 gap-1.5">
+                    <span class="text-[#4ECF8B] text-[16px]">
+                        <i class="ph-light ph-seal-check">
+                        </i>
+                    </span>
+                    View Proof
+                </div>
+                <div class="flex flex-wrap gap-2 pt-2">
+                    <span class="px-3 h-7 rounded-full bg-[#4ECF8B]/12 text-[#2E9E63] text-[12px] flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]">
+                        </span>
+                        Confirmed
+                    </span>
+                    <span class="px-3 h-7 rounded-full bg-[#F2A65A]/15 text-[#B8732F] text-[12px] flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#F2A65A]">
+                        </span>
+                        Pending
+                    </span>
+                    <span class="px-3 h-7 rounded-full bg-[#E98F93]/12 text-[#C0646A] text-[12px] flex items-center">
+                        Travel
+                    </span>
+                    <span class="px-3 h-7 rounded-full border border-[#171717]/10 text-[#171717]/60 text-[12px] flex items-center">
+                        Photography
+                    </span>
+                </div>
+            </div>
+            <div class="rounded-[28px] bg-[#171717]/[0.04] p-5 flex items-end">
+                <div class="w-full rounded-[26px] bg-white p-5 shadow-[0_-8px_30px_rgba(23,23,23,0.06)]">
+                    <div class="w-9 h-1 rounded-full bg-[#171717]/15 mx-auto">
+                    </div>
+                    <div class="flex items-center justify-between mt-4">
+                        <p class="serif text-[18px]">
+                            Proof Drawer
+                        </p>
+                        <span class="text-[12px] text-[#2E9E63] flex items-center gap-1">
+                            <i class="ph-light ph-seal-check">
+                            </i>
+                            Verified
+                        </span>
+                    </div>
+                    <div class="mt-3 text-[12px] divide-y divide-[#171717]/[0.06]">
+                        <div class="flex justify-between py-2">
+                            <span class="text-[#171717]/45">
+                                Network
+                            </span>
+                            <span>
+                                BOT Chain
+                            </span>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <span class="text-[#171717]/45">
+                                Block
+                            </span>
+                            <span>
+                                8,431,902
+                            </span>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <span class="text-[#171717]/45">
+                                Tx
+                            </span>
+                            <span>
+                                0xf392…91ab
+                            </span>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-[#171717]/40 mt-2">
+                        Shared by Story · Ring · Vow · Bond · Witness
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.to('#b00-tk-ring',{rotation:360,svgOrigin:'40 40',duration:8,repeat:-1,ease:'none'});
+gsap.to('#b00-tk-orbit',{rotation:360,svgOrigin:'40 40',duration:10,repeat:-1,ease:'none'});
+gsap.fromTo('#b00-tk-pulse',{attr:{r:6},opacity:1},{attr:{r:26},opacity:0,duration:2,repeat:-1,ease:'power1.out'});
+gsap.fromTo('#b00-tk-l',{x:-8},{x:0,duration:1.6,repeat:-1,yoyo:true,ease:'power2.inOut'});
+gsap.fromTo('#b00-tk-r',{x:8},{x:0,duration:1.6,repeat:-1,yoyo:true,ease:'power2.inOut'});
+</script>
+</div></div>
+</section>
+<section class="board" id="s01" data-zh="启动页 · 唯一的一次 Yes">
+<div class="board-label"><span class="en">01 · Forever Gateway</span><span class="zh">启动页 · 唯一的一次 Yes</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(120%_60%_at_50%_0%,rgba(233,143,147,0.14),rgba(255,249,247,0)_60%)]">
+    </div>
+    <div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <p class="relative text-center mt-5 text-[11px] tracking-[0.32em] uppercase text-[#171717]/55">
+        Consensus Bell
+    </p>
+    <div class="relative mx-auto mt-4 w-[390px] h-[380px] flex items-center justify-center">
+        <svg class="absolute w-[360px] h-[360px]" id="b01-orbit" viewbox="0 0 380 380">
+            <defs>
+                <lineargradient id="b01-trail" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0" stop-color="#E98F93" stop-opacity="0">
+                    </stop>
+                    <stop offset=".55" stop-color="#E98F93" stop-opacity=".0">
+                    </stop>
+                    <stop offset=".9" stop-color="#E98F93" stop-opacity=".55">
+                    </stop>
+                    <stop offset="1" stop-color="#ffffff" stop-opacity=".9">
+                    </stop>
+                </lineargradient>
+            </defs>
+            <circle cx="190" cy="190" fill="none" r="176" stroke="#171717" stroke-opacity=".06">
+            </circle>
+            <circle cx="190" cy="190" fill="none" r="176" stroke="url(#b01-trail)" stroke-width="1.4">
+            </circle>
+        </svg>
+        <div class="relative w-[330px] h-[330px] [mask-image:radial-gradient(circle,#000_55%,transparent_72%)]" id="b01-ring">
+            <img alt="Rose gold ring floating" class="w-full h-full object-cover mix-blend-multiply" decoding="async" loading="lazy" src="assets/ring-float.jpg"/>
+        </div>
+    </div>
+    <div class="relative text-center px-8 mt-4">
+        <h1 class="serif text-[30px] leading-[1.28] font-normal tracking-[-0.01em]">
+            Forever begins
+            <br/>
+            with one mutual yes.
+        </h1>
+        <p class="mt-4 text-[13px] leading-[1.7] text-[#171717]/50">
+            Two signatures. One ring.
+            <br/>
+            A shared history.
+        </p>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[70px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium tracking-wide">
+            Begin
+        </button>
+    </div>
+    <p class="absolute bottom-[34px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35 flex items-center justify-center gap-1.5">
+        <span class="w-1 h-1 rounded-full bg-[#4ECF8B]">
+        </span>
+        BOT Mainnet · Block #8,431,902
+    </p>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.to('#b01-orbit',{rotation:360,duration:24,repeat:-1,ease:'none'});
+gsap.to('#b01-ring',{y:-10,duration:3.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.to('#b01-ring',{rotation:6,duration:9,repeat:-1,yoyo:true,ease:'sine.inOut'});
+</script>
+</div></div>
+</section>
+<section class="board" id="s02" data-zh="创建身份 · 你是谁">
+<div class="board-label"><span class="en">02 · Create Identity 1/4</span><span class="zh">创建身份 · 你是谁</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="flex items-center justify-between px-5 h-[48px]">
+        <button aria-label="Back" class="w-10 h-10 -ml-1 flex items-center justify-center text-[22px]">
+            <i class="ph-light ph-caret-left">
+            </i>
+        </button>
+        <div class="flex gap-1.5">
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]/12">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]/12">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]/12">
+            </span>
+        </div>
+        <span class="w-10 text-right text-[12px] text-[#171717]/40">
+            1 / 4
+        </span>
+    </div>
+    <div class="text-center mt-8 px-8">
+        <h1 class="serif text-[32px] font-normal leading-tight">
+            Who are you?
+        </h1>
+        <p class="mt-2 text-[14px] text-[#171717]/50">
+            Let's create your identity.
+        </p>
+    </div>
+    <div class="relative w-[128px] h-[128px] mx-auto mt-10">
+        <div class="absolute -inset-[7px] rounded-full border border-[#E98F93]/40">
+        </div>
+        <img alt="Luna portrait — photo by Thanh Duc PHAN on Unsplash" class="w-full h-full rounded-full object-cover" decoding="async" loading="lazy" src="assets/alice.jpg"/>
+        <button aria-label="Change photo" class="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-white shadow-[0_2px_10px_rgba(23,23,23,0.08)] flex items-center justify-center text-[16px]">
+            <i class="ph-light ph-camera">
+            </i>
+        </button>
+    </div>
+    <div class="mx-5 mt-12 rounded-[24px] bg-white px-5 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+        <div class="flex items-center justify-between h-[60px] border-b border-[#171717]/[0.06]">
+            <span class="text-[14px] text-[#171717]/45">
+                Nickname
+            </span>
+            <span class="text-[15px] font-medium flex items-center gap-1">
+                Luna
+                <span class="w-[1.5px] h-4 bg-[#E98F93] ml-0.5">
+                </span>
+            </span>
+        </div>
+        <div class="flex items-center justify-between h-[60px] border-b border-[#171717]/[0.06]">
+            <span class="text-[14px] text-[#171717]/45">
+                Gender
+            </span>
+            <span class="text-[15px] font-medium flex items-center gap-1.5">
+                Female
+                <span class="text-[#171717]/25 text-[14px]">
+                    <i class="ph-light ph-caret-right">
+                    </i>
+                </span>
+            </span>
+        </div>
+        <div class="flex items-center justify-between h-[60px] border-b border-[#171717]/[0.06]">
+            <span class="text-[14px] text-[#171717]/45">
+                Location
+            </span>
+            <span class="text-[15px] font-medium flex items-center gap-1.5">
+                Shanghai
+                <span class="text-[#171717]/25 text-[14px]">
+                    <i class="ph-light ph-caret-right">
+                    </i>
+                </span>
+            </span>
+        </div>
+        <div class="flex items-center justify-between h-[60px]">
+            <span class="text-[14px] text-[#171717]/45">
+                Age Range
+            </span>
+            <span class="text-[15px] font-medium flex items-center gap-1.5">
+                20 – 26
+                <span class="text-[#171717]/25 text-[14px]">
+                    <i class="ph-light ph-caret-right">
+                    </i>
+                </span>
+            </span>
+        </div>
+    </div>
+    <p class="text-center text-[12px] text-[#171717]/35 mt-4">
+        Only your nickname is visible before you match.
+    </p>
+    <div class="absolute left-6 right-6 bottom-[42px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium">
+            Next
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+</div></div>
+</section>
+<section class="board" id="s03" data-zh="创建身份 · 兴趣">
+<div class="board-label"><span class="en">03 · Create Identity 2/4</span><span class="zh">创建身份 · 兴趣</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="flex items-center justify-between px-5 h-[48px]">
+        <button aria-label="Back" class="w-10 h-10 -ml-1 flex items-center justify-center text-[22px]">
+            <i class="ph-light ph-caret-left">
+            </i>
+        </button>
+        <div class="flex gap-1.5">
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]/12">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]/12">
+            </span>
+        </div>
+        <span class="w-10 text-right text-[12px] text-[#171717]/40">
+            2 / 4
+        </span>
+    </div>
+    <div class="px-6 mt-7">
+        <h1 class="serif text-[32px] font-normal leading-tight">
+            What do you love?
+        </h1>
+        <div class="flex items-center justify-between mt-2">
+            <p class="text-[14px] text-[#171717]/50">
+                Choose a few things you enjoy
+            </p>
+            <p class="text-[12px] text-[#171717]/40">
+                <span class="text-[#171717] font-medium">
+                    5
+                </span>
+                / 8
+            </p>
+        </div>
+    </div>
+    <div class="grid grid-cols-3 gap-x-[10px] gap-y-4 px-5 mt-7">
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Vinyl record — Aaron Burden on Pexels" class="w-full h-full object-cover" decoding="async" loading="lazy" src="assets/in-music.jpg"/>
+                <span class="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/95 flex items-center justify-center text-[11px]">
+                    <i class="ph-light ph-check">
+                    </i>
+                </span>
+            </div>
+            <p class="serif text-[14px] mt-2">
+                Music
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Airplane window — Guilherme Stecanella on Pexels" class="w-full h-full object-cover" decoding="async" loading="lazy" src="assets/in-travel.jpg"/>
+                <span class="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/95 flex items-center justify-center text-[11px]">
+                    <i class="ph-light ph-check">
+                    </i>
+                </span>
+            </div>
+            <p class="serif text-[14px] mt-2">
+                Travel
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Film camera — Orhan Pergel on Pexels" class="w-full h-full object-cover" decoding="async" loading="lazy" src="assets/in-photo.jpg"/>
+                <span class="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/95 flex items-center justify-center text-[11px]">
+                    <i class="ph-light ph-check">
+                    </i>
+                </span>
+            </div>
+            <p class="serif text-[14px] mt-2">
+                Photography
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Croissant and iced coffee — Bông on Pexels" class="w-full h-full object-cover opacity-90" decoding="async" loading="lazy" src="assets/in-food.jpg"/>
+            </div>
+            <p class="serif text-[14px] mt-2 text-[#171717]/55">
+                Food
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Book and coffee — Rahime Gül on Pexels" class="w-full h-full object-cover opacity-90" decoding="async" loading="lazy" src="assets/in-reading.jpg"/>
+            </div>
+            <p class="serif text-[14px] mt-2 text-[#171717]/55">
+                Reading
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Cinema — İNZİLE DAL on Pexels" class="w-full h-full object-cover opacity-90" decoding="async" loading="lazy" src="assets/in-movies.jpg"/>
+            </div>
+            <p class="serif text-[14px] mt-2 text-[#171717]/55">
+                Movies
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Soft abstract shapes — Anil kumar on Unsplash" class="w-full h-full object-cover" decoding="async" loading="lazy" src="assets/in-ai.jpg"/>
+                <span class="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/95 flex items-center justify-center text-[11px]">
+                    <i class="ph-light ph-check">
+                    </i>
+                </span>
+            </div>
+            <p class="serif text-[14px] mt-2">
+                AI
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Pastel painting — Kseniya Lapteva on Pexels" class="w-full h-full object-cover" decoding="async" loading="lazy" src="assets/in-art.jpg"/>
+                <span class="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/95 flex items-center justify-center text-[11px]">
+                    <i class="ph-light ph-check">
+                    </i>
+                </span>
+            </div>
+            <p class="serif text-[14px] mt-2">
+                Art
+            </p>
+        </div>
+        <div>
+            <div class="relative h-[90px] rounded-[18px] overflow-hidden">
+                <img alt="Tennis net — Santiago Manuel De la Colina on Pexels" class="w-full h-full object-cover opacity-90" decoding="async" loading="lazy" src="assets/in-sports.jpg"/>
+            </div>
+            <p class="serif text-[14px] mt-2 text-[#171717]/55">
+                Sports
+            </p>
+        </div>
+    </div>
+    <p class="text-center text-[12px] text-[#171717]/35 mt-6">
+        Pick 5 to 8. They help the right person find you.
+    </p>
+    <div class="absolute left-6 right-6 bottom-[42px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium">
+            Next
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+</div></div>
+</section>
+<section class="board" id="s04" data-zh="创建身份 · 关系意向">
+<div class="board-label"><span class="en">04 · Create Identity 3/4</span><span class="zh">创建身份 · 关系意向</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="flex items-center justify-between px-5 h-[48px]">
+        <button aria-label="Back" class="w-10 h-10 -ml-1 flex items-center justify-center text-[22px]">
+            <i class="ph-light ph-caret-left">
+            </i>
+        </button>
+        <div class="flex gap-1.5">
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]/12">
+            </span>
+        </div>
+        <span class="w-10 text-right text-[12px] text-[#171717]/40">
+            3 / 4
+        </span>
+    </div>
+    <div class="px-6 mt-7">
+        <h1 class="serif text-[32px] font-normal leading-tight">
+            What do you seek?
+        </h1>
+        <p class="mt-2 text-[14px] text-[#171717]/50">
+            Your relationship intention
+        </p>
+    </div>
+    <div class="px-5 mt-8 space-y-3">
+        <div class="rounded-[24px] bg-white px-5 py-5 flex items-center gap-4 ring-1 ring-[#171717] shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.05)]">
+            <span class="w-[22px] h-[22px] rounded-full border border-[#171717] flex items-center justify-center shrink-0">
+                <span class="w-3 h-3 rounded-full bg-[#171717]">
+                </span>
+            </span>
+            <div class="flex-1">
+                <p class="serif text-[18px]">
+                    Serious relationship
+                </p>
+                <p class="text-[13px] text-[#171717]/50 mt-0.5">
+                    Looking for a long-term partner.
+                </p>
+            </div>
+        </div>
+        <div class="rounded-[24px] bg-white px-5 py-5 flex items-center gap-4 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+            <span class="w-[22px] h-[22px] rounded-full border border-[#171717]/20 shrink-0">
+            </span>
+            <div class="flex-1">
+                <p class="serif text-[18px]">
+                    Open to connection
+                </p>
+                <p class="text-[13px] text-[#171717]/50 mt-0.5">
+                    Meet and see where it goes.
+                </p>
+            </div>
+        </div>
+        <div class="rounded-[24px] bg-white px-5 py-5 flex items-center gap-4 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+            <span class="w-[22px] h-[22px] rounded-full border border-[#171717]/20 shrink-0">
+            </span>
+            <div class="flex-1">
+                <p class="serif text-[18px]">
+                    Already in love
+                </p>
+                <p class="text-[13px] text-[#171717]/50 mt-0.5">
+                    I want to bind my person.
+                </p>
+            </div>
+        </div>
+        <div class="rounded-[24px] bg-white px-5 py-5 flex items-center gap-4 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+            <span class="w-[22px] h-[22px] rounded-full border border-[#171717]/20 shrink-0">
+            </span>
+            <div class="flex-1">
+                <p class="serif text-[18px]">
+                    Just exploring
+                </p>
+                <p class="text-[13px] text-[#171717]/50 mt-0.5">
+                    For now, I'm just looking around.
+                </p>
+            </div>
+        </div>
+    </div>
+    <p class="text-center text-[12px] text-[#171717]/35 mt-6">
+        You can change this anytime.
+    </p>
+    <div class="absolute left-6 right-6 bottom-[42px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium">
+            Next
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+</div></div>
+</section>
+<section class="board" id="s05" data-zh="创建身份 · 爱情宣言">
+<div class="board-label"><span class="en">05 · Create Identity 4/4</span><span class="zh">创建身份 · 爱情宣言</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="flex items-center justify-between px-5 h-[48px]">
+        <button aria-label="Back" class="w-10 h-10 -ml-1 flex items-center justify-center text-[22px]">
+            <i class="ph-light ph-caret-left">
+            </i>
+        </button>
+        <div class="flex gap-1.5">
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+            <span class="w-7 h-[2px] rounded-full bg-[#171717]">
+            </span>
+        </div>
+        <span class="w-10 text-right text-[12px] text-[#171717]/40">
+            4 / 4
+        </span>
+    </div>
+    <div class="px-6 mt-7">
+        <h1 class="serif text-[32px] font-normal leading-[1.2]">
+            What does love
+            <br/>
+            mean to you?
+        </h1>
+        <p class="mt-2 text-[14px] text-[#171717]/50">
+            Share a few words about yourself
+        </p>
+    </div>
+    <div class="mx-5 mt-8 h-[330px] rounded-[28px] bg-white p-6 relative shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+        <span class="serif text-[44px] leading-none text-[#E98F93]/50">
+            “
+        </span>
+        <p class="serif text-[20px] leading-[1.65] -mt-3">
+            I believe love is two people growing together, seeing more of the world, and always choosing each other.
+            <span class="inline-block w-[1.5px] h-5 bg-[#E98F93] align-middle ml-0.5">
+            </span>
+        </p>
+        <div class="absolute left-6 right-6 bottom-5 flex items-center justify-between text-[12px] text-[#171717]/35">
+            <span class="flex items-center gap-1.5">
+                <i class="ph-light ph-lock-simple">
+                </i>
+                Shown only to people you match
+            </span>
+            <span>
+                <span class="text-[#171717]/70">
+                    99
+                </span>
+                / 200
+            </span>
+        </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[42px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium">
+            Create My Identity
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+</div></div>
+</section>
+<section class="board" id="s05b" data-zh="创建中 · 链上身份">
+<div class="board-label"><span class="en">05b · Creating Identity</span><span class="zh">创建中 · 链上身份</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <div class="relative w-[150px] h-[150px]">
+            <svg class="absolute inset-0 w-full h-full" viewbox="0 0 150 150">
+                <circle cx="75" cy="75" fill="none" r="60" stroke="#171717" stroke-opacity=".06" stroke-width="2">
+                </circle>
+            </svg>
+            <svg class="absolute inset-0 w-full h-full" id="b05b-spin" viewbox="0 0 150 150">
+                <defs>
+                    <lineargradient id="b05b-sg" x1="0" x2="1" y1="0" y2="1">
+                        <stop offset="0" stop-color="#F3D3C7">
+                        </stop>
+                        <stop offset=".5" stop-color="#C98877">
+                        </stop>
+                        <stop offset="1" stop-color="#E98F93" stop-opacity="0">
+                        </stop>
+                    </lineargradient>
+                </defs>
+                <circle cx="75" cy="75" fill="none" r="60" stroke="url(#b05b-sg)" stroke-dasharray="250 127" stroke-linecap="round" stroke-width="3">
+                </circle>
+            </svg>
+            <img alt="Luna — Thanh Duc PHAN on Unsplash" class="absolute inset-[30px] w-[90px] h-[90px] rounded-full object-cover" decoding="async" loading="lazy" src="assets/alice.jpg"/>
+        </div>
+        <p class="serif text-[24px] mt-10">
+            Creating your identity…
+        </p>
+        <p class="text-[13px] text-[#171717]/45 mt-2">
+            Just a moment, Luna.
+        </p>
+    </div>
+    <p class="absolute bottom-[40px] inset-x-0 text-center text-[11px] text-[#171717]/30 flex items-center justify-center gap-1.5">
+        <i class="ph-light ph-shield-check">
+        </i>
+        Your account is secured automatically
+    </p>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.to('#b05b-spin',{rotation:360,duration:2.4,repeat:-1,ease:'none'});
+</script>
+</div></div>
+</section>
+<section class="board" id="s06" data-zh="选择路径">
+<div class="board-label"><span class="en">06 · Choose Path</span><span class="zh">选择路径</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="px-5 h-[48px] flex items-center">
+        <button aria-label="Back" class="w-10 h-10 -ml-1 flex items-center justify-center text-[22px]">
+            <i class="ph-light ph-caret-left">
+            </i>
+        </button>
+    </div>
+    <div class="px-6 mt-4">
+        <h1 class="serif text-[32px] font-normal leading-[1.2]">
+            What's your situation
+            <br/>
+            right now?
+        </h1>
+    </div>
+    <div class="px-5 mt-8 space-y-4">
+        <div class="relative h-[280px] rounded-[28px] overflow-hidden">
+            <img alt="Woman at sunset — Eduardo Muniz on Unsplash" class="absolute inset-0 w-full h-full object-cover" decoding="async" loading="lazy" src="assets/find-someone.jpg"/>
+            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,23,0)_40%,rgba(23,23,23,0.55)_100%)]">
+            </div>
+            <div class="absolute left-6 right-6 bottom-6 flex items-end justify-between text-white">
+                <div>
+                    <p class="serif text-[28px] leading-tight">
+                        Find Someone
+                    </p>
+                    <p class="text-[13px] text-white/80 mt-1">
+                        I haven't met my person yet.
+                    </p>
+                </div>
+                <span class="w-11 h-11 rounded-full bg-white/90 text-[#171717] flex items-center justify-center text-[18px]">
+                    <i class="ph-light ph-arrow-right">
+                    </i>
+                </span>
+            </div>
+        </div>
+        <div class="relative h-[280px] rounded-[28px] overflow-hidden">
+            <img alt="Couple holding hands at sunset — Adam Cheek on Unsplash" class="absolute inset-0 w-full h-full object-cover" decoding="async" loading="lazy" src="assets/bind-person.jpg"/>
+            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,23,0)_40%,rgba(23,23,23,0.55)_100%)]">
+            </div>
+            <div class="absolute left-6 right-6 bottom-6 flex items-end justify-between text-white">
+                <div>
+                    <p class="serif text-[28px] leading-tight">
+                        Bind My Person
+                    </p>
+                    <p class="text-[13px] text-white/80 mt-1">
+                        We already found each other.
+                    </p>
+                </div>
+                <span class="w-11 h-11 rounded-full bg-white/90 text-[#171717] flex items-center justify-center text-[18px]">
+                    <i class="ph-light ph-arrow-right">
+                    </i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+</div></div>
+</section>
+<section class="board" id="s07" data-zh="发现 · 共鸣的人">
+<div class="board-label"><span class="en">07 · Discover</span><span class="zh">发现 · 共鸣的人</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="px-6 mt-3 flex items-start justify-between">
+        <div>
+            <h1 class="serif text-[24px] font-normal leading-tight">
+                People who might resonate
+            </h1>
+            <p class="text-[12px] text-[#171717]/45 mt-1">
+                3 for today · chosen with care
+            </p>
+        </div>
+        <button aria-label="Filters" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[18px] shadow-[0_1px_2px_rgba(23,23,23,0.04)]">
+            <i class="ph-light ph-sliders-horizontal">
+            </i>
+        </button>
+    </div>
+    <div class="mx-5 mt-5 rounded-[28px] bg-white overflow-hidden shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.05)]">
+        <div class="relative h-[318px]">
+            <img alt="Sophie — photo by Tron Le on Unsplash" class="w-full h-full object-cover object-[50%_25%]" decoding="async" loading="lazy" src="assets/sophie.jpg"/>
+            <div class="absolute top-4 inset-x-0 flex justify-center gap-1.5">
+                <span class="w-5 h-[3px] rounded-full bg-white">
+                </span>
+                <span class="w-5 h-[3px] rounded-full bg-white/45">
+                </span>
+                <span class="w-5 h-[3px] rounded-full bg-white/45">
+                </span>
+            </div>
+        </div>
+        <div class="px-5 pt-4 pb-5">
+            <div class="flex items-baseline justify-between">
+                <p class="serif text-[24px]">
+                    Sophie, 24
+                </p>
+                <p class="text-[12px] text-[#171717]/45 flex items-center gap-1">
+                    <i class="ph-light ph-map-pin">
+                    </i>
+                    Shenzhen · 12 km
+                </p>
+            </div>
+            <div class="flex gap-1.5 mt-3">
+                <span class="px-3 h-7 rounded-full bg-[#E98F93]/12 text-[#C0646A] text-[12px] flex items-center">
+                    Travel
+                </span>
+                <span class="px-3 h-7 rounded-full bg-[#E98F93]/12 text-[#C0646A] text-[12px] flex items-center">
+                    Music
+                </span>
+                <span class="px-3 h-7 rounded-full bg-[#E98F93]/12 text-[#C0646A] text-[12px] flex items-center">
+                    Photography
+                </span>
+            </div>
+            <p class="text-[14px] leading-[1.6] text-[#171717]/70 mt-3">
+                I love meeting new places and interesting people. Hoping to find someone to explore the world together.
+            </p>
+            <div class="flex items-center gap-4 mt-3.5 pt-3.5 border-t border-[#171717]/[0.06] text-[12px] text-[#171717]/55">
+                <span class="flex items-center gap-1.5">
+                    <span class="text-[#E98F93] text-[14px]">
+                        <i class="ph-light ph-heart">
+                        </i>
+                    </span>
+                    4 shared interests
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <span class="text-[#E98F93] text-[14px]">
+                        <i class="ph-light ph-compass">
+                        </i>
+                    </span>
+                    Same intention
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="absolute left-5 right-5 bottom-[38px] flex items-center gap-3">
+        <button aria-label="Skip" class="w-[56px] h-[56px] rounded-full bg-white flex items-center justify-center text-[20px] text-[#171717]/60 shadow-[0_1px_2px_rgba(23,23,23,0.04),0_6px_18px_rgba(23,23,23,0.04)]">
+            <i class="ph-light ph-x">
+            </i>
+        </button>
+        <button aria-label="Save" class="w-[56px] h-[56px] rounded-full bg-white flex items-center justify-center text-[20px] text-[#171717]/60 shadow-[0_1px_2px_rgba(23,23,23,0.04),0_6px_18px_rgba(23,23,23,0.04)]">
+            <i class="ph-light ph-bookmark-simple">
+            </i>
+        </button>
+        <button class="flex-1 h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium flex items-center justify-center gap-2">
+            <svg class="w-[18px] h-[18px]" viewbox="0 0 20 20">
+                <circle cx="10" cy="10" fill="none" r="6.5" stroke="#E98F93" stroke-width="2">
+                </circle>
+            </svg>
+            Ring
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+</div></div>
+</section>
+<section class="board" id="s08a" data-zh="发送 Ring 邀请">
+<div class="board-label"><span class="en">08a · Send Invitation</span><span class="zh">发送 Ring 邀请</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(70%_40%_at_50%_30%,rgba(233,143,147,0.10),rgba(255,249,247,0))]">
+    </div>
+    <div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="relative px-5 h-[48px] flex items-center">
+        <button aria-label="Back" class="w-10 h-10 -ml-1 flex items-center justify-center text-[22px]">
+            <i class="ph-light ph-caret-left">
+            </i>
+        </button>
+    </div>
+    <div class="relative flex justify-center mt-2">
+        <svg class="w-[290px] h-[290px]" viewbox="0 0 320 320">
+            <defs>
+                <lineargradient id="b08a-gA" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#FBE6DE">
+                    </stop>
+                    <stop offset=".35" stop-color="#D7998A">
+                    </stop>
+                    <stop offset=".55" stop-color="#FFF3EE">
+                    </stop>
+                    <stop offset=".8" stop-color="#C58676">
+                    </stop>
+                    <stop offset="1" stop-color="#EDC8BB">
+                    </stop>
+                </lineargradient>
+                <lineargradient id="b08a-gB" x1="0" x2="1" y1="1" y2="0">
+                    <stop offset="0" stop-color="#A8695C">
+                    </stop>
+                    <stop offset=".5" stop-color="#DDAA9B">
+                    </stop>
+                    <stop offset="1" stop-color="#B57466">
+                    </stop>
+                </lineargradient>
+            </defs>
+            <g transform="rotate(-22 160 160)">
+                <g id="b08a-L">
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b08a-gB)" stroke-linecap="round" stroke-width="15" transform="translate(0 7)">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b08a-gA)" stroke-linecap="round" stroke-width="15">
+                    </path>
+                    <path d="M160 64 A96 96 0 0 0 160 256" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1">
+                    </path>
+                </g>
+                <g id="b08a-R">
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" stroke="url(#b08a-gB)" stroke-linecap="round" stroke-width="15" transform="translate(0 7)">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" stroke="url(#b08a-gA)" stroke-linecap="round" stroke-width="15">
+                    </path>
+                    <path d="M160 64 A96 96 0 0 1 160 256" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1">
+                    </path>
+                </g>
+            </g>
+        </svg>
+    </div>
+    <div class="relative text-center px-8 -mt-1">
+        <h1 class="serif text-[30px] font-normal leading-tight">
+            Send a Ring Invitation
+        </h1>
+        <div class="flex flex-col items-center mt-7">
+            <img alt="Sophie — Tron Le on Unsplash" class="w-[64px] h-[64px] rounded-full object-cover object-top ring-4 ring-white" decoding="async" loading="lazy" src="assets/sophie.jpg"/>
+            <p class="text-[15px] font-medium mt-3">
+                Sophie
+            </p>
+            <p class="text-[12px] text-[#171717]/45 mt-0.5">
+                Shenzhen · 4 shared interests
+            </p>
+        </div>
+        <p class="serif text-[16px] text-[#171717]/65 mt-7 leading-relaxed">
+            A Ring belongs to two people.
+            <br/>
+            Only two.
+        </p>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[42px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium">
+            Send Invitation
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.fromTo('#b08a-L',{x:-26},{x:-14,duration:2.6,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.fromTo('#b08a-R',{x:26},{x:14,duration:2.6,repeat:-1,yoyo:true,ease:'sine.inOut'});
+</script>
+</div></div>
+</section>
+<section class="board" id="s08b" data-zh="已发送 · 等待中">
+<div class="board-label"><span class="en">08b · Invitation Sent</span><span class="zh">已发送 · 等待中</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(70%_40%_at_50%_30%,rgba(233,143,147,0.12),rgba(255,249,247,0))]">
+    </div>
+    <div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="relative px-5 h-[48px] flex items-center justify-end">
+        <button aria-label="Close" class="w-10 h-10 flex items-center justify-center text-[20px]">
+            <i class="ph-light ph-x">
+            </i>
+        </button>
+    </div>
+    <div class="relative flex justify-center mt-2">
+        <svg class="w-[290px] h-[290px]" viewbox="0 0 320 320">
+            <defs>
+                <lineargradient id="b08b-gA" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#FBE6DE">
+                    </stop>
+                    <stop offset=".35" stop-color="#D7998A">
+                    </stop>
+                    <stop offset=".55" stop-color="#FFF3EE">
+                    </stop>
+                    <stop offset=".8" stop-color="#C58676">
+                    </stop>
+                    <stop offset="1" stop-color="#EDC8BB">
+                    </stop>
+                </lineargradient>
+                <lineargradient id="b08b-gB" x1="0" x2="1" y1="1" y2="0">
+                    <stop offset="0" stop-color="#A8695C">
+                    </stop>
+                    <stop offset=".5" stop-color="#DDAA9B">
+                    </stop>
+                    <stop offset="1" stop-color="#B57466">
+                    </stop>
+                </lineargradient>
+                <radialgradient id="b08b-glow">
+                    <stop offset="0" stop-color="#E98F93" stop-opacity=".22">
+                    </stop>
+                    <stop offset="1" stop-color="#E98F93" stop-opacity="0">
+                    </stop>
+                </radialgradient>
+            </defs>
+            <circle cx="160" cy="160" fill="url(#b08b-glow)" id="b08b-glowc" r="150">
+            </circle>
+            <g transform="rotate(-22 160 160)">
+                <g>
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b08b-gB)" stroke-linecap="round" stroke-width="15" transform="translate(0 7)">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b08b-gA)" stroke-linecap="round" stroke-width="15">
+                    </path>
+                    <path d="M160 64 A96 96 0 0 0 160 256" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1">
+                    </path>
+                </g>
+                <g>
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" stroke="#C98877" stroke-linecap="round" stroke-opacity=".07" stroke-width="15">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" id="b08b-ghost" stroke="#C98877" stroke-dasharray="1 7" stroke-linecap="round" stroke-opacity=".6" stroke-width="1.4">
+                    </path>
+                </g>
+            </g>
+        </svg>
+    </div>
+    <div class="relative text-center px-8 -mt-1">
+        <h1 class="serif text-[30px] font-normal leading-tight">
+            Invitation Sent
+        </h1>
+        <p class="text-[14px] text-[#171717]/50 mt-2">
+            Waiting for Sophie.
+        </p>
+    </div>
+    <div class="relative mx-5 mt-7 rounded-[24px] bg-white px-5 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+        <div class="flex items-center justify-between h-[56px] border-b border-[#171717]/[0.06] text-[14px]">
+            <span class="text-[#171717]/45">
+                Invitation created
+            </span>
+            <span class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]">
+                </span>
+                Just now
+            </span>
+        </div>
+        <div class="flex items-center justify-between h-[56px] text-[14px]">
+            <span class="text-[#171717]/45">
+                Expires in
+            </span>
+            <span class="font-medium tabular-nums tracking-wide">
+                23:47:12
+            </span>
+        </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[34px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium flex items-center justify-center gap-2">
+            <span class="text-[18px]">
+                <i class="ph-light ph-share-network">
+                </i>
+            </span>
+            Share Invitation
+        </button>
+        <button class="w-full h-[46px] mt-2 text-[14px] text-[#171717]/70 flex items-center justify-center gap-1.5">
+            <span class="text-[#4ECF8B] text-[16px]">
+                <i class="ph-light ph-seal-check">
+                </i>
+            </span>
+            View Proof
+        </button>
+        <button class="w-full h-[40px] text-[13px] text-[#171717]/40">
+            Cancel Invitation
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.fromTo('#b08b-glowc',{opacity:.4},{opacity:1,duration:2.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.to('#b08b-ghost',{strokeDashoffset:-64,duration:6,repeat:-1,ease:'none'});
+</script>
+</div></div>
+</section>
+<section class="board" id="s09" data-zh="收到邀请">
+<div class="board-label"><span class="en">09 · Invitation Received</span><span class="zh">收到邀请</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(70%_38%_at_50%_26%,rgba(233,143,147,0.12),rgba(255,249,247,0))]">
+    </div>
+    <div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <p class="relative text-center text-[11px] tracking-[0.28em] uppercase text-[#171717]/45 mt-4">
+        A Ring Invitation
+    </p>
+    <div class="relative flex justify-center mt-2">
+        <div class="relative w-[260px] h-[260px]">
+            <svg class="absolute inset-0 w-full h-full" viewbox="0 0 320 320">
+                <defs>
+                    <lineargradient id="b09-gA" x1="0" x2="1" y1="0" y2="1">
+                        <stop offset="0" stop-color="#FBE6DE">
+                        </stop>
+                        <stop offset=".35" stop-color="#D7998A">
+                        </stop>
+                        <stop offset=".55" stop-color="#FFF3EE">
+                        </stop>
+                        <stop offset=".8" stop-color="#C58676">
+                        </stop>
+                        <stop offset="1" stop-color="#EDC8BB">
+                        </stop>
+                    </lineargradient>
+                    <lineargradient id="b09-gB" x1="0" x2="1" y1="1" y2="0">
+                        <stop offset="0" stop-color="#A8695C">
+                        </stop>
+                        <stop offset=".5" stop-color="#DDAA9B">
+                        </stop>
+                        <stop offset="1" stop-color="#B57466">
+                        </stop>
+                    </lineargradient>
+                </defs>
+                <g transform="rotate(-22 160 160)">
+                    <g>
+                        <path d="M160 46 A114 114 0 0 0 160 274" fill="none" stroke="url(#b09-gB)" stroke-linecap="round" stroke-width="14" transform="translate(0 7)">
+                        </path>
+                        <path d="M160 46 A114 114 0 0 0 160 274" fill="none" stroke="url(#b09-gA)" stroke-linecap="round" stroke-width="14">
+                        </path>
+                    </g>
+                    <g>
+                        <path d="M160 46 A114 114 0 0 1 160 274" fill="none" stroke="#C98877" stroke-linecap="round" stroke-opacity=".07" stroke-width="14">
+                        </path>
+                        <path d="M160 46 A114 114 0 0 1 160 274" fill="none" id="b09-ghost" stroke="#C98877" stroke-dasharray="1 7" stroke-linecap="round" stroke-opacity=".6" stroke-width="1.4">
+                        </path>
+                    </g>
+                </g>
+            </svg>
+            <img alt="Alice — oktavianus mulyadi on Unsplash" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[96px] h-[96px] rounded-full object-cover object-top ring-[5px] ring-white" decoding="async" loading="lazy" src="assets/alice.jpg"/>
+        </div>
+    </div>
+    <div class="relative px-7 text-center mt-4">
+        <h1 class="serif text-[26px] font-normal leading-[1.3]">
+            Alice wants to share
+            <br/>
+            a Ring with you.
+        </h1>
+        <div class="flex justify-center flex-wrap gap-1.5 mt-4">
+            <span class="px-3 h-7 rounded-full bg-[#E98F93]/12 text-[#C0646A] text-[12px] flex items-center">
+                Travel
+            </span>
+            <span class="px-3 h-7 rounded-full bg-[#E98F93]/12 text-[#C0646A] text-[12px] flex items-center">
+                Photography
+            </span>
+            <span class="px-3 h-7 rounded-full border border-[#171717]/10 text-[#171717]/60 text-[12px] flex items-center">
+                Coffee
+            </span>
+            <span class="px-3 h-7 rounded-full border border-[#171717]/10 text-[#171717]/60 text-[12px] flex items-center">
+                AI
+            </span>
+        </div>
+    </div>
+    <div class="relative mx-5 mt-5 rounded-[24px] bg-white px-6 py-5 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+        <p class="text-[11px] tracking-[0.18em] uppercase text-[#171717]/40">
+            What love means to Alice
+        </p>
+        <p class="serif text-[16px] leading-[1.65] mt-2 text-[#171717]/85">
+            “I believe in long-term relationships and growing together. Hope we can explore more of the world together.”
+        </p>
+    </div>
+    <div class="absolute left-5 right-5 bottom-[40px] flex gap-3">
+        <button class="flex-1 h-[56px] rounded-full border border-[#171717]/15 text-[15px] font-medium text-[#171717]/70">
+            Decline
+        </button>
+        <button class="flex-[1.4] h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium">
+            Accept
+        </button>
+    </div>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.to('#b09-ghost',{strokeDashoffset:-64,duration:6,repeat:-1,ease:'none'});
+</script>
+</div></div>
+</section>
+<section class="board" id="s10" data-zh="签名接受">
+<div class="board-label"><span class="en">10 · Sign & Accept</span><span class="zh">签名接受</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(80%_45%_at_50%_28%,rgba(233,143,147,0.12),rgba(255,249,247,0))]">
+    </div>
+    <div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="relative px-5 h-[48px] flex items-center">
+        <button aria-label="Back" class="w-10 h-10 -ml-1 flex items-center justify-center text-[22px]">
+            <i class="ph-light ph-caret-left">
+            </i>
+        </button>
+    </div>
+    <div class="relative flex justify-center mt-0">
+        <svg class="w-[300px] h-[300px]" viewbox="0 0 320 320">
+            <defs>
+                <lineargradient id="b10-gA" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#FBE6DE">
+                    </stop>
+                    <stop offset=".35" stop-color="#D7998A">
+                    </stop>
+                    <stop offset=".55" stop-color="#FFF3EE">
+                    </stop>
+                    <stop offset=".8" stop-color="#C58676">
+                    </stop>
+                    <stop offset="1" stop-color="#EDC8BB">
+                    </stop>
+                </lineargradient>
+                <lineargradient id="b10-gB" x1="0" x2="1" y1="1" y2="0">
+                    <stop offset="0" stop-color="#A8695C">
+                    </stop>
+                    <stop offset=".5" stop-color="#DDAA9B">
+                    </stop>
+                    <stop offset="1" stop-color="#B57466">
+                    </stop>
+                </lineargradient>
+            </defs>
+            <g transform="rotate(-22 160 160)">
+                <g transform="translate(-5 0)">
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b10-gB)" stroke-linecap="round" stroke-width="15" transform="translate(0 7)">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b10-gA)" stroke-linecap="round" stroke-width="15">
+                    </path>
+                </g>
+                <g id="b10-R" transform="translate(5 0)">
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" opacity=".35" stroke="url(#b10-gB)" stroke-linecap="round" stroke-width="15" transform="translate(0 7)">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" opacity=".45" stroke="url(#b10-gA)" stroke-linecap="round" stroke-width="15">
+                    </path>
+                </g>
+            </g>
+        </svg>
+    </div>
+    <div class="relative px-7 text-center -mt-2">
+        <h1 class="serif text-[28px] font-normal leading-[1.3]">
+            Only you can complete
+            <br/>
+            this Ring.
+        </h1>
+    </div>
+    <div class="relative mx-5 mt-7 rounded-[24px] bg-white px-5 py-1 shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+        <div class="flex items-center gap-4 h-[60px] border-b border-[#171717]/[0.06]">
+            <span class="w-9 h-9 rounded-full bg-[#E98F93]/12 text-[#C0646A] flex items-center justify-center text-[17px]">
+                <i class="ph-light ph-circle">
+                </i>
+            </span>
+            <span class="text-[14px]">
+                Creates one active Romantic Ring
+            </span>
+        </div>
+        <div class="flex items-center gap-4 h-[60px] border-b border-[#171717]/[0.06]">
+            <span class="w-9 h-9 rounded-full bg-[#171717]/[0.05] text-[#171717]/70 flex items-center justify-center text-[17px]">
+                <i class="ph-light ph-coins">
+                </i>
+            </span>
+            <span class="text-[14px]">
+                No funds transferred
+            </span>
+        </div>
+        <div class="flex items-center gap-4 h-[60px]">
+            <span class="w-9 h-9 rounded-full bg-[#4ECF8B]/12 text-[#2E9E63] flex items-center justify-center text-[17px]">
+                <i class="ph-light ph-seal-check">
+                </i>
+            </span>
+            <span class="text-[14px]">
+                Recorded on BOT Chain
+            </span>
+        </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[56px]">
+        <button class="w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium flex items-center justify-center gap-2">
+            <span class="text-[18px]">
+                <i class="ph-light ph-scan-smiley">
+                </i>
+            </span>
+            Sign & Accept
+        </button>
+    </div>
+    <p class="absolute bottom-[28px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/30">
+        BOT Chain · Chain ID 677
+    </p>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717]">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.fromTo('#b10-R',{opacity:.55},{opacity:1,duration:2.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
+</script>
+</div></div>
+</section>
+<section class="board" id="s11" data-zh="戒指仪式">
+<div class="board-label"><span class="en">11 · Ring Ceremony</span><span class="zh">戒指仪式</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-[390px] h-[844px] overflow-hidden bg-[#171717] text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(70%_42%_at_50%_34%,rgba(233,143,147,0.20),rgba(23,23,23,0)_70%)]">
+    </div>
+    <div class="absolute w-[2px] h-[2px] rounded-full bg-white/60 top-[120px] left-[60px] star">
+    </div>
+    <div class="absolute w-[2px] h-[2px] rounded-full bg-white/40 top-[180px] right-[54px] star">
+    </div>
+    <div class="absolute w-[1.5px] h-[1.5px] rounded-full bg-white/50 top-[420px] left-[40px] star">
+    </div>
+    <div class="absolute w-[2px] h-[2px] rounded-full bg-white/30 top-[470px] right-[70px] star">
+    </div>
+    <div class="absolute w-[1.5px] h-[1.5px] rounded-full bg-white/50 top-[96px] right-[140px] star">
+    </div>
+    <div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+        <span>
+            9:41
+        </span>
+        <div class="flex items-center gap-[5px] text-[16px]">
+            <i class="ph-light ph-cell-signal-high">
+            </i>
+            <i class="ph-light ph-wifi-high">
+            </i>
+            <i class="ph-light ph-battery-high">
+            </i>
+        </div>
+    </div>
+    <div class="relative flex justify-center mt-10">
+        <svg class="w-[300px] h-[300px] overflow-visible" id="b11-stage" viewbox="0 0 320 320">
+            <defs>
+                <lineargradient id="b11-gA" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#FBE6DE">
+                    </stop>
+                    <stop offset=".35" stop-color="#D7998A">
+                    </stop>
+                    <stop offset=".55" stop-color="#FFF3EE">
+                    </stop>
+                    <stop offset=".8" stop-color="#C58676">
+                    </stop>
+                    <stop offset="1" stop-color="#EDC8BB">
+                    </stop>
+                </lineargradient>
+                <lineargradient id="b11-gB" x1="0" x2="1" y1="1" y2="0">
+                    <stop offset="0" stop-color="#7E4A40">
+                    </stop>
+                    <stop offset=".5" stop-color="#C08F81">
+                    </stop>
+                    <stop offset="1" stop-color="#8E584B">
+                    </stop>
+                </lineargradient>
+            </defs>
+            <circle cx="160" cy="160" fill="none" id="b11-wave" opacity="0" r="104" stroke="#F3D3C7" stroke-width="1">
+            </circle>
+            <g transform="rotate(-22 160 160)">
+                <g id="b11-L">
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b11-gB)" stroke-linecap="round" stroke-width="15" transform="translate(0 7)">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 0 160 262" fill="none" stroke="url(#b11-gA)" stroke-linecap="round" stroke-width="15">
+                    </path>
+                    <path d="M160 64 A96 96 0 0 0 160 256" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1">
+                    </path>
+                </g>
+                <g id="b11-R">
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" stroke="url(#b11-gB)" stroke-linecap="round" stroke-width="15" transform="translate(0 7)">
+                    </path>
+                    <path d="M160 58 A102 102 0 0 1 160 262" fill="none" stroke="url(#b11-gA)" stroke-linecap="round" stroke-width="15">
+                    </path>
+                    <path d="M160 64 A96 96 0 0 1 160 256" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1">
+                    </path>
+                </g>
+            </g>
+        </svg>
+    </div>
+    <div class="relative text-center px-8 mt-4">
+        <h1 class="t1 serif text-[40px] font-normal leading-none">
+            Our Ring
+        </h1>
+        <p class="t2 text-[15px] mt-4 text-white/85">
+            Alice
+            <span class="text-[#E98F93]">
+                ×
+            </span>
+            Sophie
+        </p>
+        <p class="t2 text-[12px] mt-1 text-white/45 tracking-wide">
+            Born October 7, 2026
+        </p>
+        <p class="t3 serif text-[16px] leading-[1.7] text-white/75 mt-7">
+            Forever does not begin with a promise.
+            <br/>
+            It begins with two people
+            <br/>
+            choosing the same thing.
+        </p>
+    </div>
+    <div class="t4 absolute left-6 right-6 bottom-[70px]">
+        <button class="w-full h-[56px] rounded-full bg-[#FFF9F7] text-[#171717] text-[15px] font-medium">
+            Enter Our Ring
+        </button>
+    </div>
+    <p class="t4 absolute bottom-[34px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-white/35 flex items-center justify-center gap-1.5">
+        <span class="w-1 h-1 rounded-full bg-[#4ECF8B]">
+        </span>
+        BOT Chain · Block #8,431,902
+    </p>
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-white">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js">
+</script>
+<script>
+    gsap.to('#b11 .star',{opacity:.2,duration:2,repeat:-1,yoyo:true,stagger:.4,ease:'sine.inOut'});
+const tl=gsap.timeline({repeat:-1,repeatDelay:2.5});
+tl.set(['#b11 .t1','#b11 .t2','#b11 .t3','#b11 .t4'],{opacity:0,y:10})
+  .fromTo('#b11-L',{x:-70,opacity:.6},{x:0,opacity:1,duration:2.2,ease:'power3.inOut'},0)
+  .fromTo('#b11-R',{x:70,opacity:.6},{x:0,opacity:1,duration:2.2,ease:'power3.inOut'},0)
+  .to('#b11-stage',{x:2,duration:.05,repeat:5,yoyo:true,ease:'none'},2.2)
+  .fromTo('#b11-wave',{attr:{r:104},opacity:.8},{attr:{r:170},opacity:0,duration:1.6,ease:'power2.out'},2.2)
+  .to('#b11 .t1',{opacity:1,y:0,duration:.9,ease:'power2.out'},2.6)
+  .to('#b11 .t2',{opacity:1,y:0,duration:.9,ease:'power2.out'},2.9)
+  .to('#b11 .t3',{opacity:1,y:0,duration:1,ease:'power2.out'},3.3)
+  .to('#b11 .t4',{opacity:1,y:0,duration:.8,ease:'power2.out'},3.8)
+  .to({},{duration:4});
+</script>
+</div></div>
+</section>
+<section class="board" id="s12" data-zh="关系首页">
+<div class="board-label"><span class="en">12 · Ring Home</span><span class="zh">关系首页 · 漂浮的 Dynamic Ring + Bottom Tabs</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div class="absolute inset-0 bg-[radial-gradient(120%_55%_at_50%_0%,rgba(233,143,147,0.13),rgba(255,249,247,0)_60%)]"></div>
+  <div data-statusbar></div>
+  <div class="relative flex items-center justify-between px-6 mt-2">
+    <div class="flex items-center">
+      <img src="assets/alice.jpg" alt="Alice" class="w-[34px] h-[34px] rounded-full object-cover border-2 border-white shadow-sm">
+      <img src="assets/sophie.jpg" alt="Sophie" class="w-[34px] h-[34px] rounded-full object-cover border-2 border-white -ml-2 shadow-sm">
+    </div>
+    <div class="text-center">
+      <p class="serif text-[17px] leading-tight">Alice <span class="text-[#E98F93]">×</span> Sophie</p>
+      <p class="text-[10px] tracking-[0.18em] uppercase text-[#171717]/40 mt-0.5">One Ring · Two People</p>
+    </div>
+    <button data-proof-trigger data-proof-action="Ring Created" class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><i class="ph-light ph-seal-check text-[14px]"></i>Verified</button>
+  </div>
+  <div class="relative mx-auto mt-2 w-[390px] h-[300px] flex items-center justify-center">
+    <svg class="absolute w-[280px] h-[280px]" data-anim="orbit" viewBox="0 0 280 280">
+      <defs>
+        <linearGradient id="b12-trail" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#E98F93" stop-opacity="0"></stop>
+          <stop offset=".75" stop-color="#E98F93" stop-opacity="0"></stop>
+          <stop offset=".92" stop-color="#E98F93" stop-opacity=".5"></stop>
+          <stop offset="1" stop-color="#ffffff" stop-opacity=".9"></stop>
+        </linearGradient>
+      </defs>
+      <circle cx="140" cy="140" r="128" fill="none" stroke="#171717" stroke-opacity=".06"></circle>
+      <circle cx="140" cy="140" r="128" fill="none" stroke="url(#b12-trail)" stroke-width="1.4"></circle>
+    </svg>
+    <div class="relative w-[240px] h-[240px] [mask-image:radial-gradient(circle,#000_55%,transparent_72%)]" data-anim="ring">
+      <img src="assets/ring-float.jpg" alt="Our Ring" class="w-full h-full object-cover mix-blend-multiply">
+    </div>
+    <span class="absolute bottom-2 text-[10px] tracking-[0.18em] uppercase text-[#171717]/35">Bond thicker · Vows engraved</span>
+  </div>
+  <div class="text-center mt-1">
+    <p class="serif text-[44px] leading-none" id="b12-days">127</p>
+    <p class="text-[11px] tracking-[0.22em] uppercase text-[#171717]/45 mt-1.5">Days Together</p>
+  </div>
+  <div class="card mx-6 mt-5 grid grid-cols-3 py-4">
+    <div class="text-center border-r border-[#171717]/[0.06]">
+      <p class="serif text-[22px]">18</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Memories</p>
+    </div>
+    <div class="text-center border-r border-[#171717]/[0.06]">
+      <p class="serif text-[22px]">7</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Vows</p>
+    </div>
+    <div class="text-center">
+      <p class="serif text-[22px]">260 <span class="text-[12px] text-[#171717]/40">BOT</span></p><p class="text-[11px] text-[#171717]/45 mt-0.5">Bond</p>
+    </div>
+  </div>
+  <div class="px-6 mt-5">
+    <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40 mb-2">Today</p>
+    <div class="card p-4 space-y-3">
+      <div class="flex items-center gap-3">
+        <img src="assets/sophie.jpg" alt="Sophie" class="w-[38px] h-[38px] rounded-full object-cover">
+        <div class="flex-1">
+          <p class="text-[14px] font-medium">Sophie added a memory.</p>
+          <p class="text-[12px] text-[#171717]/45">East Lake 🌸 · A perfect day together</p>
+        </div>
+        <img src="assets/east-lake.jpg" alt="East Lake" class="w-[46px] h-[46px] rounded-[14px] object-cover">
+      </div>
+      <div class="h-px bg-[#171717]/[0.06]"></div>
+      <div class="flex items-center gap-3" data-go="15">
+        <div class="w-[38px] h-[38px] rounded-full bg-[#F2A65A]/15 flex items-center justify-center"><i class="ph-light ph-hand-heart text-[20px] text-[#B8732F]"></i></div>
+        <div class="flex-1">
+          <p class="text-[14px] font-medium">A Vow is waiting for you.</p>
+          <p class="text-[12px] text-[#B8732F] flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#F2A65A]"></span>Pending · proposed by Alice</p>
+        </div>
+        <i class="ph-light ph-caret-right text-[16px] text-[#171717]/30"></i>
+      </div>
+    </div>
+  </div>
+  <div data-tabbar="ring" data-pulse="1"></div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s13" data-zh="记忆">
+<div class="board-label"><span class="en">13 · Story</span><span class="zh">记忆 · 时间线，不是 Feed</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div data-statusbar></div>
+  <div class="relative flex items-start justify-between px-6 mt-2">
+    <div>
+      <h1 class="serif text-[30px] leading-tight">Our Story</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-1">All the moments, big or small.</p>
+    </div>
+    <button class="w-[42px] h-[42px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[20px]" title="Add a memory"><i class="ph-light ph-plus"></i></button>
+  </div>
+  <div class="flex gap-2 px-6 mt-4">
+    <button class="filter-chip on px-4 h-8 rounded-full text-[13px] bg-[#171717] text-white">All</button>
+    <button class="filter-chip px-4 h-8 rounded-full text-[13px] border border-[#171717]/10 text-[#171717]/55">Photos</button>
+    <button class="filter-chip px-4 h-8 rounded-full text-[13px] border border-[#171717]/10 text-[#171717]/55">Videos</button>
+    <button class="filter-chip px-4 h-8 rounded-full text-[13px] border border-[#171717]/10 text-[#171717]/55">Notes</button>
+  </div>
+  <div class="px-6 mt-5 flex items-center gap-3">
+    <p class="serif text-[19px]">October 2026</p>
+    <div class="flex-1 h-px bg-[#171717]/[0.07]"></div>
+  </div>
+  <div class="px-6 mt-3 relative">
+    <div class="absolute left-[81px] top-2 bottom-6 w-px bg-[#171717]/[0.08]"></div>
+    <div class="space-y-4">
+      <div class="flex gap-3">
+        <p class="w-[38px] text-right text-[12px] text-[#171717]/45 leading-[1.4] pt-3">7<br>Oct</p>
+        <span class="w-[9px] h-[9px] rounded-full bg-[#E98F93] ring-4 ring-[#E98F93]/15 mt-3.5 shrink-0 relative z-10 -ml-[4px]"></span>
+        <div class="card p-4 flex-1">
+          <p class="serif text-[17px]">We started our Ring</p>
+          <p class="text-[13px] text-[#171717]/55 mt-1">The day two yeses became one ring.</p>
+          <img src="assets/ring-hero.jpg" alt="Our Ring" class="mt-3 w-full h-[110px] object-cover rounded-[14px]">
+          <div class="flex items-center justify-between mt-2.5">
+            <p class="text-[11px] text-[#171717]/40">Added by Alice</p>
+            <button data-proof-trigger data-proof-action="Story Anchored" class="text-[11px] text-[#2E9E63] flex items-center gap-1"><i class="ph-light ph-seal-check text-[13px]"></i>Content Proof Available</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <p class="w-[38px] text-right text-[12px] text-[#171717]/45 leading-[1.4] pt-3">12<br>Oct</p>
+        <span class="w-[9px] h-[9px] rounded-full bg-[#E98F93] ring-4 ring-[#E98F93]/15 mt-3.5 shrink-0 relative z-10 -ml-[4px]"></span>
+        <div class="card p-4 flex-1">
+          <p class="serif text-[17px]">East Lake</p>
+          <p class="text-[13px] text-[#171717]/55 mt-1">A perfect day together.</p>
+          <div class="mt-3 grid grid-cols-2 gap-2">
+            <img src="assets/east-lake.jpg" alt="East Lake" class="w-full h-[100px] object-cover rounded-[14px]">
+            <img src="assets/vow-hero.jpg" alt="Sunset" class="w-full h-[100px] object-cover rounded-[14px]">
+          </div>
+          <p class="text-[11px] text-[#171717]/40 mt-2.5">Added by Sophie · 2h ago</p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <p class="w-[38px] text-right text-[12px] text-[#171717]/45 leading-[1.4] pt-3">21<br>Oct</p>
+        <span class="w-[9px] h-[9px] rounded-full bg-[#E98F93] ring-4 ring-[#E98F93]/15 mt-3.5 shrink-0 relative z-10 -ml-[4px]"></span>
+        <div class="card p-4 flex-1">
+          <p class="serif text-[17px]">First movie together</p>
+          <p class="text-[13px] text-[#171717]/55 mt-1">So many laughs 🌸</p>
+          <div class="mt-3 grid grid-cols-3 gap-2">
+            <img src="assets/cinema.jpg" alt="Cinema" class="w-full h-[72px] object-cover rounded-[14px]">
+            <img src="assets/in-movies.jpg" alt="Movie night" class="w-full h-[72px] object-cover rounded-[14px]">
+            <img src="assets/in-food.jpg" alt="Snacks" class="w-full h-[72px] object-cover rounded-[14px]">
+          </div>
+          <p class="text-[11px] text-[#171717]/40 mt-2.5">Added by Alice · Photos only shared with each other</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-tabbar="story"></div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s14" data-zh="誓言">
+<div class="board-label"><span class="en">14 · Vow</span><span class="zh">誓言 · 双方确认才算数</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div data-statusbar></div>
+  <div class="relative flex items-start justify-between px-6 mt-2">
+    <div>
+      <h1 class="serif text-[30px] leading-tight">Our Vows</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-1 max-w-[240px]">A thought becomes a Vow only when both of you choose it.</p>
+    </div>
+    <button class="h-[40px] px-4 rounded-full bg-[#171717] text-white text-[13px] font-medium flex items-center gap-1.5 mt-1" data-go="15"><i class="ph-light ph-plus text-[15px]"></i>New Vow</button>
+  </div>
+  <div class="px-6 mt-5 flex items-baseline gap-2">
+    <p class="serif text-[34px] leading-none">7</p>
+    <p class="text-[12px] tracking-[0.16em] uppercase text-[#171717]/45">Total Vows</p>
+  </div>
+  <div class="px-6 mt-4 space-y-3">
+    <div class="card p-5">
+      <p class="serif text-[17px] leading-relaxed">“Let’s always communicate, even when it’s hard.”</p>
+      <div class="flex items-center gap-2 mt-3 text-[12px] text-[#2E9E63]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Confirmed
+        <span class="text-[#171717]/35">· Oct 7, 2026</span>
+        <i class="ph-light ph-seal-check text-[14px] ml-auto text-[#4ECF8B]"></i>
+      </div>
+    </div>
+    <div class="card p-5">
+      <div class="flex items-center gap-3">
+        <p class="serif text-[17px] leading-relaxed flex-1">“Travel to Japan together.”</p>
+        <img src="assets/japan-trip.jpg" alt="Japan" class="w-[52px] h-[52px] rounded-[14px] object-cover">
+      </div>
+      <div class="flex items-center gap-2 mt-3 text-[12px] text-[#2E9E63]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Confirmed
+        <span class="text-[#171717]/35">· Oct 21, 2026</span>
+        <span class="ml-auto text-[11px] text-[#171717]/40">Bond · 200/1,000 BOT</span>
+      </div>
+    </div>
+    <div class="card p-5 ring-1 ring-[#F2A65A]/25">
+      <p class="serif text-[17px] leading-relaxed">“Build a home filled with love.”</p>
+      <div class="flex items-center gap-2 mt-3 text-[12px] text-[#B8732F]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#F2A65A]"></span>Pending
+        <span class="text-[#171717]/45">· Waiting for Sophie</span>
+        <button data-go="15" class="ml-auto text-[12px] text-[#171717]/55 flex items-center">Review <i class="ph-light ph-caret-right text-[13px]"></i></button>
+      </div>
+    </div>
+    <div class="card p-5">
+      <p class="serif text-[17px] leading-relaxed">“Support each other’s dreams.”</p>
+      <div class="flex items-center gap-2 mt-3 text-[12px] text-[#2E9E63]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Confirmed
+        <span class="text-[#171717]/35">· Sep 12, 2026</span>
+        <i class="ph-light ph-seal-check text-[14px] ml-auto text-[#4ECF8B]"></i>
+      </div>
+    </div>
+  </div>
+  <p class="absolute bottom-[86px] inset-x-0 text-center text-[10px] tracking-[0.14em] uppercase text-[#171717]/35">Vow Count grows only with both signatures</p>
+  <div data-tabbar="vow"></div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s15" data-zh="誓言确认">
+<div class="board-label"><span class="en">15 · Vow Detail</span><span class="zh">誓言确认 · Confirm 后 7 → 8</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div class="relative h-[300px]">
+    <img src="assets/vow-hero.jpg" alt="Vow" class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,23,0.18),rgba(255,249,247,0)_35%,rgba(255,249,247,0.9)_92%,#FFF9F7)]"></div>
+    <button class="absolute top-[58px] left-5 w-[38px] h-[38px] rounded-full bg-white/80 backdrop-blur flex items-center justify-center text-[18px] shadow-sm" data-go="14"><i class="ph-light ph-arrow-left"></i></button>
+    <div class="absolute top-[58px] right-5 rounded-[20px] bg-white/80 backdrop-blur px-4 py-2.5 text-center shadow-sm">
+      <p class="serif text-[22px] leading-none" id="b15-count">7</p>
+      <p class="text-[9px] tracking-[0.14em] uppercase text-[#171717]/45 mt-1">Total Vows</p>
+    </div>
+  </div>
+  <div class="px-8 mt-2">
+    <p class="serif text-[22px] leading-[1.5]">“I choose you, again, in all the ordinary days and all the unexpected ones.”</p>
+    <div class="flex items-center gap-2.5 mt-5">
+      <img src="assets/alice.jpg" alt="Alice" class="w-[24px] h-[24px] rounded-full object-cover">
+      <p class="text-[13px] text-[#171717]/60">Proposed by Alice</p>
+      <p class="text-[12px] text-[#171717]/40">· Nov 10, 2026</p>
+    </div>
+    <div class="flex items-center gap-2 mt-4" id="b15-status">
+      <span class="chip bg-[#F2A65A]/15 text-[#B8732F]"><span class="w-1.5 h-1.5 rounded-full bg-[#F2A65A]"></span>Pending Confirmation</span>
+      <div class="flex items-center ml-1">
+        <img src="assets/alice.jpg" class="w-[22px] h-[22px] rounded-full object-cover border-2 border-white" alt="Alice">
+        <img src="assets/sophie.jpg" class="w-[22px] h-[22px] rounded-full object-cover border-2 border-white -ml-1.5 opacity-40 grayscale" alt="Sophie">
+      </div>
+      <p class="text-[12px] text-[#171717]/45">Waiting for Sophie</p>
+      <button data-proof-trigger data-proof-action="Vow Proposed" class="ml-auto text-[12px] text-[#2E9E63] flex items-center gap-1"><i class="ph-light ph-seal-check text-[14px]"></i>View Proof</button>
+    </div>
+  </div>
+  <div class="absolute left-6 right-6 bottom-[96px]">
+    <div id="b15-done" class="hidden rounded-[24px] bg-[#4ECF8B]/12 p-5 relative overflow-hidden">
+      <svg class="absolute -right-4 -top-4 w-[110px] h-[110px] opacity-60" viewBox="0 0 100 100" id="b15-pulse-svg">
+        <circle cx="50" cy="50" r="14" fill="none" stroke="#4ECF8B" stroke-width="1.2" class="b15-pulse-c"></circle>
+      </svg>
+      <div class="flex items-center gap-2 text-[#2E9E63]">
+        <i class="ph-light ph-seal-check text-[22px]"></i>
+        <p class="text-[15px] font-medium">Confirmed by Alice &amp; Sophie</p>
+      </div>
+      <p class="text-[12px] text-[#171717]/50 mt-1.5">Vow #8 · Recorded on BOT Chain · Block #8,431,966</p>
+    </div>
+    <button id="b15-confirm" class="pill pill-dark">Confirm</button>
+  </div>
+  <p class="absolute bottom-[64px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35">BOT Chain · Chain ID 677</p>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s16" data-zh="共同目标">
+<div class="board-label"><span class="en">16 · Bond</span><span class="zh">共同目标 · 像储蓄，不像 DeFi</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div data-statusbar></div>
+  <div class="relative flex items-start justify-between px-6 mt-2">
+    <button class="w-[38px] h-[38px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[17px]" data-go="12"><i class="ph-light ph-arrow-left"></i></button>
+    <div class="text-center">
+      <h1 class="serif text-[26px] leading-tight">Our Bond</h1>
+      <p class="text-[12px] text-[#171717]/50 mt-0.5">Give a future plan some weight.</p>
+    </div>
+    <button class="w-[38px] h-[38px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[17px]" title="New goal"><i class="ph-light ph-plus"></i></button>
+  </div>
+  <div class="px-6 mt-5">
+    <div class="card rounded-[28px] overflow-hidden">
+      <img src="assets/japan-trip.jpg" alt="Japan Trip" class="w-full h-[130px] object-cover">
+      <div class="p-5">
+        <p class="serif text-[22px]">Japan Trip</p>
+        <p class="text-[13px] text-[#171717]/55 mt-1">A journey to see more of the world together.</p>
+        <div class="flex items-end justify-between mt-4 mb-2">
+          <p class="text-[13px] font-medium">200 <span class="text-[#171717]/40 font-normal">/ 1,000 BOT</span></p>
+          <div class="flex items-center -space-x-1.5">
+            <img src="assets/alice.jpg" class="w-[24px] h-[24px] rounded-full object-cover border-2 border-white" alt="Alice">
+            <img src="assets/sophie.jpg" class="w-[24px] h-[24px] rounded-full object-cover border-2 border-white" alt="Sophie">
+          </div>
+        </div>
+        <div class="h-[7px] rounded-full bg-[#171717]/[0.07] overflow-hidden"><div class="h-full w-[20%] rounded-full bg-[linear-gradient(90deg,#E7B7A8,#E98F93)]"></div></div>
+        <button class="pill pill-dark mt-4 h-[50px]" data-go="17">Deposit</button>
+      </div>
+    </div>
+  </div>
+  <div class="px-6 mt-4 space-y-2.5">
+    <div class="flat p-3.5 flex items-center gap-3">
+      <img src="assets/anniversary.jpg" alt="Anniversary" class="w-[46px] h-[46px] rounded-[14px] object-cover">
+      <div class="flex-1">
+        <p class="text-[14px] font-medium">Anniversary</p>
+        <div class="h-[5px] rounded-full bg-[#171717]/[0.07] mt-1.5 w-[120px] overflow-hidden"><div class="h-full w-[32%] bg-[#E98F93]/70 rounded-full"></div></div>
+      </div>
+      <div class="text-right">
+        <p class="text-[13px] font-medium">500 <span class="text-[11px] text-[#171717]/40 font-normal">BOT</span></p>
+        <p class="text-[11px] text-[#171717]/45">32%</p>
+      </div>
+    </div>
+    <div class="flat p-3.5 flex items-center gap-3">
+      <img src="assets/future-home.jpg" alt="Future Home" class="w-[46px] h-[46px] rounded-[14px] object-cover">
+      <div class="flex-1">
+        <p class="text-[14px] font-medium">Future Home</p>
+        <div class="h-[5px] rounded-full bg-[#171717]/[0.07] mt-1.5 w-[120px] overflow-hidden"><div class="h-full w-[12%] bg-[#E98F93]/70 rounded-full"></div></div>
+      </div>
+      <div class="text-right">
+        <p class="text-[13px] font-medium">5,000 <span class="text-[11px] text-[#171717]/40 font-normal">BOT</span></p>
+        <p class="text-[11px] text-[#171717]/45">12%</p>
+      </div>
+    </div>
+  </div>
+  <p class="absolute bottom-[64px] inset-x-0 text-center text-[10px] tracking-[0.14em] uppercase text-[#171717]/35">Held in both names · Withdraw your own, anytime</p>
+  <div data-tabbar="bond"></div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s17" data-zh="记忆仓库">
+<div class="board-label"><span class="en">17 · Bell Vault</span><span class="zh">记忆仓库 · 私密存储 + 公开证明</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div class="absolute inset-0 bg-[radial-gradient(100%_45%_at_50%_0%,rgba(233,143,147,0.10),rgba(255,249,247,0)_60%)]"></div>
+  <div data-statusbar></div>
+  <div class="relative flex items-start justify-between px-6 mt-2">
+    <button class="w-[38px] h-[38px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[17px]" data-go="20"><i class="ph-light ph-arrow-left"></i></button>
+    <div class="text-center">
+      <h1 class="serif text-[26px] leading-tight">Bell Vault</h1>
+      <p class="text-[12px] text-[#171717]/50 mt-0.5">Encrypted for both of you.</p>
+    </div>
+    <span class="w-[38px]"></span>
+  </div>
+  <div class="px-6 mt-6">
+    <div class="card rounded-[28px] p-6 text-center">
+      <div class="w-[56px] h-[56px] mx-auto rounded-full bg-[#E98F93]/12 flex items-center justify-center">
+        <i class="ph-light ph-lock-simple-open text-[26px] text-[#C0646A]"></i>
+      </div>
+      <p class="serif text-[22px] mt-3">Our Memories</p>
+      <p class="text-[12px] text-[#171717]/45 mt-1">Only the two of you hold the key.</p>
+      <div class="grid grid-cols-3 gap-y-5 mt-6">
+        <div><p class="serif text-[24px]">342</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Photos</p></div>
+        <div><p class="serif text-[24px]">27</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Videos</p></div>
+        <div><p class="serif text-[24px]">63</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Notes</p></div>
+        <div><p class="serif text-[24px]">18</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Vows</p></div>
+        <div><p class="serif text-[24px]">7</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Documents</p></div>
+        <div><p class="serif text-[24px] text-[#2E9E63]">✓</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Encrypted</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="px-6 mt-4 space-y-2.5">
+    <button class="pill pill-dark h-[50px]">Manage Memories</button>
+    <button class="pill pill-line h-[50px]">Export Archive</button>
+    <button class="h-[44px] w-full flex items-center justify-center gap-1.5 text-[14px] text-[#171717]/60"><i class="ph-light ph-cloud-arrow-up text-[17px]"></i>Backup</button>
+  </div>
+  <div class="px-8 absolute bottom-[64px] inset-x-0">
+    <p class="serif text-[15px] text-center text-[#171717]/70 leading-relaxed">We store memories privately<br>and proofs publicly.</p>
+    <button id="b17-info" class="mx-auto mt-2 flex items-center gap-1 text-[11px] text-[#171717]/40"><i class="ph-light ph-info text-[13px]"></i>What this means</button>
+    <div id="b17-tech" class="hidden flat mt-2 p-3 text-center text-[11px] text-[#171717]/55 leading-relaxed">
+      照片与日记以 AES-256-GCM 加密存储，密钥由你们两人的 X25519 密钥协商产生；链上只有哈希与证明，永远没有内容。
+    </div>
+  </div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s18" data-zh="爱的见证">
+<div class="board-label"><span class="en">18 · Witness</span><span class="zh">爱的见证 · 像 Luxury Configurator</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div data-statusbar></div>
+  <div class="relative flex items-start justify-between px-6 mt-2">
+    <button class="w-[38px] h-[38px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[17px]" data-go="12"><i class="ph-light ph-arrow-left"></i></button>
+    <div class="text-center">
+      <h1 class="serif text-[26px] leading-tight">Make It Real</h1>
+      <p class="text-[12px] text-[#171717]/50 mt-0.5">Turn our Ring into something real.</p>
+    </div>
+    <span class="w-[38px]"></span>
+  </div>
+  <div class="mt-6 flex gap-4 overflow-x-auto px-6 pb-2 snap-x snap-mandatory" style="scrollbar-width:none">
+    <div class="shrink-0 w-[290px] card rounded-[28px] overflow-hidden snap-center" data-go="19">
+      <div class="h-[300px] overflow-hidden bg-[#F5EDE9]"><img src="assets/ring-hero.jpg" alt="Digital Ring" class="w-full h-full object-cover"></div>
+      <div class="p-5">
+        <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40">Witness 01 · Digital</p>
+        <p class="serif text-[20px] mt-1.5">Digital Ring</p>
+        <p class="text-[13px] text-[#171717]/55 mt-1 leading-relaxed">Mint a unique NFT from your relationship.</p>
+        <p class="flex items-center gap-1 text-[13px] font-medium mt-3">Configure <i class="ph-light ph-arrow-right text-[15px]"></i></p>
+      </div>
+    </div>
+    <div class="shrink-0 w-[290px] card rounded-[28px] overflow-hidden snap-center">
+      <div class="h-[300px] overflow-hidden bg-[#F5EDE9]"><img src="assets/ring-box.jpg" alt="Physical Ring" class="w-full h-full object-cover"></div>
+      <div class="p-5">
+        <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40">Witness 02 · Physical</p>
+        <p class="serif text-[20px] mt-1.5">Physical Ring</p>
+        <p class="text-[13px] text-[#171717]/55 mt-1 leading-relaxed">Custom jewelry generated from your Ring.</p>
+        <p class="flex items-center gap-1 text-[13px] font-medium mt-3 text-[#171717]/45">Coming soon</p>
+      </div>
+    </div>
+    <div class="shrink-0 w-[290px] card rounded-[28px] overflow-hidden snap-center">
+      <div class="h-[300px] overflow-hidden bg-[#F5EDE9]"><img src="assets/keepsake.jpg" alt="Memory Object" class="w-full h-full object-cover"></div>
+      <div class="p-5">
+        <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40">Witness 03 · Object</p>
+        <p class="serif text-[20px] mt-1.5">Memory Object</p>
+        <p class="text-[13px] text-[#171717]/55 mt-1 leading-relaxed">A tangible piece of your love story.</p>
+        <p class="flex items-center gap-1 text-[13px] font-medium mt-3 text-[#171717]/45">Coming soon</p>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-center gap-1.5 mt-4">
+    <span class="w-[6px] h-[6px] rounded-full bg-[#E98F93]"></span>
+    <span class="w-[6px] h-[6px] rounded-full bg-[#171717]/15"></span>
+    <span class="w-[6px] h-[6px] rounded-full bg-[#171717]/15"></span>
+  </div>
+  <p class="absolute bottom-[64px] inset-x-0 text-center text-[10px] tracking-[0.14em] uppercase text-[#171717]/35">Generated from 127 days · 18 memories · 7 vows</p>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s19" data-zh="见证详情">
+<div class="board-label"><span class="en">19 · Witness Detail</span><span class="zh">见证详情 · 属于你们自己的唯一之物</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div class="absolute inset-0 bg-[radial-gradient(110%_45%_at_50%_6%,rgba(233,143,147,0.13),rgba(255,249,247,0)_58%)]"></div>
+  <div data-statusbar></div>
+  <div class="relative flex items-center justify-between px-6 mt-2">
+    <button class="w-[38px] h-[38px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[17px]" data-go="18"><i class="ph-light ph-arrow-left"></i></button>
+    <p class="text-[10px] tracking-[0.22em] uppercase text-[#171717]/45">Digital Witness · #431</p>
+    <button data-proof-trigger data-proof-action="Witness Minted" class="w-[38px] h-[38px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[17px] text-[#2E9E63]"><i class="ph-light ph-seal-check"></i></button>
+  </div>
+  <div class="relative mx-auto mt-1 w-[390px] h-[250px] flex items-center justify-center">
+    <svg class="absolute w-[230px] h-[230px]" data-anim="orbit" viewBox="0 0 230 230">
+      <defs>
+        <linearGradient id="b19-trail" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#E98F93" stop-opacity="0"></stop>
+          <stop offset=".78" stop-color="#E98F93" stop-opacity="0"></stop>
+          <stop offset=".94" stop-color="#E98F93" stop-opacity=".5"></stop>
+          <stop offset="1" stop-color="#ffffff" stop-opacity=".9"></stop>
+        </linearGradient>
+      </defs>
+      <circle cx="115" cy="115" r="104" fill="none" stroke="#171717" stroke-opacity=".06"></circle>
+      <circle cx="115" cy="115" r="104" fill="none" stroke="url(#b19-trail)" stroke-width="1.3"></circle>
+    </svg>
+    <div class="relative w-[190px] h-[190px] [mask-image:radial-gradient(circle,#000_55%,transparent_72%)]" data-anim="ring">
+      <img src="assets/ring-hero.jpg" alt="Your Unique Ring" class="w-full h-full object-cover mix-blend-multiply">
+    </div>
+  </div>
+  <div class="text-center mt-1">
+    <p class="serif text-[24px]">Your Unique Ring</p>
+    <p class="text-[13px] text-[#171717]/50 mt-1">Generated from your relationship.</p>
+  </div>
+  <div class="px-6 mt-4">
+    <div class="flat divide-y divide-[#171717]/[0.06] px-4">
+      <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-heart text-[16px] text-[#E98F93]"></i>Days Together</span><span class="font-medium">127</span></div>
+      <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-images text-[16px] text-[#E98F93]"></i>Memories</span><span class="font-medium">18</span></div>
+      <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-hand-heart text-[16px] text-[#E98F93]"></i>Vows</span><span class="font-medium">7</span></div>
+      <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-vault text-[16px] text-[#E98F93]"></i>Bond</span><span class="font-medium">260 BOT</span></div>
+      <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-map-pin text-[16px] text-[#E98F93]"></i>First meet</span><span class="font-medium">East Lake</span></div>
+    </div>
+  </div>
+  <div class="px-6 mt-4">
+    <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40 mb-2.5">Material</p>
+    <div class="flex items-center gap-4">
+      <button class="mat on w-[46px] h-[46px] rounded-full" style="background:linear-gradient(135deg,#F6D3C4,#C98877)" title="Rose Gold"></button>
+      <button class="mat w-[46px] h-[46px] rounded-full" style="background:linear-gradient(135deg,#F0F0F2,#B9BCC4)" title="Silver"></button>
+      <button class="mat w-[46px] h-[46px] rounded-full" style="background:linear-gradient(135deg,#FAF8F4,#D9D6CE)" title="White Gold"></button>
+      <button class="mat w-[46px] h-[46px] rounded-full" style="background:linear-gradient(135deg,#4A4A4C,#171717)" title="Black Titanium"></button>
+      <p class="ml-auto text-[13px] font-medium" id="b19-mat-label">Rose Gold</p>
+    </div>
+  </div>
+  <div class="absolute left-6 right-6 bottom-[64px]">
+    <button class="pill pill-dark h-[52px]">Mint Digital Ring</button>
+    <p class="text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35 mt-2">Mint fee 2.0 BOT · BOT Chain</p>
+  </div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s20" data-zh="关系设置">
+<div class="board-label"><span class="en">20 · Relationship Settings</span><span class="zh">关系设置 · 结束也不抹去历史</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div data-statusbar></div>
+  <div class="relative px-6 mt-2">
+    <h1 class="serif text-[30px] leading-tight">Our Ring</h1>
+  </div>
+  <div class="px-6 mt-4">
+    <div class="card divide-y divide-[#171717]/[0.06] px-5">
+      <div class="flex items-center justify-between py-3.5">
+        <p class="text-[13px] text-[#171717]/50">Status</p>
+        <span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Active</span>
+      </div>
+      <div class="flex items-center justify-between py-3.5">
+        <p class="text-[13px] text-[#171717]/50">Created</p>
+        <p class="text-[13px] font-medium">Oct 7, 2026</p>
+      </div>
+      <div class="flex items-center justify-between py-3.5">
+        <p class="text-[13px] text-[#171717]/50">Participants</p>
+        <div class="flex items-center gap-2">
+          <div class="flex items-center -space-x-1.5">
+            <img src="assets/alice.jpg" class="w-[26px] h-[26px] rounded-full object-cover border-2 border-white" alt="Alice">
+            <img src="assets/sophie.jpg" class="w-[26px] h-[26px] rounded-full object-cover border-2 border-white" alt="Sophie">
+          </div>
+          <p class="text-[13px] font-medium">Alice · Sophie</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="px-6 mt-4">
+    <div class="flat divide-y divide-[#171717]/[0.06] px-4">
+      <div class="flex items-center gap-3 py-3.5">
+        <i class="ph-light ph-shield-check text-[20px] text-[#171717]/55"></i>
+        <div class="flex-1"><p class="text-[14px] font-medium">Privacy</p><p class="text-[11px] text-[#171717]/45">Manage who can see your profile</p></div>
+        <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+      </div>
+      <div class="flex items-center gap-3 py-3.5">
+        <i class="ph-light ph-download-simple text-[20px] text-[#171717]/55"></i>
+        <div class="flex-1"><p class="text-[14px] font-medium">Export Memories</p><p class="text-[11px] text-[#171717]/45">Download your encrypted archive</p></div>
+        <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+      </div>
+      <div class="flex items-center gap-3 py-3.5" data-proof-trigger data-proof-action="Proof History">
+        <i class="ph-light ph-seal-check text-[20px] text-[#171717]/55"></i>
+        <div class="flex-1"><p class="text-[14px] font-medium">Proof History</p><p class="text-[11px] text-[#171717]/45">View all on-chain records</p></div>
+        <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+      </div>
+      <div class="flex items-center gap-3 py-3.5" data-go="18">
+        <i class="ph-light ph-diamond text-[20px] text-[#171717]/55"></i>
+        <div class="flex-1"><p class="text-[14px] font-medium">Witnesses</p><p class="text-[11px] text-[#171717]/45">Digital &amp; physical witnesses</p></div>
+        <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+      </div>
+    </div>
+  </div>
+  <div class="px-6 mt-4">
+    <button class="w-full rounded-[20px] border border-[#E98F93]/35 bg-[#E98F93]/[0.06] p-4 flex items-center gap-3 text-left" data-go="20b">
+      <i class="ph-light ph-heart-break text-[20px] text-[#C0646A]"></i>
+      <div class="flex-1">
+        <p class="text-[14px] font-medium text-[#C0646A]">End Our Ring</p>
+        <p class="text-[11px] text-[#171717]/45">You will both be free to create a new Ring.</p>
+      </div>
+      <i class="ph-light ph-caret-right text-[15px] text-[#C0646A]/50"></i>
+    </button>
+  </div>
+  <p class="absolute bottom-[86px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35">Relation #1024 · BOT Chain</p>
+  <div data-tabbar="me"></div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s20b" data-zh="结束流程">
+<div class="board-label"><span class="en">20b · Ending</span><span class="zh">结束流程 · 归档，不是删除</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div class="absolute inset-0 bg-[radial-gradient(100%_40%_at_50%_0%,rgba(23,23,23,0.05),rgba(255,249,247,0)_60%)]"></div>
+  <div data-statusbar></div>
+  <div class="relative flex items-center justify-between px-6 mt-2">
+    <button class="w-[38px] h-[38px] rounded-full bg-white shadow-[var(--card-shadow)] border border-[#171717]/[0.06] flex items-center justify-center text-[17px]" data-go="20"><i class="ph-light ph-arrow-left"></i></button>
+    <p class="text-[10px] tracking-[0.22em] uppercase text-[#171717]/45">End Our Ring</p>
+    <span class="w-[38px]"></span>
+  </div>
+  <div class="px-10 mt-5 text-center">
+    <p class="serif text-[22px] leading-[1.4]">Ending a Ring does not<br>erase its history.</p>
+    <p class="text-[12px] text-[#171717]/50 mt-2 leading-relaxed">An archived Ring turns matte grey —<br>the story stays yours, forever readable.</p>
+  </div>
+  <div class="px-6 mt-4">
+    <div class="card p-4 flex flex-col items-center">
+      <svg width="96" height="96" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="42" fill="none" stroke="#B9B3AE" stroke-width="6" opacity=".75"></circle>
+        <circle cx="60" cy="60" r="30" fill="none" stroke="#B9B3AE" stroke-width="1" opacity=".35"></circle>
+      </svg>
+      <p class="serif text-[15px] mt-1 text-[#171717]/55">Alice <span class="text-[#171717]/30">×</span> Sophie</p>
+      <span class="chip bg-[#171717]/[0.06] text-[#171717]/50 mt-1.5">Archived · never deleted</span>
+    </div>
+  </div>
+  <div class="px-6 mt-3">
+    <div class="flat divide-y divide-[#171717]/[0.06] px-4 text-[12.5px]">
+      <div class="flex items-center gap-2.5 py-2.5"><i class="ph-light ph-check-circle text-[16px] text-[#2E9E63]"></i><span>Both confirm → archived immediately</span></div>
+      <div class="flex items-center gap-2.5 py-2.5"><i class="ph-light ph-clock text-[16px] text-[#B8732F]"></i><span>No answer → ends quietly after 7 days</span></div>
+      <div class="flex items-center gap-2.5 py-2.5"><i class="ph-light ph-archive text-[16px] text-[#171717]/50"></i><span>Memories stay encrypted &amp; exportable</span></div>
+    </div>
+  </div>
+  <div class="absolute left-6 right-6 bottom-[92px] space-y-2">
+    <button class="pill h-[48px] bg-[#C0646A] text-white">Request End</button>
+    <button class="pill pill-line h-[46px]" data-go="20">Keep Our Ring</button>
+  </div>
+  <p class="absolute bottom-[64px] inset-x-0 text-center serif italic text-[13px] text-[#171717]/55">Some things end. That doesn’t mean they never existed.</p>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+<section class="board" id="s21" data-zh="证明组件">
+<div class="board-label"><span class="en">21 · Proof Drawer</span><span class="zh">统一证明组件 · 全产品复用</span></div>
+<div class="phone"><div class="screen">
+<div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+  <div data-statusbar></div>
+  <div class="px-6 mt-3 opacity-40">
+    <p class="serif text-[19px]">Our Vows</p>
+    <div class="card p-5 mt-3">
+      <p class="serif text-[17px] leading-relaxed">“I choose you, again, in all the ordinary days and all the unexpected ones.”</p>
+      <div class="flex items-center gap-2 mt-3 text-[12px] text-[#2E9E63]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Confirmed · Vow #8
+      </div>
+    </div>
+    <p class="text-[11px] text-[#171717]/45 mt-3">↑ 点「View Proof」时，这层 Emotion 之上浮起 Proof。</p>
+  </div>
+  <div class="absolute inset-0 bg-[#171717]/22 backdrop-blur-[2px]"></div>
+  <div class="absolute inset-x-3 bottom-3 rounded-[26px] bg-white p-5 shadow-[0_-8px_30px_rgba(23,23,23,0.16)]">
+    <div class="w-9 h-1 rounded-full bg-[#171717]/15 mx-auto"></div>
+    <div class="flex items-center justify-between mt-4">
+      <p class="serif text-[19px]">Proof</p>
+      <span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><i class="ph-light ph-seal-check text-[14px]"></i>Verified</span>
+    </div>
+    <div class="mt-2">
+      <div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Network</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>BOT Chain</span></div>
+      <div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Relation</span><span>#1024</span></div>
+      <div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Action</span><span>Vow Confirmed</span></div>
+      <div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Initiated by</span><span class="flex items-center gap-1.5"><img src="assets/alice.jpg" class="w-[16px] h-[16px] rounded-full object-cover" alt="Alice">Alice</span></div>
+      <div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Confirmed by</span><span class="flex items-center gap-1.5"><img src="assets/sophie.jpg" class="w-[16px] h-[16px] rounded-full object-cover" alt="Sophie">Sophie</span></div>
+      <div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Block</span><span>8,431,966</span></div>
+      <div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Timestamp</span><span>Oct 7, 2026 · 21:43</span></div>
+      <div class="flex justify-between py-2 text-[12.5px]"><span class="text-[#171717]/45">Tx</span><span>0xf392…91ab</span></div>
+    </div>
+    <button class="pill pill-line h-[46px] mt-2 gap-1.5">View Explorer <i class="ph-light ph-arrow-up-right text-[15px]"></i></button>
+    <p class="text-[11px] text-[#171717]/40 text-center mt-2.5">One component · Story / Ring / Vow / Bond / Witness</p>
+  </div>
+  <div data-homebar></div>
+</div>
+</div></div>
+</section>
+
+</main>
+<footer class="max-w-[1720px] mx-auto px-10 pb-16">
+  <div class="border-t border-[#171717]/10 pt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div>
+      <p class="serif text-[19px]">Emotion Layer <span class="text-[#171717]/30">情感层</span></p>
+      <p class="text-[13px] text-[#171717]/55 mt-2 leading-relaxed">Ring、照片、Vow、Story、情绪文案 —— 用户每天看到的，永远是爱情本身。</p>
+    </div>
+    <div>
+      <p class="serif text-[19px]">Action Layer <span class="text-[#171717]/30">行动层</span></p>
+      <p class="text-[13px] text-[#171717]/55 mt-2 leading-relaxed">Invite · Accept · Confirm · Deposit · Mint —— 一个页面只有一个清晰的主按钮。</p>
+    </div>
+    <div>
+      <p class="serif text-[19px]">Proof Layer <span class="text-[#171717]/30">证明层</span></p>
+      <p class="text-[13px] text-[#171717]/55 mt-2 leading-relaxed">Block、Timestamp、Hash、Explorer —— 默认永远隐藏，只在「View Proof」时出现。不要让 Web3 看起来像 Web3。</p>
+    </div>
+  </div>
+  <p class="text-center text-[11px] tracking-[0.16em] uppercase text-[#171717]/35 mt-12">Consensus Bell · Design v2 · Built with Kombai + ZCode · 2026.10</p>
+</footer>
+<script>
+(function(){
+  const STATUSBAR = '<div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold"><span>9:41</span><div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div></div>';
+  const TABS = [
+    ['ring','ph-heart','Ring','12'],
+    ['story','ph-images','Story','13'],
+    ['vow','ph-hand-heart','Vow','14'],
+    ['bond','ph-vault','Bond','16'],
+    ['me','ph-user','Me','20'],
+  ];
+  function injectChrome(){
+    document.querySelectorAll('[data-statusbar]').forEach(el=>{ el.outerHTML = STATUSBAR; });
+    document.querySelectorAll('[data-tabbar]').forEach(el=>{
+      const active = el.getAttribute('data-tabbar');
+      const pulse = el.hasAttribute('data-pulse');
+      const inner = TABS.map(([k,ic,label,go])=>
+        '<button class="tb '+(k===active?'on':'')+'" data-go="'+go+'"><i class="ph-light '+ic+'"></i>'+label+'</button>'
+      ).join('');
+      const wrap = document.createElement('div');
+      wrap.className = 'tabbar absolute bottom-0 inset-x-0 bg-white/92 backdrop-blur border-t border-[#171717]/[0.06] pt-[9px] flex z-30';
+      wrap.style.height = '78px';
+      wrap.innerHTML = (pulse?'<div class="absolute top-0 inset-x-0 h-[2px] bg-[linear-gradient(90deg,transparent,rgba(78,207,139,0.55),transparent)]" style="animation:tabpulse 2.6s ease-in-out infinite"></div>':'') + inner;
+      el.replaceWith(wrap);
+    });
+    document.querySelectorAll('[data-homebar]').forEach(el=>{
+      el.outerHTML = '<div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] rounded-full bg-[#171717] z-40"></div>';
+    });
+    if(!document.getElementById('tabpulse-kf')){
+      const st = document.createElement('style');
+      st.id='tabpulse-kf';
+      st.textContent='@keyframes tabpulse{0%,100%{opacity:.25}50%{opacity:1}}';
+      document.head.appendChild(st);
+    }
+  }
+
+  function wireByText(){
+    const wires = [
+      ['s01','Begin','02'],['s02','Next','03'],['s03','Next','04'],['s04','Next','05'],
+      ['s05','Create My Identity','05b'],['s07','Ring','08a'],['s08a','Send Invitation','08b'],
+      ['s09','Accept','10'],['s10','Sign & Accept','11'],['s11','Enter Our Ring','12'],
+    ];
+    wires.forEach(([s,label,go])=>{
+      const scope = document.getElementById(s); if(!scope) return;
+      const btn = Array.from(scope.querySelectorAll('button')).find(b=>b.textContent.trim()===label);
+      if(btn){ btn.setAttribute('data-go',go); btn.style.cursor='pointer'; }
+    });
+    // 06: two big path cards — climb to the rounded overflow-hidden card container
+    [['Find Someone','07'],['Bind My Person','10']].forEach(([label,go])=>{
+      const p = Array.from(document.querySelectorAll('#s06 p')).find(x=>x.textContent.trim()===label);
+      let node = p, target = null, guard = 0;
+      while(node && guard++ < 8){
+        const cls = String(node.className||'');
+        if(node.tagName==='DIV' && cls.includes('overflow-hidden') && cls.includes('rounded')){ target = node; break; }
+        node = node.parentElement;
+      }
+      (target||p).setAttribute('data-go',go);
+      (target||p).style.cursor='pointer';
+    });
+    // 05b: any click advances
+    const s5b = document.getElementById('s05b');
+    if(s5b){ s5b.querySelector('.phone').addEventListener('click',()=>{ location.hash='#s06'; }); }
+  }
+
+  function navigate(go){
+    const t = document.getElementById('s'+go);
+    if(!t) return;
+    t.scrollIntoView({behavior:'smooth',block:'center'});
+    t.classList.add('flash');
+    setTimeout(()=>t.classList.remove('flash'),1600);
+  }
+  document.addEventListener('click',e=>{
+    const g = e.target.closest('[data-go]');
+    if(g){ e.preventDefault(); navigate(g.getAttribute('data-go')); }
+    const pf = e.target.closest('[data-proof-trigger]');
+    if(pf){
+      const screen = pf.closest('.screen');
+      const sheet = screen && screen.querySelector('.proofsheet');
+      if(sheet){ sheet.classList.remove('hidden'); gsap.fromTo(sheet.querySelector('.proof-card'),{y:60,autoAlpha:0},{y:0,autoAlpha:1,duration:.45,ease:'power3.out'}); }
+    }
+    if(e.target.closest('[data-close-proof]')){
+      const sheet = e.target.closest('.proofsheet');
+      if(sheet){ gsap.to(sheet.querySelector('.proof-card'),{y:50,autoAlpha:0,duration:.3,ease:'power2.in',onComplete:()=>sheet.classList.add('hidden')}); }
+    }
+  });
+  window.addEventListener('hashchange',()=>{
+    const id = location.hash.replace('#','');
+    if(id) navigate(id.replace('s',''));
+  });
+
+  function sharedAnims(){
+    document.querySelectorAll('[data-anim="orbit"]').forEach(el=>{
+      gsap.to(el,{rotation:360,duration:26,repeat:-1,ease:'none'});
+    });
+    document.querySelectorAll('[data-anim="ring"]').forEach(el=>{
+      gsap.to(el,{y:-9,duration:3.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      gsap.to(el,{rotation:5,duration:10,repeat:-1,yoyo:true,ease:'sine.inOut'});
+    });
+  }
+
+  function injectProofsheets(){
+    document.querySelectorAll('.screen').forEach(screen=>{
+      const trig = screen.querySelector('[data-proof-trigger]');
+      if(!trig || screen.querySelector('.proofsheet')) return;
+      const action = trig.getAttribute('data-proof-action') || 'Ring Created';
+      const sheet = document.createElement('div');
+      sheet.className = 'proofsheet absolute inset-0 z-50 hidden';
+      sheet.innerHTML =
+        '<div class="absolute inset-0 bg-[#171717]/25 backdrop-blur-[2px]" data-close-proof></div>'+
+        '<div class="proof-card absolute inset-x-3 bottom-3 rounded-[26px] bg-white p-5 shadow-[0_-8px_30px_rgba(23,23,23,0.16)]">'+
+          '<div class="w-9 h-1 rounded-full bg-[#171717]/15 mx-auto"></div>'+
+          '<div class="flex items-center justify-between mt-3.5"><p class="serif text-[19px]">Proof</p>'+
+          '<span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><i class="ph-light ph-seal-check text-[14px]"></i>Verified</span></div>'+
+          '<div class="mt-1.5">'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Network</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>BOT Chain</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Relation</span><span>#1024</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Action</span><span>'+action+'</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Initiated by</span><span>Alice</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Confirmed by</span><span>Sophie</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px] border-b border-[#171717]/[0.06]"><span class="text-[#171717]/45">Block</span><span>8,431,966</span></div>'+
+            '<div class="flex justify-between py-2 text-[12.5px]"><span class="text-[#171717]/45">Tx</span><span>0xf392…91ab</span></div>'+
+          '</div>'+
+          '<button class="pill pill-line h-[44px] mt-1 gap-1.5" data-close-proof style="width:100%">View Explorer <i class="ph-light ph-arrow-up-right text-[14px]"></i></button>'+
+        '</div>';
+      screen.appendChild(sheet);
+    });
+  }
+
+  function vowConfirm(){
+    const btn = document.getElementById('b15-confirm');
+    const done = document.getElementById('b15-done');
+    const count = document.getElementById('b15-count');
+    const status = document.getElementById('b15-status');
+    if(!btn) return;
+    btn.addEventListener('click',()=>{
+      btn.classList.add('hidden');
+      done.classList.remove('hidden');
+      gsap.fromTo(done,{autoAlpha:0,y:14},{autoAlpha:1,y:0,duration:.5,ease:'power3.out'});
+      gsap.fromTo('.b15-pulse-c',{attr:{r:10},opacity:.9},{attr:{r:48},opacity:0,duration:1.8,repeat:-1,ease:'power1.out'});
+      const obj = {v:7};
+      gsap.to(obj,{v:8,duration:.9,ease:'power2.out',onUpdate:()=>{ count.textContent = Math.round(obj.v); }});
+      if(status){
+        status.innerHTML = '<span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Confirmed</span>'+
+          '<div class="flex items-center ml-1">'+
+          '<img src="assets/alice.jpg" class="w-[22px] h-[22px] rounded-full object-cover border-2 border-white" alt="Alice">'+
+          '<img src="assets/sophie.jpg" class="w-[22px] h-[22px] rounded-full object-cover border-2 border-white -ml-1.5" alt="Sophie"></div>'+
+          '<p class="text-[12px] text-[#171717]/50">Oct 10, 2026 · just now</p>';
+      }
+    });
+  }
+
+  function misc(){
+    const info = document.getElementById('b17-info');
+    const tech = document.getElementById('b17-tech');
+    if(info && tech){ info.addEventListener('click',()=>tech.classList.toggle('hidden')); }
+    const label = document.getElementById('b19-mat-label');
+    document.querySelectorAll('#s19 .mat').forEach(m=>{
+      m.addEventListener('click',()=>{
+        document.querySelectorAll('#s19 .mat').forEach(x=>x.classList.remove('on'));
+        m.classList.add('on');
+        if(label) label.textContent = m.getAttribute('title');
+      });
+    });
+    document.querySelectorAll('.filter-chip').forEach(c=>{
+      c.addEventListener('click',()=>{
+        c.parentElement.querySelectorAll('.filter-chip').forEach(x=>{
+          x.classList.remove('on','bg-[#171717]','text-white');
+          x.classList.add('border','border-[#171717]/10','text-[#171717]/55');
+        });
+        c.classList.add('on','bg-[#171717]','text-white');
+        c.classList.remove('border-[#171717]/10','text-[#171717]/55');
+      });
+    });
+    document.querySelectorAll('.zoom-ctl button').forEach(b=>{
+      b.addEventListener('click',()=>{
+        document.querySelectorAll('.zoom-ctl button').forEach(x=>x.classList.remove('on'));
+        b.classList.add('on');
+        document.documentElement.style.setProperty('--zoom', b.getAttribute('data-zoom'));
+      });
+    });
+  }
+
+  injectChrome();
+  injectProofsheets();
+  wireByText();
+  sharedAnims();
+  vowConfirm();
+  misc();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+{
+  "network": "BOT public Testnet",
+  "chainId": 968,
+  "completedAt": "2026-10-07T03:49:41.777Z",
+  "contract": "0x74aAC8f21131c5655d3A904696AB1B99Fa8C88Fa",
+  "ringSBT": "0xF700977320C50EcE4c22E72ec80a8596Dec8E20D",
+  "ringId": "1",
+  "complete": true,
+  "participants": "Two independent locally generated test signing wallets; not Privy email users",
+  "checks": {
+    "alice": {
+      "account": "0xF2F4f3c7D93F3A63adAeD706649D7bdA68033A93",
+      "activeRelation": "0",
+      "bondWei": "0",
+      "sbtBalance": "1"
+    },
+    "bob": {
+      "account": "0x394a60c8fcC6F6687a4a39B2292da9246C365dF1",
+      "activeRelation": "0",
+      "bondWei": "0",
+      "sbtBalance": "1"
+    }
+  },
+  "vowCount": 1,
+  "finalStatus": "ARCHIVED",
+  "uniqueBinding": {
+    "verified": true,
+    "method": "public RPC eth_call",
+    "transactionsSubmitted": 0
+  },
+  "transactions": [
+    {
+      "label": "deploy",
+      "hash": "0x7fe9ae20a8bc7fba129ae76b6e39655f336d731c3ee7dff5bdcc71e1f72dfa3b",
+      "block": 25979829,
+      "contractAddress": "0x74aAC8f21131c5655d3A904696AB1B99Fa8C88Fa",
+      "confirmed": true,
+      "explorer": "https://scan.bohr.life/tx/0x7fe9ae20a8bc7fba129ae76b6e39655f336d731c3ee7dff5bdcc71e1f72dfa3b"
+    },
+    {
+      "label": "fund-alice",
+      "hash": "0x153887e4858b7bf3d0f6d0de0685c21a724017513d294d1ac72bd7914911eecb",
+      "block": 25979975,
+      "contractAddress": null,
+      "confirmed": true,
+      "explorer": "https://scan.bohr.life/tx/0x153887e4858b7bf3d0f6d0de0685c21a724017513d294d1ac72bd7914911eecb"
+    },
+    {
+      "label": "fund-bob",
+      "hash": "0xa2d7a30133e76f3eb7bbf7772f5335d8da15d0917ab31ae1b7690f7074cbd32a",
+      "block": 25979991,
+      "contractAddress": null,
+      "confirmed": true,
+      "explorer": "https://scan.bohr.life/tx/0xa2d7a30133e76f3eb7bbf7772f5335d8da15d0917ab31ae1b7690f7074cbd32a"
+    }
+  ],
+  "operations": [
+    {
+      "label": "invite",
+      "id": "18c1ba28-391c-4945-9fe5-3778a20f3cda",
+      "userOpHash": "0xe34048491f5c7900461db99ab581f828c613c56037aa7c2717d45f32cb3b807a",
+      "transactionHash": "0x4efae558844ecd698cafd5688a3e7fb97d92103ab27a77432b8a1153346dabc5",
+      "block": 25980012,
+      "confirmations": 5,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0x4efae558844ecd698cafd5688a3e7fb97d92103ab27a77432b8a1153346dabc5"
+    },
+    {
+      "label": "accept",
+      "id": "bcb0f7a2-32bb-405c-9bf9-14eac34b8697",
+      "userOpHash": "0xf0e31879354704dc968adf15f7561e702150c14df7376c8565ed6f671a84529f",
+      "transactionHash": "0x91b41e1ca8c191bc48848e34c6ed6572eea58ac42b1888edd3dccbcec8af497f",
+      "block": 25980025,
+      "confirmations": 4,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0x91b41e1ca8c191bc48848e34c6ed6572eea58ac42b1888edd3dccbcec8af497f"
+    },
+    {
+      "label": "vow",
+      "id": "a409576d-04b6-43d5-955f-6a397176c64b",
+      "userOpHash": "0x7458a9f056b46b5201bb60033425288761b51bc30810b94b7a7b78f5e7a8310d",
+      "transactionHash": "0xe456e597106b18cb8669cb73ce3e67b73c1d95b6d86d1a5e69ae5668045d40fe",
+      "block": 25980358,
+      "confirmations": 5,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0xe456e597106b18cb8669cb73ce3e67b73c1d95b6d86d1a5e69ae5668045d40fe"
+    },
+    {
+      "label": "confirm-vow",
+      "id": "6ebbd473-e914-435e-a931-cfc06eee0def",
+      "userOpHash": "0xefe597e284ebefd24f944fce68e36185518250388c99cf02748254e3ebd9bb34",
+      "transactionHash": "0xa469eeb066a336c41e83f34f49e809130c36f5bf749791e02d834ff8b326e939",
+      "block": 25980585,
+      "confirmations": 4,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0xa469eeb066a336c41e83f34f49e809130c36f5bf749791e02d834ff8b326e939"
+    },
+    {
+      "label": "bond",
+      "id": "e8d4cffe-b608-43b6-9361-6a25173ee850",
+      "userOpHash": "0x62d0e14bcadeee923a2cced1177733601d7ee34b7d6660ba16f99c0778588715",
+      "transactionHash": "0xd0f27e297ad99f984683ea8c8a43b9f7a84fab3ae4e14fd2feb6746134b9acb3",
+      "block": 25980598,
+      "confirmations": 5,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0xd0f27e297ad99f984683ea8c8a43b9f7a84fab3ae4e14fd2feb6746134b9acb3"
+    },
+    {
+      "label": "request-end",
+      "id": "7d6399df-f482-4d68-ab5a-51335b2fddd7",
+      "userOpHash": "0xf7085e1d8e4afcace78396ba7e7465fd969d8b0db74efaa6fb209adb29707c62",
+      "transactionHash": "0x16eeaaa8c29233b37e7401a57e1a114ecc482a13a193677f0a58a8ce4d206c48",
+      "block": 25980612,
+      "confirmations": 3,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0x16eeaaa8c29233b37e7401a57e1a114ecc482a13a193677f0a58a8ce4d206c48"
+    },
+    {
+      "label": "confirm-end",
+      "id": "0ffcfb4f-ad0d-4a78-bee1-da53ae13f45e",
+      "userOpHash": "0x89d12b1c54294933d7836b80da9b54f3a075bd0fc17514dc4ee0c057fa95f826",
+      "transactionHash": "0x852418b5a8eabc24143547e02506fce337db3b96cac4a96c473c5740ded06a84",
+      "block": 25980626,
+      "confirmations": 5,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0x852418b5a8eabc24143547e02506fce337db3b96cac4a96c473c5740ded06a84"
+    },
+    {
+      "label": "withdraw",
+      "id": "3f9fb5c4-7f44-4ef8-94fb-5a26eb22d8cf",
+      "userOpHash": "0x77d34b74159b670e03692d8013102c59af441fb7e04323d9c44dd255b84c2dc8",
+      "transactionHash": "0x47e18a28002edd3ad7ac1907586a6dfa9fc07c377bf50f459a4b8ea8c7a5a4f6",
+      "block": 25980639,
+      "confirmations": 4,
+      "status": "CONFIRMED",
+      "explorer": "https://scan.bohr.life/tx/0x47e18a28002edd3ad7ac1907586a6dfa9fc07c377bf50f459a4b8ea8c7a5a4f6"
+    }
+  ],
+  "failedAttempts": [
+    {
+      "label": "vow",
+      "id": "44be635a-0216-4a96-888d-498cdc4e19c9",
+      "userOpHash": "0x92a861673241789cc2b4adb5d6a3734bb0b01860fb26076e2e1c122251f8213d",
+      "transactionHash": "0xb41fdebfd32be9587fd2d938fe7d36a23d166dbfa36bbbf72f978609fdc6bf45",
+      "diagnosis": "Bundler callGasLimit56500 lower than actual execution estimate113384; corrected deployed-account gas floor"
+    },
+    {
+      "label": "confirm-vow",
+      "id": "c0c4e068-9faf-4bb4-8bb0-ce0588284ae3",
+      "userOpHash": "0x29cca15652be562dd10d099e98ba0fe720b5d3b58039a8d0432880a2005f59b6",
+      "transactionHash": null,
+      "diagnosis": "RPC eth_sendUserOperation failed: FailedOp(0,\"AA26 over verificationGasLimit\")"
+    }
+  ],
+  "regressionTests": {
+    "passed": 59,
+    "failed": 0
+  },
+  "sourceHashes": {
+    "aa.mjs": "a636abb8c2fccfcf7f0a315f7687a8f6009c6e0763ca9142a224c987919f02ee",
+    "aa.test.mjs": "3fa10580fb96d97a3ca254e1f595a47ac0e70efa175d305ed80774614b1a64f3",
+    "aa-e2e.test.mjs": "22c884c98c83a164c44ebe4593bcca13d51e15dc215d815c6a887ab5519819f1",
+    "ring-testnet.mjs": "ab4fc86e10a3d92e234f7e0e6d900aa897a66dd74584781e135c5fd1b9a87b29"
+  }
+}
