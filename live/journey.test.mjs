@@ -41,7 +41,7 @@ test('journey pages escape content and separate visitor identity from real accou
   const base={preview:true,identityStep:1,previewProfile:null,identityDraft:null,previewMemories:[],user:null,relation:null,profile:{name:'PRIVATE'},memories:[],proofs:[],history:[],candidates:[],config:{explorer:''},radarFilters:{city:'',intention:'',radius:0},formatAmount:()=> '0'};
   for(const route of ['identity','path','journey-index','invite-page','invitation-preview','ceremony','story','vows','bond','vault','witness','witness-detail','witness-configurator','privacy']){const html=view({...base,route});assert.match(html,/访客预览/);assert.doesNotMatch(html,/PRIVATE|VISITOR_VIEW_ONLY|Minted|Block #/);}
   const html=view({...base,route:'story',previewMemories:[{id:'draft',type:'note',at:new Date().toISOString(),content:{title:'<script>alert(1)</script>',text:'<img onerror=x>'}}]});assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);
-  assert.match(view({...base,route:'witness-detail'}),/外观预览/);assert.match(view({...base,route:'bond'}),/预算不是余额/);
+  assert.match(view({...base,route:'witness-detail'}),/外观预览/);assert.match(view({...base,route:'bond'}),/规划目标不是余额/);
 });
 
 test('Witness design is an escaped local preference with validated choices',async()=>{
