@@ -32,8 +32,13 @@ export function searchRadar(db, address, filters) {
     const common = [...new Map(profile.interests.filter(i => interests.has(normalize(i))).map(i => [normalize(i), i])).values()];
     const sameIntention = Boolean(normalize(own.intention) && normalize(own.intention) === normalize(profile.intention));
     const sameCity = Boolean(normalize(own.city) && normalize(own.city) === normalize(profile.city));
-    const reasons = [...(common.length ? ['共同兴趣：' + common.join('、')] : []), ...(sameIntention ? ['关系意向一致'] : []), ...(sameCity ? ['资料填写了同一城市'] : [])];
-    candidates.push({address:row.address,name:profile.name,city:profile.city,age:profile.age,interests:profile.interests,statement:profile.statement,intention:profile.intention,avatarUrl:profile.avatarUrl||'',occupation:profile.occupation||'',common,reasons:reasons.length?reasons:['公开资料候选，暂未发现共同偏好'],distanceKm:km===null?null:Math.round(km/10)*10,saved:saved.has(row.address),score:common.length*4+Number(sameIntention)*3+Number(sameCity)*2,_distance:km??Infinity});
+    // Nearby resonance: coarse-grid distance becomes a first-class scoring
+    // factor so "附近最合适" is real ranking, not a tie-breaker afterthought.
+    const bands = [[20, 6, '约 20 km 内'], [50, 4, '约 50 km 内'], [100, 2, '约 100 km 内']];
+    const band = km !== null && km !== undefined ? bands.find(([limit]) => km <= limit) : null;
+    const reasons = [...(common.length ? ['共同兴趣：' + common.join('、')] : []), ...(sameIntention ? ['关系意向一致'] : []), ...(band ? ['附近 · ' + band[2] + '（粗略区域估算）'] : sameCity ? ['资料填写了同一城市'] : [])];
+    const nearbyScore = band ? band[1] : 0;
+    candidates.push({address:row.address,name:profile.name,city:profile.city,age:profile.age,interests:profile.interests,statement:profile.statement,intention:profile.intention,avatarUrl:profile.avatarUrl||'',occupation:profile.occupation||'',common,reasons:reasons.length?reasons:['公开资料候选，暂未发现共同偏好'],distanceKm:km===null?null:Math.round(km/10)*10,saved:saved.has(row.address),score:common.length*4+nearbyScore+Number(sameIntention)*3+Number(sameCity)*2,_distance:km??Infinity});
   }
   candidates.sort((a,b)=>b.score-a.score||a._distance-b._distance||a.address.localeCompare(b.address));
   return {candidates:candidates.slice(0,100).map(({_distance,score,...candidate})=>candidate),total:candidates.length,hasLocation,limited:candidates.length>100,method:'shared-interests-intention-city',filters};

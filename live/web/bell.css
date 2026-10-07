@@ -221,3 +221,8 @@ body[data-shell="gateway"] .demo-bar,body[data-shell="gateway"] #tabs{display:no
 .identity-avatar-hint .bell-icon{width:var(--size-12);height:var(--size-12)}
 .identity-portrait{display:flex;flex-direction:column;align-items:center;gap:var(--size-20);margin-bottom:var(--size-20)}
 .ceremony-facts{display:flex;flex-direction:column;gap:var(--size-12);margin:var(--size-20) 0;text-align:left}
+.radar-distance{position:absolute;top:var(--size-10);right:var(--size-10);z-index:1;background:var(--surface-white,#fff);color:var(--sage-deep,#2E9E63);font-size:var(--size-10);font-weight:600;border-radius:var(--size-999);padding:var(--size-2) var(--size-10);box-shadow:0 1px 6px rgba(23,23,23,.08)}
+.radar-card{position:relative}
+.radar-insight{margin:var(--size-16) 0;width:100%;text-align:left}
+.radar-insight .row{justify-content:space-between}
+.radar-insight p{margin:var(--size-8) 0 0;line-height:1.65}

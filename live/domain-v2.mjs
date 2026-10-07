@@ -58,9 +58,14 @@ export function createDomainV2(db, chain, config = {}) {
     if (!row) fail(409,'Complete your profile before requesting a draft');
     const profile=JSON.parse(row.body);
     if (job.skill==='radar-explain') {
-      const candidates=searchRadar(db,address,job.filters??{city:'',intention:'',radius:0}).candidates
+      const candidates=searchRadar(db,address,job.filters??{city:'',intention:'',radius:0,gender:'',ageMin:0,ageMax:0}).candidates
         .filter(candidate=>!isBlocked(address,candidate.address));
-      return {engine:'structured-rules-v1',llm:false,editable:true,requiresUserApproval:true,candidates};
+      const nearbyCount=candidates.filter(candidate=>candidate.distanceKm!==null&&candidate.distanceKm!==undefined&&candidate.distanceKm<=50).length;
+      const top=candidates[0];
+      const summary=top
+        ?`根据你公开的兴趣（${(profile.interests||[]).join('、')||'尚未填写'}）${profile.intention?'与「'+profile.intention+'」的意向':''}，在${nearbyCount?'附近 '+nearbyCount+' 位、':''}共 ${candidates.length} 位公开资料中，当前与你共鸣最强的是 ${top.name}${top.distanceKm!==null&&top.distanceKm!==undefined?(top.distanceKm===0?'（同一粗略区域）':'（区域估算约 '+top.distanceKm+' km）'):''}——理由：${top.reasons.join('；')}。这是资料排序结果，不是感情承诺；是否靠近，由你决定。`
+        :'当前筛选下没有符合条件的公开资料；试试放宽人群筛选，或先完善自己的兴趣与意向。';
+      return {engine:'structured-rules-v1',llm:false,editable:true,requiresUserApproval:true,summary,nearbyCount,candidates};
     }
     const title=job.title || (job.skill==='vow-draft'?'我们的约定':'我们的故事');
     const points=job.points.length?job.points:(profile.interests||[]).map(interest=>'一起分享'+interest);
