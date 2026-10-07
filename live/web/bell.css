@@ -205,3 +205,19 @@ body[data-shell="gateway"] .demo-bar,body[data-shell="gateway"] #tabs{display:no
 .bell-me-partner .bell-avatar{width:100%;height:100%;border-radius:50%;font-size:var(--size-20)}
 .bell-me-partner b{position:absolute;z-index:3;top:calc(-1 * var(--size-4));right:calc(-1 * var(--size-4));width:var(--size-20);height:var(--size-20);border-radius:50%;background:var(--bell-rose-gold,#C98877);color:var(--surface-white,#fff);font-size:var(--size-10);display:grid;place-items:center;font-style:normal;box-shadow:0 1px 4px rgba(23,23,23,.12)}
 .bell-me-avatars{padding-bottom:var(--size-12)}
+.bind-candidates{display:flex;flex-direction:column;gap:var(--size-12);margin:var(--size-20) 0}
+.bind-candidate{display:flex;align-items:center;gap:var(--size-12);width:100%;text-align:left;background:var(--surface-white,#fff);border:0;border-radius:var(--size-20);box-shadow:var(--bell-shadow);padding:var(--size-12) var(--size-16);cursor:pointer}
+.bind-candidate .bell-face,.bind-candidate .bell-avatar{width:var(--size-48);height:var(--size-48);border-radius:50%;object-fit:cover;flex:none}
+.bind-candidate-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--size-2)}
+.bind-candidate-body b{font-size:var(--size-14)}
+.bind-candidate-body small{color:var(--muted);font-size:var(--size-11);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.avatar-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--size-12);margin-bottom:var(--size-20)}
+.avatar-picker button{border:2px solid transparent;border-radius:50%;padding:var(--size-3);background:var(--surface-white,#fff);cursor:pointer;box-shadow:var(--bell-shadow)}
+.avatar-picker button.active{border-color:var(--bell-deep-rose)}
+.avatar-picker img{width:100%;aspect-ratio:1;border-radius:50%;object-fit:cover;display:block}
+.identity-avatar-btn{position:relative;display:grid;place-items:center;width:var(--size-96);height:var(--size-96);margin:0 auto;border-radius:50%;padding:var(--size-4);background:var(--surface-white,#fff);border:0;cursor:pointer;box-shadow:0 8px 24px rgba(217,140,149,.22)}
+.identity-avatar-btn .bell-face,.identity-avatar-btn .identity-initial{width:100%;height:100%;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-size:var(--size-28)}
+.identity-avatar-hint{position:absolute;bottom:calc(-1 * var(--size-8));left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:var(--size-4);background:var(--bell-deep-rose);color:var(--surface-white,#fff);border-radius:var(--size-999);padding:var(--size-2) var(--size-10);font-size:var(--size-11);white-space:nowrap}
+.identity-avatar-hint .bell-icon{width:var(--size-12);height:var(--size-12)}
+.identity-portrait{display:flex;flex-direction:column;align-items:center;gap:var(--size-20);margin-bottom:var(--size-20)}
+.ceremony-facts{display:flex;flex-direction:column;gap:var(--size-12);margin:var(--size-20) 0;text-align:left}

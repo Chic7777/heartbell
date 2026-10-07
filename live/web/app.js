@@ -176,6 +176,16 @@ async function action(target){
   if(action==='help'){modal('从相遇，到共同生活',notice('通过邮箱或钱包创建账户，填写身份后可寻找共鸣。邀请与接受均由各自的钱包签名。记忆在本机加密，交易证明来自真实链上回执。')+btn('开始创建身份','identity'));return;}
   if(action==='wallet-info'){modal('Wallet & Smart Account',state.user?notice('邮箱签名钱包：'+escape(state.user)+'<br>智能账户：'+escape(state.chainAddress||state.user))+btn('查看链上记录','proofs','','light'):notice('连接后，邮箱签名钱包和智能账户会显示在这里。')+btn('连接钱包','login'));return;}
   if(action==='copy-address'){const text=target.dataset.copy||'';if(!text)throw new Error('还没有可复制的账户地址。');await navigator.clipboard.writeText(text);toast('地址已复制：'+short(text));return;}
+  if(action==='avatar-picker'){
+    const draft=state.identityDraft||{};
+    const options=[1,2,3,4,5,6].map(n=>'<button type="button" class="'+(draft.avatarUrl==='/assets/avatar-'+n+'.jpg'?'active':'')+'" data-action="avatar-pick" data-src="/assets/avatar-'+n+'.jpg" aria-label="选择头像 '+n+'"><img src="/assets/avatar-'+n+'.jpg" width="80" height="80" alt=""></button>').join('');
+    const urlValue=draft.avatarUrl&&!draft.avatarUrl.startsWith('/assets/')?draft.avatarUrl:'';
+    modal('Curate Photo · 挑选头像','<div class="avatar-picker">'+options+'</div><form class="form" data-form="avatar-url">'+input('或使用外部 HTTPS 图片链接','avatarUrl',urlValue,'maxlength="300" inputmode="url" placeholder="https://..."')+'<div class="actions">'+btn('使用此链接','avatar-url-apply','type="submit"','light compact')+'</div></form>'+(draft.avatarUrl?btn('清除当前头像','avatar-clear','','danger compact'):'')+notice('头像会公开展示给已登录用户；可随时更换，保存身份后生效。'));
+    return;
+  }
+  if(action==='avatar-pick'){state.identityDraft={...(state.identityDraft||{}),avatarUrl:target.dataset.src};dialog.close();toast('头像已挑选，保存身份后生效。');if(state.route==='identity'){state.identityStep=1;render();}return;}
+  if(action==='avatar-clear'){state.identityDraft={...(state.identityDraft||{}),avatarUrl:''};dialog.close();render();return;}
+  if(action==='bind-select'){state.inviteAddress=target.dataset.address||'';navigate('direct-bind');toast('已填入对方地址，请核对后发出邀请。');return;}
   if(action==='proof-detail'){const proof=state.proofs.find(p=>p.hash===target.dataset.hash);if(!proof)throw new Error('真实交易证明尚未加载。');modal('On-chain Proof',proofSheet(proof,state.config));return;}
   if(state.preview&&!['login','login-privy','login-injected','logout','close','discover','stitch-back','stitch-account','stitch-wallet'].includes(action)){toast('访客模式仅供浏览，此操作需要先连接钱包。');return;}
   if(['discover','direct-bind'].includes(action)&&state.user&&!state.preview){api('/api/journey',{method:'PUT',body:{path:action==='discover'?'radar':'direct'}}).catch(()=>{});}
@@ -214,6 +224,7 @@ async function action(target){
     case 'new-vow':if(state.relation?.status!=='ACTIVE')throw new Error('先建立 Active Ring，才可以提出誓言。');modal('Our Vow',`<form class="form" data-form="vow"><label for="f-vow">只有你们两人选择它，才成为誓言。</label><textarea id="f-vow" name="text" maxlength="200" required></textarea>${submit('加密正文并提出链上誓言')}</form>`);break;
     case 'confirm-vow':{const vow=state.relation.vows.find(v=>v.index===Number(target.dataset.index));const memory=state.memories.find(m=>m.body.hash?.toLowerCase()===vow?.hash.toLowerCase());const text=memory?.content?.text||vow?.text;if(!vow||!text||keccak256(toUtf8Bytes(text))!==vow.hash)throw new Error('无法核对正文与链上哈希，不会请求你确认未知内容。');await transact('confirmVow',[vow.index]);break;}
     case 'deposit':modal('Contribute to Our Bond',`<form class="form" data-form="deposit"><div class="deposit-quick" aria-label="快捷金额">${[25,50,100].map(amount=>btn('+'+amount+' BOT','deposit-quick',`data-fill="${amount}" type="button"`,'light compact')).join('')}</div>${input('存入 BOT 数量','amount','','required type="number" min="0.000000000000000001" step="any" placeholder="0.0"')}${notice('快捷金额会累加到输入框。提交后由你的钱包签名，把真实 BOT 转入合约；出资记在你的钱包名下。')}${submit('核对并使用钱包存入')}</form>`);break;
+    case 'avatar-url-apply':{const url=value('avatarUrl');state.identityDraft={...(state.identityDraft||{}),avatarUrl:url};dialog.close();toast(url?'外部头像链接已记录，保存身份后生效。':'已清除外部链接。');if(state.route==='identity'){state.identityStep=1;render();}break;}
     case 'deposit-quick':{const form=target.closest('form'),el=form?.querySelector('[name="amount"]');if(el)el.value=String(Math.max(0,(Number(el.value)||0)+Number(target.dataset.fill)));break}
     case 'withdraw':modal('取回我的剩余贡献',notice('只有当前钱包在已归档 Ring 中的剩余贡献可以取回。')+btn('钱包确认提现','withdraw-confirm'));break;
     case 'withdraw-confirm':{const id=state.relation.id;await transact('withdrawFrom',[id]);selectedArchive=id;await refresh();dialog.close();break;}
