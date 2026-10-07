@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consensus Bell · App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="stage">
+<div id="veil"><div class="vr"></div><p class="vt">Consensus Bell</p></div>
+<div class="phone" id="phone">
+
+<!-- ============ 01 · GATEWAY ============ -->
+<section class="scr" id="scr-gateway">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(120%_60%_at_50%_0%,rgba(233,143,147,0.14),rgba(255,249,247,0)_60%)]"></div>
+    <div class="relative flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <p class="relative text-center mt-5 text-[11px] tracking-[0.32em] uppercase text-[#171717]/55">Consensus Bell</p>
+    <div class="relative mx-auto mt-4 w-[390px] h-[380px] flex items-center justify-center">
+      <svg class="absolute w-[360px] h-[360px]" id="g-orbit" viewBox="0 0 380 380">
+        <defs>
+          <linearGradient id="g-trail" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#E98F93" stop-opacity="0"></stop>
+            <stop offset=".55" stop-color="#E98F93" stop-opacity="0"></stop>
+            <stop offset=".9" stop-color="#E98F93" stop-opacity=".55"></stop>
+            <stop offset="1" stop-color="#ffffff" stop-opacity=".9"></stop>
+          </linearGradient>
+        </defs>
+        <circle cx="190" cy="190" fill="none" r="176" stroke="#171717" stroke-opacity=".06"></circle>
+        <circle cx="190" cy="190" fill="none" r="176" stroke="url(#g-trail)" stroke-width="1.4"></circle>
+      </svg>
+      <div class="relative w-[330px] h-[330px] [mask-image:radial-gradient(circle,#000_55%,transparent_72%)]" id="g-ringimg">
+        <img src="assets/ring-float.jpg" alt="Ring" class="w-full h-full object-cover mix-blend-multiply">
+      </div>
+    </div>
+    <div class="relative text-center px-8 mt-4">
+      <h1 class="serif text-[30px] leading-[1.28] tracking-[-0.01em]">Forever begins<br>with one mutual yes.</h1>
+      <p class="mt-4 text-[13px] leading-[1.7] text-[#171717]/50">Two signatures. One ring.<br>A shared history.</p>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[70px]">
+      <button class="pill pill-dark" data-nav="scr-login">Begin</button>
+    </div>
+    <p class="absolute bottom-[34px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35 flex items-center justify-center gap-1.5">
+      <span class="w-1 h-1 rounded-full bg-[#4ECF8B]"></span>BOT Mainnet · Block #8,431,902
+    </p>
+  </div>
+</section>
+
+<!-- ============ 01b · WALLET LOGIN ============ -->
+<section class="scr" id="scr-login">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(120%_55%_at_50%_0%,rgba(233,143,147,0.14),rgba(255,249,247,0)_60%)]"></div>
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="absolute inset-x-0 top-[130px] flex justify-center">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle cx="65" cy="65" r="44" fill="none" stroke="#C98877" stroke-width="5"></circle>
+        <circle cx="65" cy="65" r="30" fill="none" stroke="#C98877" stroke-width="1.2" opacity=".4"></circle>
+        <rect x="47" y="57" width="36" height="17" rx="5" fill="#171717"></rect>
+        <circle cx="74" cy="65.5" r="3" fill="#FFF9F7"></circle>
+      </svg>
+    </div>
+    <div class="absolute inset-x-0 top-[286px] text-center px-10">
+      <h1 class="serif text-[28px] leading-snug">Your wallet is<br>your identity.</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-3 leading-relaxed">One account for your Ring, your Vows<br>and everything you two build.</p>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[104px]">
+      <button class="pill pill-dark" id="login-btn">Connect Wallet</button>
+      <button class="h-[40px] w-full flex items-center justify-center gap-1.5 text-[13px] text-[#171717]/50 mt-1" id="login-demo">
+        <i class="ph-light ph-sparkle text-[15px]"></i>Continue with an embedded demo wallet
+      </button>
+    </div>
+    <p class="absolute bottom-[62px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35 flex items-center justify-center gap-1.5">
+      <span class="w-1 h-1 rounded-full bg-[#4ECF8B]"></span><span id="login-net">BOT Chain · Chain ID 677</span>
+    </p>
+    <p class="absolute bottom-[30px] inset-x-0 text-center text-[10px] text-[#171717]/30 px-10" id="login-note">Demo mode never asks for seed phrases.</p>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 02 · IDENTITY 1 ============ -->
+<section class="scr" id="scr-id1">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center justify-between px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+      <div class="flex-1 mx-3 h-[2px] rounded bg-[#171717]/10"><div class="w-1/4 h-full rounded bg-[#171717]"></div></div>
+      <p class="text-[12px] text-[#171717]/45">1 / 4</p>
+    </div>
+    <div class="text-center mt-6">
+      <h1 class="serif text-[28px]">Who are you?</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-1.5">Let’s create your identity.</p>
+      <div class="relative w-[104px] h-[104px] mx-auto mt-6">
+        <img src="assets/alice.jpg" alt="avatar" class="w-full h-full rounded-full object-cover">
+        <span class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center text-[15px]"><i class="ph-light ph-camera"></i></span>
+      </div>
+    </div>
+    <div class="px-8 mt-8">
+      <div class="irow"><label>Nickname</label><input id="in-name" value="Luna" maxlength="16"></div>
+      <div class="irow"><label>Gender</label>
+        <select id="in-gender"><option>Female</option><option>Male</option><option>Private</option></select>
+      </div>
+      <div class="irow"><label>Location</label><input id="in-city" value="Shanghai" maxlength="20"></div>
+      <div class="irow"><label>Age Range</label>
+        <select id="in-age"><option>20 – 26</option><option>27 – 33</option><option>34 – 40</option><option>Prefer not to say</option></select>
+      </div>
+    </div>
+    <p class="text-center text-[11px] text-[#171717]/40 mt-6">Only your nickname is visible before you match.</p>
+    <div class="absolute left-6 right-6 bottom-[56px]">
+      <button class="pill pill-dark" data-nav="scr-id2">Next</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 03 · IDENTITY 2 · INTERESTS ============ -->
+<section class="scr" id="scr-id2">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center justify-between px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+      <div class="flex-1 mx-3 h-[2px] rounded bg-[#171717]/10"><div class="w-2/4 h-full rounded bg-[#171717]"></div></div>
+      <p class="text-[12px] text-[#171717]/45">2 / 4</p>
+    </div>
+    <div class="px-6 mt-5">
+      <h1 class="serif text-[28px]">What do you love?</h1>
+      <div class="flex items-end justify-between mt-1.5">
+        <p class="text-[13px] text-[#171717]/50">Choose a few things you enjoy.</p>
+        <p class="text-[12px] text-[#171717]/45"><span id="int-count">0</span> / 8</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-2.5 px-6 mt-5" id="int-grid"></div>
+    <p class="text-center text-[11px] text-[#171717]/40 mt-5 px-10 leading-relaxed">Pick 5 to 8. They help the right person find you.</p>
+    <div class="absolute left-6 right-6 bottom-[56px]">
+      <button class="pill pill-dark" data-nav="scr-id3">Next</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 04 · IDENTITY 3 · INTENTION ============ -->
+<section class="scr" id="scr-id3">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center justify-between px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+      <div class="flex-1 mx-3 h-[2px] rounded bg-[#171717]/10"><div class="w-3/4 h-full rounded bg-[#171717]"></div></div>
+      <p class="text-[12px] text-[#171717]/45">3 / 4</p>
+    </div>
+    <div class="px-6 mt-5">
+      <h1 class="serif text-[28px]">What do you seek?</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-1.5">Your relationship intention</p>
+    </div>
+    <div class="px-6 mt-6 space-y-3" id="intention-list">
+      <button class="rcard sel" data-int="Serious relationship"><span class="dot"></span><span><span class="block text-[15px] font-medium">Serious relationship</span><span class="block text-[12px] text-[#171717]/50 mt-0.5">Looking for a long-term partner.</span></span></button>
+      <button class="rcard" data-int="Open to connection"><span class="dot"></span><span><span class="block text-[15px] font-medium">Open to connection</span><span class="block text-[12px] text-[#171717]/50 mt-0.5">Meet and see where it goes.</span></span></button>
+      <button class="rcard" data-int="Already in love"><span class="dot"></span><span><span class="block text-[15px] font-medium">Already in love</span><span class="block text-[12px] text-[#171717]/50 mt-0.5">I want to bind my person.</span></span></button>
+      <button class="rcard" data-int="Just exploring"><span class="dot"></span><span><span class="block text-[15px] font-medium">Just exploring</span><span class="block text-[12px] text-[#171717]/50 mt-0.5">For now, I’m just looking around.</span></span></button>
+    </div>
+    <p class="text-center text-[11px] text-[#171717]/40 mt-6">You can change this anytime.</p>
+    <div class="absolute left-6 right-6 bottom-[56px]">
+      <button class="pill pill-dark" data-nav="scr-id4">Next</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 05 · IDENTITY 4 · LOVE STATEMENT ============ -->
+<section class="scr" id="scr-id4">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center justify-between px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+      <div class="flex-1 mx-3 h-[2px] rounded bg-[#171717]/10"><div class="w-full h-full rounded bg-[#171717]"></div></div>
+      <p class="text-[12px] text-[#171717]/45">4 / 4</p>
+    </div>
+    <div class="px-8 mt-6">
+      <h1 class="serif text-[28px] leading-snug">What does love<br>mean to you?</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-1.5">Share a few words about yourself.</p>
+    </div>
+    <div class="px-8 mt-6">
+      <textarea id="in-statement" rows="6" maxlength="200"
+        class="w-full bg-transparent border-0 outline-0 resize-none serif text-[19px] leading-[1.7] text-[#171717]/85 placeholder:text-[#171717]/25"
+        placeholder="I believe love is…">I believe love is two people growing together, seeing more of the world, and always choosing each other.</textarea>
+      <div class="h-px bg-[#171717]/10 mt-2"></div>
+      <p class="text-right text-[12px] text-[#171717]/40 mt-2"><span id="st-count">99</span> / 200</p>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[56px]">
+      <button class="pill pill-dark" data-nav="scr-creating">Create My Identity</button>
+    </div>
+    <p class="absolute bottom-[26px] inset-x-0 text-center text-[10px] text-[#171717]/35">Your account is secured automatically.</p>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 05b · CREATING ============ -->
+<section class="scr" id="scr-creating">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(110%_50%_at_50%_20%,rgba(233,143,147,0.12),rgba(255,249,247,0)_60%)]"></div>
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="absolute inset-0 flex flex-col items-center justify-center px-12 text-center">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="44" fill="none" stroke="#171717" stroke-opacity=".08" stroke-width="4"></circle>
+        <path d="M60 16 A44 44 0 0 1 104 60" fill="none" stroke="#C98877" stroke-width="4" stroke-linecap="round" id="cr-spin"></path>
+      </svg>
+      <h1 class="serif text-[24px] mt-8">Creating your identity…</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-3 leading-relaxed">Setting up your account and a private<br>space for your future Ring.</p>
+      <p class="text-[10px] tracking-[0.16em] uppercase text-[#171717]/35 mt-10">BOT Chain · Chain ID 677</p>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 06 · CHOOSE PATH ============ -->
+<section class="scr" id="scr-path">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+    </div>
+    <div class="px-6 mt-3">
+      <h1 class="serif text-[28px] leading-snug">What’s your situation<br>right now?</h1>
+    </div>
+    <div class="px-5 mt-6 space-y-4">
+      <div class="relative h-[280px] rounded-[28px] overflow-hidden" data-nav="scr-discover" role="button">
+        <img src="assets/find-someone.jpg" alt="Find Someone" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,23,0)_30%,rgba(23,23,23,0.55)_100%)]"></div>
+        <div class="absolute left-6 right-6 bottom-6 flex items-end justify-between text-white">
+          <div>
+            <p class="serif text-[28px] leading-tight">Find Someone</p>
+            <p class="text-[13px] text-white/80 mt-1">I haven’t met my person yet.</p>
+          </div>
+          <span class="w-11 h-11 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-[18px]"><i class="ph-light ph-arrow-right"></i></span>
+        </div>
+      </div>
+      <div class="relative h-[280px] rounded-[28px] overflow-hidden" data-nav="scr-invite" role="button">
+        <img src="assets/bind-person.jpg" alt="Bind My Person" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,23,0)_30%,rgba(23,23,23,0.55)_100%)]"></div>
+        <div class="absolute left-6 right-6 bottom-6 flex items-end justify-between text-white">
+          <div>
+            <p class="serif text-[28px] leading-tight">Bind My Person</p>
+            <p class="text-[13px] text-white/80 mt-1">We already found each other.</p>
+          </div>
+          <span class="w-11 h-11 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-[18px]"><i class="ph-light ph-arrow-right"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 07 · DISCOVER ============ -->
+<section class="scr" id="scr-discover">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center justify-between px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+      <h1 class="serif text-[19px] leading-tight text-center">People who might<br>resonate</h1>
+      <button class="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center text-[18px]" data-toast="Filters · coming in the full app"><i class="ph-light ph-sliders-horizontal"></i></button>
+    </div>
+    <p class="text-center text-[11px] text-[#171717]/40 mt-1.5">3 for today · chosen with care</p>
+    <div class="px-6 mt-4">
+      <div class="card rounded-[28px] overflow-hidden">
+        <div class="relative h-[330px]">
+          <img src="assets/sophie.jpg" alt="Sophie" class="absolute inset-0 w-full h-full object-cover">
+          <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,23,0)_45%,rgba(23,23,23,0.5)_100%)]"></div>
+          <button class="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-white/85 backdrop-blur flex items-center justify-center text-[16px] shadow" data-toast="Report · hidden from your feed"><i class="ph-light ph-dots-three-vertical"></i></button>
+          <div class="absolute left-5 right-5 bottom-4 text-white">
+            <p class="serif text-[24px]">Sophie, 24</p>
+            <p class="text-[12px] text-white/85 mt-0.5">Shenzhen · 12 km</p>
+            <div class="flex gap-1.5 mt-2.5">
+              <span class="dtag bg-white/20 backdrop-blur text-white">Travel</span>
+              <span class="dtag bg-white/20 backdrop-blur text-white">Music</span>
+              <span class="dtag bg-white/20 backdrop-blur text-white">Photography</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <p class="text-[13.5px] leading-relaxed text-[#171717]/75">I love meeting new places and interesting people. Hoping to find someone to explore the world together.</p>
+          <div class="flex items-center gap-2 mt-3.5">
+            <span class="dtag bg-[#E98F93]/10 text-[#C0646A]"><i class="ph-light ph-heart text-[12px]"></i><span id="dc-shared">4</span> shared interests</span>
+            <span class="dtag bg-[#171717]/[0.05] text-[#171717]/60" id="dc-intent"><i class="ph-light ph-check-circle text-[12px]"></i>Same intention</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[56px] flex items-center gap-3">
+      <button class="w-[56px] h-[56px] rounded-full bg-white shadow flex items-center justify-center text-[20px] text-[#171717]/60" data-toast="Skipped · she won’t know"><i class="ph-light ph-x"></i></button>
+      <button class="w-[56px] h-[56px] rounded-full bg-white shadow flex items-center justify-center text-[19px] text-[#171717]/60" data-toast="Saved to your list"><i class="ph-light ph-bookmark-simple"></i></button>
+      <button class="flex-1 h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium flex items-center justify-center gap-2" data-nav="scr-invite">
+        <i class="ph-light ph-circle-notch text-[18px]"></i>Ring
+      </button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 08a · SEND INVITATION ============ -->
+<section class="scr" id="scr-invite">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(110%_50%_at_50%_18%,rgba(233,143,147,0.13),rgba(255,249,247,0)_60%)]"></div>
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+    </div>
+    <div class="relative mx-auto mt-2 w-[300px] h-[250px]">
+      <svg viewBox="0 0 300 250" class="w-full h-full">
+        <path d="M118 40 A88 88 0 0 0 118 208" fill="none" stroke="#C98877" stroke-width="7" stroke-linecap="round" id="inv-L"></path>
+        <path d="M182 40 A88 88 0 0 1 182 208" fill="none" stroke="#E7B7A8" stroke-width="7" stroke-linecap="round" opacity=".8" id="inv-R"></path>
+        <circle cx="150" cy="124" r="3" fill="#E98F93"></circle>
+      </svg>
+    </div>
+    <div class="text-center mt-1 px-10">
+      <h1 class="serif text-[24px] leading-snug">Send a Ring Invitation</h1>
+      <div class="mt-4 flex items-center justify-center">
+        <img src="assets/sophie.jpg" alt="Sophie" class="w-[54px] h-[54px] rounded-full object-cover ring-4 ring-white shadow">
+      </div>
+      <p class="text-[15px] font-medium mt-2.5">Sophie</p>
+      <p class="serif italic text-[14px] text-[#171717]/55 mt-3">A Ring belongs to two people. Only two.</p>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[76px]">
+      <button class="pill pill-dark" id="inv-send">Send Invitation</button>
+      <p class="text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35 mt-3">Creates one on-chain invitation · expires in 24h</p>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 08b · INVITATION SENT ============ -->
+<section class="scr" id="scr-sent">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex justify-end px-6 mt-2">
+      <button data-nav="scr-discover" class="w-10 h-10 -mr-2 flex items-center justify-center text-[22px]" title="Close"><i class="ph-light ph-x"></i></button>
+    </div>
+    <div class="relative mx-auto mt-2 w-[300px] h-[215px]">
+      <svg viewBox="0 0 300 215" class="w-full h-full">
+        <path d="M150 24 A84 84 0 0 0 150 192" fill="none" stroke="#C98877" stroke-width="7" stroke-linecap="round"></path>
+        <path d="M150 24 A84 84 0 0 1 150 192" fill="none" stroke="#C98877" stroke-width="2" stroke-dasharray="3 9" stroke-linecap="round" opacity=".38" id="sent-ghost"></path>
+      </svg>
+    </div>
+    <div class="text-center px-10">
+      <h1 class="serif text-[26px]">Invitation Sent</h1>
+      <p class="text-[13px] text-[#171717]/50 mt-2">Waiting for Sophie.</p>
+    </div>
+    <div class="px-8 mt-5">
+      <div class="flat divide-y divide-[#171717]/[0.06] px-4">
+        <div class="flex items-center justify-between py-3 text-[13px]"><span class="text-[#171717]/50">Invitation created</span><span class="text-[#2E9E63] flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Just now</span></div>
+        <div class="flex items-center justify-between py-3 text-[13px]"><span class="text-[#171717]/50">Expires in</span><span class="font-medium tabular-nums" id="sent-timer">23:47:12</span></div>
+      </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[104px] space-y-1">
+      <button class="pill pill-dark" data-toast="Share link copied · only Sophie can open it">Share Invitation</button>
+      <button class="h-[44px] w-full flex items-center justify-center gap-1.5 text-[14px] text-[#2E9E63]" data-proof="Invitation Created"><i class="ph-light ph-seal-check text-[16px]"></i>View Proof</button>
+      <button class="h-[36px] w-full text-[13px] text-[#171717]/45" data-nav="scr-discover">Cancel Invitation</button>
+    </div>
+    <p class="text-center text-[11px] text-[#171717]/40 mt-2 hidden" id="sent-tx"></p>
+    <p class="absolute bottom-[62px] inset-x-0 text-center text-[11px] text-[#171717]/35" id="sent-switchline">Demo · <button class="underline" data-nav="scr-received">switch to Sophie’s phone →</button></p>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 09 · INVITATION RECEIVED ============ -->
+<section class="scr" id="scr-received">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <p class="text-center mt-3 text-[10px] tracking-[0.3em] uppercase text-[#171717]/40">A Ring Invitation</p>
+    <div class="relative mx-auto mt-2 w-[300px] h-[185px]">
+      <svg viewBox="0 0 300 185" class="w-full h-full">
+        <path d="M150 18 A74 74 0 0 0 150 166" fill="none" stroke="#C98877" stroke-width="6" stroke-linecap="round"></path>
+        <path d="M150 18 A74 74 0 0 1 150 166" fill="none" stroke="#C98877" stroke-width="2" stroke-dasharray="3 8" opacity=".3"></path>
+        <circle cx="150" cy="92" r="34" fill="#FFF9F7"></circle>
+      </svg>
+      <img src="assets/alice.jpg" alt="Alice" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[62px] h-[62px] rounded-full object-cover ring-4 ring-white shadow">
+    </div>
+    <div class="text-center px-10 mt-1">
+      <h1 class="serif text-[24px] leading-snug"><span id="rcv-name">Luna</span> wants to share<br>a Ring with you.</h1>
+      <div class="flex justify-center gap-1.5 mt-4">
+        <span class="dtag bg-[#E98F93]/10 text-[#C0646A]">Travel</span>
+        <span class="dtag bg-[#E98F93]/10 text-[#C0646A]">Photography</span>
+        <span class="dtag border border-[#171717]/10 text-[#171717]/55">Coffee</span>
+        <span class="dtag border border-[#171717]/10 text-[#171717]/55">AI</span>
+      </div>
+      <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40 mt-4">What love means to Alice</p>
+      <p class="serif text-[15px] leading-relaxed text-[#171717]/75 mt-2">“I believe in long-term relationships and growing together. Hope we can explore more of the world together.”</p>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[76px] flex gap-3">
+      <button class="pill pill-line" data-toast="Declined · Alice will see a gentle no">Decline</button>
+      <button class="pill pill-dark" data-nav="scr-sign">Accept</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 10 · SIGN & ACCEPT ============ -->
+<section class="scr" id="scr-sign">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(110%_45%_at_50%_12%,rgba(233,143,147,0.12),rgba(255,249,247,0)_58%)]"></div>
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center px-6 mt-2">
+      <button data-back class="w-10 h-10 -ml-2 flex items-center justify-center text-[22px]"><i class="ph-light ph-caret-left"></i></button>
+    </div>
+    <div class="relative mx-auto mt-3 w-[300px] h-[212px]">
+      <svg viewBox="0 0 300 212" class="w-full h-full">
+        <path d="M150 22 A82 82 0 0 0 150 186" fill="none" stroke="#C98877" stroke-width="6" stroke-linecap="round"></path>
+        <path d="M150 22 A82 82 0 0 1 150 186" fill="none" stroke="#E7B7A8" stroke-width="6" stroke-linecap="round" id="sign-R" opacity=".8"></path>
+      </svg>
+    </div>
+    <div class="text-center px-10">
+      <h1 class="serif text-[24px] leading-snug">Only you can complete<br>this Ring.</h1>
+    </div>
+    <div class="px-8 mt-5">
+      <div class="flat divide-y divide-[#171717]/[0.06] px-4">
+        <div class="flex items-center gap-3 py-3.5 text-[13.5px]"><i class="ph-light ph-heart-circle text-[20px] text-[#C0646A]"></i>Creates one active Romantic Ring</div>
+        <div class="flex items-center gap-3 py-3.5 text-[13.5px]"><i class="ph-light ph-shield-check text-[20px] text-[#171717]/55"></i>No funds transferred</div>
+        <div class="flex items-center gap-3 py-3.5 text-[13.5px]"><i class="ph-light ph-seal-check text-[20px] text-[#2E9E63]"></i>Recorded on BOT Chain</div>
+      </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[86px]">
+      <p class="text-center text-[11px] text-[#171717]/45 mb-2.5 flex items-center justify-center gap-1.5" id="sign-as"><i class="ph-light ph-wallet text-[14px]"></i>Signing as…</p>
+      <button class="pill pill-dark" id="sign-go">Sign &amp; Accept</button>
+    </div>
+    <p class="absolute bottom-[56px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35">BOT Chain · Chain ID 677</p>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 11 · CEREMONY ============ -->
+<section class="scr" id="scr-ceremony">
+  <div class="sans relative w-full h-full overflow-hidden text-[#FFF9F7]" style="background:radial-gradient(120%_80%_at_50%_0%,#2A2020,#171114_70%)">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <span class="absolute star w-[2px] h-[2px] rounded-full bg-white/70" style="left:14%;top:18%"></span>
+    <span class="absolute star w-[2px] h-[2px] rounded-full bg-white/50" style="left:84%;top:12%"></span>
+    <span class="absolute star w-[3px] h-[3px] rounded-full bg-white/60" style="left:76%;top:34%"></span>
+    <span class="absolute star w-[2px] h-[2px] rounded-full bg-white/40" style="left:22%;top:38%"></span>
+    <div class="absolute inset-x-0 top-[140px] flex justify-center">
+      <svg width="330" height="330" viewBox="0 0 330 330">
+        <circle cx="165" cy="165" r="118" fill="none" stroke="#FFF9F7" stroke-opacity=".08"></circle>
+        <path d="M165 47 A118 118 0 0 0 165 283" fill="none" stroke="#D9A08F" stroke-width="9" stroke-linecap="round" id="cer-L"></path>
+        <path d="M165 47 A118 118 0 0 1 165 283" fill="none" stroke="#EDD9C8" stroke-width="9" stroke-linecap="round" id="cer-R"></path>
+      </svg>
+    </div>
+    <div class="absolute inset-x-0 bottom-[142px] text-center px-10 cer-title">
+      <h1 class="serif text-[32px]">Our Ring</h1>
+      <p class="text-[13px] tracking-[0.18em] uppercase text-white/60 mt-3 cer-names" id="cer-names">Luna × Sophie</p>
+      <p class="text-[11px] tracking-[0.14em] uppercase text-white/40 mt-1.5 cer-names">Born October 7, 2026</p>
+      <p class="serif text-[15px] leading-relaxed text-white/75 mt-5 cer-line">Forever does not begin with a promise.<br>It begins with two people choosing<br>the same thing.</p>
+    </div>
+    <div class="absolute left-8 right-8 bottom-[68px] cer-enter">
+      <button class="pill bg-white text-[#171717]" id="cer-enter" style="height:54px">Enter Our Ring</button>
+      <p class="text-center text-[10px] tracking-[0.16em] uppercase text-white/35 mt-3"><span class="w-1 h-1 rounded-full bg-[#4ECF8B] inline-block mr-1.5"></span>BOT Chain · Block #8,431,902</p>
+    </div>
+    <div class="homebar" style="background:#FFF9F7"></div>
+  </div>
+</section>
+
+<!-- ============ 12 · HOME ============ -->
+<section class="scr" id="scr-home">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(120%_55%_at_50%_0%,rgba(233,143,147,0.13),rgba(255,249,247,0)_60%)]"></div>
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="relative flex items-center justify-between px-6 mt-1">
+      <div class="flex items-center">
+        <img src="assets/alice.jpg" alt="Alice" class="w-[34px] h-[34px] rounded-full object-cover border-2 border-white shadow-sm">
+        <img src="assets/sophie.jpg" alt="Sophie" class="w-[34px] h-[34px] rounded-full object-cover border-2 border-white -ml-2 shadow-sm">
+      </div>
+      <div class="text-center">
+        <p class="serif text-[17px] leading-tight" id="hm-names">Luna <span class="text-[#E98F93]">×</span> Sophie</p>
+        <p class="text-[10px] tracking-[0.18em] uppercase text-[#171717]/40 mt-0.5">One Ring · Two People</p>
+      </div>
+      <button class="chip bg-[#4ECF8B]/12 text-[#2E9E63]" id="home-verified" data-proof="Ring Created"><i class="ph-light ph-seal-check text-[14px]"></i>Verified</button>
+    </div>
+    <div class="relative mx-auto mt-1 w-[390px] h-[272px] flex items-center justify-center">
+      <svg class="absolute w-[265px] h-[265px]" id="hm-orbit" viewBox="0 0 265 265">
+        <defs>
+          <linearGradient id="hm-trail" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#E98F93" stop-opacity="0"></stop>
+            <stop offset=".75" stop-color="#E98F93" stop-opacity="0"></stop>
+            <stop offset=".92" stop-color="#E98F93" stop-opacity=".5"></stop>
+            <stop offset="1" stop-color="#ffffff" stop-opacity=".9"></stop>
+          </linearGradient>
+        </defs>
+        <circle cx="132" cy="132" r="120" fill="none" stroke="#171717" stroke-opacity=".06"></circle>
+        <circle cx="132" cy="132" r="120" fill="none" stroke="url(#hm-trail)" stroke-width="1.4"></circle>
+      </svg>
+      <div class="relative w-[220px] h-[220px] [mask-image:radial-gradient(circle,#000_55%,transparent_72%)] ring-img" id="hm-ringimg">
+        <img src="assets/ring-float.jpg" alt="Our Ring" class="w-full h-full object-cover mix-blend-multiply">
+      </div>
+      <span class="absolute bottom-1 text-[10px] tracking-[0.18em] uppercase text-[#171717]/35">Bond thicker · Vows engraved</span>
+    </div>
+    <div class="text-center">
+      <p class="serif text-[42px] leading-none">127</p>
+      <p class="text-[11px] tracking-[0.22em] uppercase text-[#171717]/45 mt-0.5">Days Together</p>
+    </div>
+    <div class="card mx-6 mt-3.5 grid grid-cols-3 py-3.5">
+      <div class="text-center border-r border-[#171717]/[0.06]"><p class="serif text-[22px]" data-b="memories">18</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Memories</p></div>
+      <div class="text-center border-r border-[#171717]/[0.06]"><p class="serif text-[22px]" data-b="vows">7</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Vows</p></div>
+      <div class="text-center"><p class="serif text-[22px]"><span data-b="bond">260</span> <span class="text-[12px] text-[#171717]/40">BOT</span></p><p class="text-[11px] text-[#171717]/45 mt-0.5">Bond</p></div>
+    </div>
+    <div class="px-6 mt-3.5">
+      <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40 mb-2">Today</p>
+      <div class="card p-4 space-y-3">
+        <div class="flex items-center gap-3" data-nav="scr-story" role="button">
+          <img src="assets/sophie.jpg" alt="Sophie" class="w-[38px] h-[38px] rounded-full object-cover">
+          <div class="flex-1">
+            <p class="text-[14px] font-medium">Sophie added a memory.</p>
+            <p class="text-[12px] text-[#171717]/45">East Lake 🌸 · A perfect day together</p>
+          </div>
+          <img src="assets/east-lake.jpg" alt="East Lake" class="w-[46px] h-[46px] rounded-[14px] object-cover">
+        </div>
+        <div class="h-px bg-[#171717]/[0.06]" id="home-sep"></div>
+        <div class="flex items-center gap-3" id="home-pending" data-nav="scr-vowdetail" role="button">
+          <div class="w-[38px] h-[38px] rounded-full bg-[#F2A65A]/15 flex items-center justify-center"><i class="ph-light ph-hand-heart text-[20px] text-[#B8732F]"></i></div>
+          <div class="flex-1">
+            <p class="text-[14px] font-medium">A Vow is waiting for you.</p>
+            <p class="text-[12px] text-[#B8732F] flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#F2A65A]"></span>Pending · proposed by Alice</p>
+          </div>
+          <i class="ph-light ph-caret-right text-[16px] text-[#171717]/30"></i>
+        </div>
+      </div>
+    </div>
+    <div class="tabbar" data-tabroot>
+      <div class="tabpulse" id="home-pulse"></div>
+      <button class="tb on" data-tab="scr-home"><i class="ph-light ph-heart"></i>Ring</button>
+      <button class="tb" data-tab="scr-story"><i class="ph-light ph-images"></i>Story</button>
+      <button class="tb" data-tab="scr-vows"><i class="ph-light ph-hand-heart"></i>Vow</button>
+      <button class="tb" data-tab="scr-bond"><i class="ph-light ph-vault"></i>Bond</button>
+      <button class="tb" data-tab="scr-me"><i class="ph-light ph-user"></i>Me</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 13 · STORY ============ -->
+<section class="scr" id="scr-story">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-start justify-between px-6 mt-2">
+      <div>
+        <h1 class="serif text-[30px] leading-tight">Our Story</h1>
+        <p class="text-[13px] text-[#171717]/50 mt-1">All the moments, big or small.</p>
+      </div>
+      <button class="w-[42px] h-[42px] rounded-full bg-white shadow border border-[#171717]/[0.06] flex items-center justify-center text-[20px]" data-toast="Add a memory · camera & notes open here"><i class="ph-light ph-plus"></i></button>
+    </div>
+    <div class="flex gap-2 px-6 mt-4" id="story-filters">
+      <button class="fchip on" data-f="all">All</button>
+      <button class="fchip" data-f="photo">Photos</button>
+      <button class="fchip" data-f="video">Videos</button>
+      <button class="fchip" data-f="note">Notes</button>
+    </div>
+    <div class="absolute inset-x-0 top-[178px] bottom-[78px] overflow-y-auto px-6 pb-4" style="scrollbar-width:none">
+      <div class="flex items-center gap-3 mt-1">
+        <p class="serif text-[19px]">October 2026</p>
+        <div class="flex-1 h-px bg-[#171717]/[0.07]"></div>
+      </div>
+      <div class="mt-3 relative">
+        <div class="absolute left-[39px] top-2 bottom-4 w-px bg-[#171717]/[0.08]"></div>
+        <div class="space-y-4">
+          <div class="flex gap-3">
+            <p class="w-[30px] text-right text-[11px] text-[#171717]/45 leading-[1.4] pt-3 shrink-0">7<br>Oct</p>
+            <span class="w-[9px] h-[9px] rounded-full bg-[#E98F93] ring-4 ring-[#E98F93]/15 mt-3.5 shrink-0 relative z-10 -ml-[6px]"></span>
+            <div class="card p-4 flex-1 ev" data-t="photo">
+              <p class="serif text-[17px]">We started our Ring</p>
+              <p class="text-[13px] text-[#171717]/55 mt-1">The day two yeses became one ring.</p>
+              <img src="assets/ring-hero.jpg" alt="Ring" class="mt-3 w-full h-[104px] object-cover rounded-[14px]">
+              <div class="flex items-center justify-between mt-2.5">
+                <p class="text-[11px] text-[#171717]/40">Added by Alice</p>
+                <button class="text-[11px] text-[#2E9E63] flex items-center gap-1" data-proof="Story Anchored"><i class="ph-light ph-seal-check text-[13px]"></i>Content Proof</button>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <p class="w-[30px] text-right text-[11px] text-[#171717]/45 leading-[1.4] pt-3 shrink-0">12<br>Oct</p>
+            <span class="w-[9px] h-[9px] rounded-full bg-[#E98F93] ring-4 ring-[#E98F93]/15 mt-3.5 shrink-0 relative z-10 -ml-[6px]"></span>
+            <div class="card p-4 flex-1 ev" data-t="photo">
+              <p class="serif text-[17px]">East Lake</p>
+              <p class="text-[13px] text-[#171717]/55 mt-1">A perfect day together.</p>
+              <div class="mt-3 grid grid-cols-2 gap-2">
+                <img src="assets/east-lake.jpg" alt="East Lake" class="w-full h-[96px] object-cover rounded-[14px]">
+                <img src="assets/vow-hero.jpg" alt="Sunset" class="w-full h-[96px] object-cover rounded-[14px]">
+              </div>
+              <p class="text-[11px] text-[#171717]/40 mt-2.5">Added by Sophie · 2h ago</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <p class="w-[30px] text-right text-[11px] text-[#171717]/45 leading-[1.4] pt-3 shrink-0">21<br>Oct</p>
+            <span class="w-[9px] h-[9px] rounded-full bg-[#E98F93] ring-4 ring-[#E98F93]/15 mt-3.5 shrink-0 relative z-10 -ml-[6px]"></span>
+            <div class="card p-4 flex-1 ev" data-t="video">
+              <p class="serif text-[17px]">First movie together</p>
+              <p class="text-[13px] text-[#171717]/55 mt-1">So many laughs 🌸</p>
+              <div class="mt-3 relative">
+                <img src="assets/cinema.jpg" alt="Cinema" class="w-full h-[96px] object-cover rounded-[14px]">
+                <span class="absolute inset-0 flex items-center justify-center pointer-events-none"><span class="w-11 h-11 rounded-full bg-white/85 flex items-center justify-center text-[18px] shadow"><i class="ph-fill ph-play"></i></span></span>
+              </div>
+              <p class="text-[11px] text-[#171717]/40 mt-2.5">Added by Alice · Video · 0:42</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <p class="w-[30px] text-right text-[11px] text-[#171717]/45 leading-[1.4] pt-3 shrink-0">29<br>Oct</p>
+            <span class="w-[9px] h-[9px] rounded-full bg-[#E98F93] ring-4 ring-[#E98F93]/15 mt-3.5 shrink-0 relative z-10 -ml-[6px]"></span>
+            <div class="card p-4 flex-1 ev" data-t="note">
+              <p class="serif text-[17px]">A little note</p>
+              <p class="serif text-[14px] leading-relaxed text-[#171717]/70 mt-1">“Today the rain followed us home, and neither of us minded.”</p>
+              <p class="text-[11px] text-[#171717]/40 mt-2.5">Added by Sophie</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tabbar" data-tabroot>
+      <button class="tb" data-tab="scr-home"><i class="ph-light ph-heart"></i>Ring</button>
+      <button class="tb on" data-tab="scr-story"><i class="ph-light ph-images"></i>Story</button>
+      <button class="tb" data-tab="scr-vows"><i class="ph-light ph-hand-heart"></i>Vow</button>
+      <button class="tb" data-tab="scr-bond"><i class="ph-light ph-vault"></i>Bond</button>
+      <button class="tb" data-tab="scr-me"><i class="ph-light ph-user"></i>Me</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 14 · VOWS ============ -->
+<section class="scr" id="scr-vows">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-start justify-between px-6 mt-2">
+      <div>
+        <h1 class="serif text-[30px] leading-tight">Our Vows</h1>
+        <p class="text-[13px] text-[#171717]/50 mt-1 max-w-[250px]">A thought becomes a Vow only when both of you choose it.</p>
+      </div>
+      <button class="h-[40px] px-4 rounded-full bg-[#171717] text-white text-[13px] font-medium flex items-center gap-1.5 mt-1 shrink-0" id="vow-new"><i class="ph-light ph-plus text-[15px]"></i>New Vow</button>
+    </div>
+    <div class="absolute inset-x-0 top-[168px] bottom-[92px] overflow-y-auto px-6 pb-3" style="scrollbar-width:none">
+      <div class="flex items-baseline gap-2 mb-3">
+        <p class="serif text-[34px] leading-none" data-b="vows">7</p>
+        <p class="text-[12px] tracking-[0.16em] uppercase text-[#171717]/45">Total Vows</p>
+      </div>
+      <div class="space-y-3" id="vow-list"></div>
+    </div>
+    <p class="absolute bottom-[90px] inset-x-0 text-center text-[10px] tracking-[0.14em] uppercase text-[#171717]/35">Vow Count grows only with both signatures</p>
+    <div class="tabbar" data-tabroot>
+      <button class="tb" data-tab="scr-home"><i class="ph-light ph-heart"></i>Ring</button>
+      <button class="tb" data-tab="scr-story"><i class="ph-light ph-images"></i>Story</button>
+      <button class="tb on" data-tab="scr-vows"><i class="ph-light ph-hand-heart"></i>Vow</button>
+      <button class="tb" data-tab="scr-bond"><i class="ph-light ph-vault"></i>Bond</button>
+      <button class="tb" data-tab="scr-me"><i class="ph-light ph-user"></i>Me</button>
+    </div>
+    <div class="sheet-ov" id="vow-ov"></div>
+    <div class="sheet" id="vow-sheet">
+      <div class="grab"></div>
+      <p class="serif text-[20px]">New Vow</p>
+      <p class="text-[12.5px] text-[#171717]/50 mt-1">It becomes real only when Sophie confirms.</p>
+      <textarea id="vow-draft" rows="3" maxlength="140" class="w-full mt-3 p-3.5 serif text-[16px] leading-relaxed outline-0 resize-none bg-[#FFF9F7] border border-[#171717]/10 rounded-[16px]" placeholder="Let’s always…">Let’s always eat dinner together, phones down.</textarea>
+      <button class="pill pill-dark mt-3 h-[50px]" id="vow-propose">Propose Vow</button>
+      <button class="h-[40px] w-full text-[13px] text-[#171717]/45 mt-1" id="vow-cancel">Cancel</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 15 · VOW DETAIL ============ -->
+<section class="scr" id="scr-vowdetail">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="relative h-[298px]">
+      <img src="assets/vow-hero.jpg" alt="Vow" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,23,23,0.18),rgba(255,249,247,0)_35%,rgba(255,249,247,0.9)_92%,#FFF9F7)]"></div>
+      <button class="absolute top-[58px] left-5 w-[38px] h-[38px] rounded-full bg-white/80 backdrop-blur flex items-center justify-center text-[18px] shadow-sm" data-back><i class="ph-light ph-arrow-left"></i></button>
+      <div class="absolute top-[58px] right-5 rounded-[20px] bg-white/80 backdrop-blur px-4 py-2.5 text-center shadow-sm">
+        <p class="serif text-[22px] leading-none" data-b="vows">7</p>
+        <p class="text-[9px] tracking-[0.14em] uppercase text-[#171717]/45 mt-1">Total Vows</p>
+      </div>
+    </div>
+    <div class="px-8 mt-1">
+      <p class="serif text-[21px] leading-[1.5]" id="vd-quote">“I choose you, again, in all the ordinary days and all the unexpected ones.”</p>
+      <div class="flex items-center gap-2.5 mt-4" id="vd-meta">
+        <img src="assets/alice.jpg" alt="Alice" class="w-[24px] h-[24px] rounded-full object-cover">
+        <p class="text-[13px] text-[#171717]/60">Proposed by Alice</p>
+        <p class="text-[12px] text-[#171717]/40">· Nov 10, 2026</p>
+      </div>
+      <div class="flex items-center gap-2 mt-3.5" id="vd-status"></div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[96px]">
+      <div id="vd-done" class="hidden rounded-[24px] bg-[#4ECF8B]/12 p-5 relative overflow-hidden">
+        <svg class="absolute -right-4 -top-4 w-[110px] h-[110px] opacity-60" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="14" fill="none" stroke="#4ECF8B" stroke-width="1.2" class="vd-pulse"></circle>
+        </svg>
+        <div class="flex items-center gap-2 text-[#2E9E63]">
+          <i class="ph-light ph-seal-check text-[22px]"></i>
+          <p class="text-[15px] font-medium">Confirmed by Alice &amp; Sophie</p>
+        </div>
+        <p class="text-[12px] text-[#171717]/50 mt-1.5" id="vd-done-sub">Recorded on BOT Chain · Block #8,431,966</p>
+      </div>
+      <button id="vd-confirm" class="pill pill-dark">Confirm</button>
+    </div>
+    <p class="absolute bottom-[64px] inset-x-0 text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35">BOT Chain · Chain ID 677</p>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 16 · BOND ============ -->
+<section class="scr" id="scr-bond">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-start justify-between px-6 mt-2">
+      <span class="w-[38px]"></span>
+      <div class="text-center">
+        <h1 class="serif text-[26px] leading-tight">Our Bond</h1>
+        <p class="text-[12px] text-[#171717]/50 mt-0.5">Give a future plan some weight.</p>
+      </div>
+      <button class="w-[38px] h-[38px] rounded-full bg-white shadow border border-[#171717]/[0.06] flex items-center justify-center text-[17px]" data-toast="New goal · name it together"><i class="ph-light ph-plus"></i></button>
+    </div>
+    <div class="px-6 mt-4">
+      <div class="card rounded-[28px] overflow-hidden">
+        <img src="assets/japan-trip.jpg" alt="Japan Trip" class="w-full h-[116px] object-cover">
+        <div class="p-5">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="serif text-[22px]">Japan Trip</p>
+              <p class="text-[13px] text-[#171717]/55 mt-1">A journey to see more of the world together.</p>
+            </div>
+            <button class="chip bg-[#4ECF8B]/12 text-[#2E9E63] shrink-0 ml-2" data-proof="Bond Deposited"><i class="ph-light ph-seal-check text-[13px]"></i>Verified</button>
+          </div>
+          <div class="flex items-end justify-between mt-3.5 mb-2">
+            <p class="text-[13px] font-medium"><span id="jp-amt">200</span> <span class="text-[#171717]/40 font-normal">/ 1,000 BOT</span></p>
+            <div class="flex items-center -space-x-1.5">
+              <img src="assets/alice.jpg" class="w-[24px] h-[24px] rounded-full object-cover border-2 border-white" alt="Alice">
+              <img src="assets/sophie.jpg" class="w-[24px] h-[24px] rounded-full object-cover border-2 border-white" alt="Sophie">
+            </div>
+          </div>
+          <div class="h-[7px] rounded-full bg-[#171717]/[0.07] overflow-hidden"><div class="h-full rounded-full bg-[linear-gradient(90deg,#E7B7A8,#E98F93)]" id="jp-bar" style="width:20%"></div></div>
+          <button class="pill pill-dark mt-4 h-[50px]" id="bond-deposit">Deposit</button>
+        </div>
+      </div>
+    </div>
+    <div class="px-6 mt-3.5 space-y-2.5">
+      <div class="flat p-3.5 flex items-center gap-3" data-toast="Anniversary goal · deposit opens in the full app">
+        <img src="assets/anniversary.jpg" alt="Anniversary" class="w-[46px] h-[46px] rounded-[14px] object-cover">
+        <div class="flex-1">
+          <p class="text-[14px] font-medium">Anniversary</p>
+          <div class="h-[5px] rounded-full bg-[#171717]/[0.07] mt-1.5 w-[120px] overflow-hidden"><div class="h-full w-[32%] bg-[#E98F93]/70 rounded-full"></div></div>
+        </div>
+        <div class="text-right"><p class="text-[13px] font-medium">500 <span class="text-[11px] text-[#171717]/40 font-normal">BOT</span></p><p class="text-[11px] text-[#171717]/45">32%</p></div>
+      </div>
+      <div class="flat p-3.5 flex items-center gap-3" data-toast="Future Home goal · deposit opens in the full app">
+        <img src="assets/future-home.jpg" alt="Future Home" class="w-[46px] h-[46px] rounded-[14px] object-cover">
+        <div class="flex-1">
+          <p class="text-[14px] font-medium">Future Home</p>
+          <div class="h-[5px] rounded-full bg-[#171717]/[0.07] mt-1.5 w-[120px] overflow-hidden"><div class="h-full w-[12%] bg-[#E98F93]/70 rounded-full"></div></div>
+        </div>
+        <div class="text-right"><p class="text-[13px] font-medium">5,000 <span class="text-[11px] text-[#171717]/40 font-normal">BOT</span></p><p class="text-[11px] text-[#171717]/45">12%</p></div>
+      </div>
+    </div>
+    <p class="absolute bottom-[88px] inset-x-0 text-center text-[10px] tracking-[0.14em] uppercase text-[#171717]/35">Held in both names · Withdraw your own, anytime</p>
+    <div class="tabbar" data-tabroot>
+      <button class="tb" data-tab="scr-home"><i class="ph-light ph-heart"></i>Ring</button>
+      <button class="tb" data-tab="scr-story"><i class="ph-light ph-images"></i>Story</button>
+      <button class="tb" data-tab="scr-vows"><i class="ph-light ph-hand-heart"></i>Vow</button>
+      <button class="tb on" data-tab="scr-bond"><i class="ph-light ph-vault"></i>Bond</button>
+      <button class="tb" data-tab="scr-me"><i class="ph-light ph-user"></i>Me</button>
+    </div>
+    <div class="sheet-ov" id="bond-ov"></div>
+    <div class="sheet" id="bond-sheet">
+      <div class="grab"></div>
+      <p class="serif text-[20px]">Deposit · Japan Trip</p>
+      <p class="text-[12.5px] text-[#171717]/50 mt-1">Held in your name. Both signatures needed to spend.</p>
+      <div class="flex gap-2 mt-4" id="bond-amts">
+        <button class="fchip on flex-1" data-amt="50">50 BOT</button>
+        <button class="fchip flex-1" data-amt="100">100 BOT</button>
+        <button class="fchip flex-1" data-amt="200">200 BOT</button>
+      </div>
+      <button class="pill pill-dark mt-4 h-[50px]" id="bond-confirm">Deposit</button>
+      <button class="h-[40px] w-full text-[13px] text-[#171717]/45 mt-1" id="bond-cancel">Cancel</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 17 · BELL VAULT ============ -->
+<section class="scr" id="scr-vault">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(100%_45%_at_50%_0%,rgba(233,143,147,0.10),rgba(255,249,247,0)_60%)]"></div>
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-start justify-between px-6 mt-2">
+      <button data-back class="w-[38px] h-[38px] rounded-full bg-white shadow border border-[#171717]/[0.06] flex items-center justify-center text-[17px]"><i class="ph-light ph-arrow-left"></i></button>
+      <div class="text-center">
+        <h1 class="serif text-[26px] leading-tight">Bell Vault</h1>
+        <p class="text-[12px] text-[#171717]/50 mt-0.5">Encrypted for both of you.</p>
+      </div>
+      <span class="w-[38px]"></span>
+    </div>
+    <div class="px-6 mt-5">
+      <div class="card rounded-[28px] p-6 text-center">
+        <div class="w-[56px] h-[56px] mx-auto rounded-full bg-[#E98F93]/12 flex items-center justify-center"><i class="ph-light ph-lock-simple-open text-[26px] text-[#C0646A]"></i></div>
+        <p class="serif text-[22px] mt-3">Our Memories</p>
+        <p class="text-[12px] text-[#171717]/45 mt-1">Only the two of you hold the key.</p>
+        <div class="grid grid-cols-3 gap-y-5 mt-6">
+          <div><p class="serif text-[24px]">342</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Photos</p></div>
+          <div><p class="serif text-[24px]">27</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Videos</p></div>
+          <div><p class="serif text-[24px]">63</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Notes</p></div>
+          <div><p class="serif text-[24px]" data-b="vows">7</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Vows</p></div>
+          <div><p class="serif text-[24px]">7</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Documents</p></div>
+          <div><p class="serif text-[24px] text-[#2E9E63]">✓</p><p class="text-[11px] text-[#171717]/45 mt-0.5">Encrypted</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="px-6 mt-4 space-y-2.5">
+      <button class="pill pill-dark h-[50px]" data-toast="Memories manager · full app">Manage Memories</button>
+      <button class="pill pill-line h-[50px]" data-toast="Encrypted archive exported">Export Archive</button>
+      <button class="h-[44px] w-full flex items-center justify-center gap-1.5 text-[14px] text-[#171717]/60" data-toast="Backup scheduled · nightly"><i class="ph-light ph-cloud-arrow-up text-[17px]"></i>Backup</button>
+    </div>
+    <div class="px-8 absolute bottom-[52px] inset-x-0">
+      <p class="serif text-[15px] text-center text-[#171717]/70 leading-relaxed">We store memories privately<br>and proofs publicly.</p>
+      <button class="mx-auto mt-1.5 flex items-center gap-1 text-[11px] text-[#171717]/40" id="vault-info"><i class="ph-light ph-info text-[13px]"></i>What this means</button>
+      <p class="hidden flat mt-2 p-3 text-center text-[11px] text-[#171717]/55 leading-relaxed" id="vault-tech">照片与日记以 AES-256-GCM 加密存储，密钥由你们两人的 X25519 密钥协商产生；链上只有哈希与证明，永远没有内容。</p>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 18 · WITNESS ============ -->
+<section class="scr" id="scr-witness">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-start justify-between px-6 mt-2">
+      <button data-back class="w-[38px] h-[38px] rounded-full bg-white shadow border border-[#171717]/[0.06] flex items-center justify-center text-[17px]"><i class="ph-light ph-arrow-left"></i></button>
+      <div class="text-center">
+        <h1 class="serif text-[26px] leading-tight">Make It Real</h1>
+        <p class="text-[12px] text-[#171717]/50 mt-0.5">Turn our Ring into something real.</p>
+      </div>
+      <span class="w-[38px]"></span>
+    </div>
+    <div class="mt-5 flex gap-4 overflow-x-auto px-6 pb-2" style="scrollbar-width:none">
+      <div class="shrink-0 w-[290px] card rounded-[28px] overflow-hidden" data-nav="scr-witnessd" role="button">
+        <div class="h-[292px] overflow-hidden bg-[#F5EDE9]"><img src="assets/ring-hero.jpg" alt="Digital Ring" class="w-full h-full object-cover"></div>
+        <div class="p-5">
+          <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40">Witness 01 · Digital</p>
+          <p class="serif text-[20px] mt-1.5">Digital Ring</p>
+          <p class="text-[13px] text-[#171717]/55 mt-1 leading-relaxed">Mint a unique NFT from your relationship.</p>
+          <p class="flex items-center gap-1 text-[13px] font-medium mt-3">Configure <i class="ph-light ph-arrow-right text-[15px]"></i></p>
+        </div>
+      </div>
+      <div class="shrink-0 w-[290px] card rounded-[28px] overflow-hidden" data-toast="Physical Ring · jewelry atelier opens soon" role="button">
+        <div class="h-[292px] overflow-hidden bg-[#F5EDE9]"><img src="assets/ring-box.jpg" alt="Physical Ring" class="w-full h-full object-cover"></div>
+        <div class="p-5">
+          <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40">Witness 02 · Physical</p>
+          <p class="serif text-[20px] mt-1.5">Physical Ring</p>
+          <p class="text-[13px] text-[#171717]/55 mt-1 leading-relaxed">Custom jewelry generated from your Ring.</p>
+          <p class="text-[13px] font-medium mt-3 text-[#171717]/45">Coming soon</p>
+        </div>
+      </div>
+      <div class="shrink-0 w-[290px] card rounded-[28px] overflow-hidden" data-toast="Memory Object · keepsake line opens soon" role="button">
+        <div class="h-[292px] overflow-hidden bg-[#F5EDE9]"><img src="assets/keepsake.jpg" alt="Memory Object" class="w-full h-full object-cover"></div>
+        <div class="p-5">
+          <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40">Witness 03 · Object</p>
+          <p class="serif text-[20px] mt-1.5">Memory Object</p>
+          <p class="text-[13px] text-[#171717]/55 mt-1 leading-relaxed">A tangible piece of your love story.</p>
+          <p class="text-[13px] font-medium mt-3 text-[#171717]/45">Coming soon</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center gap-1.5 mt-3">
+      <span class="w-[6px] h-[6px] rounded-full bg-[#E98F93]"></span>
+      <span class="w-[6px] h-[6px] rounded-full bg-[#171717]/15"></span>
+      <span class="w-[6px] h-[6px] rounded-full bg-[#171717]/15"></span>
+    </div>
+    <p class="absolute bottom-[56px] inset-x-0 text-center text-[10px] tracking-[0.14em] uppercase text-[#171717]/35">Generated from 127 days · 18 memories · 7 vows</p>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 19 · WITNESS DETAIL ============ -->
+<section class="scr" id="scr-witnessd">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="absolute inset-0 bg-[radial-gradient(110%_45%_at_50%_6%,rgba(233,143,147,0.13),rgba(255,249,247,0)_58%)]"></div>
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="relative flex items-center justify-between px-6 mt-2">
+      <button data-back class="w-[38px] h-[38px] rounded-full bg-white shadow border border-[#171717]/[0.06] flex items-center justify-center text-[17px]"><i class="ph-light ph-arrow-left"></i></button>
+      <p class="text-[10px] tracking-[0.22em] uppercase text-[#171717]/45">Digital Witness · #431</p>
+      <button class="w-[38px] h-[38px] rounded-full bg-white shadow border border-[#171717]/[0.06] flex items-center justify-center text-[17px] text-[#2E9E63]" data-proof="Witness Fingerprint"><i class="ph-light ph-seal-check"></i></button>
+    </div>
+    <div class="relative mx-auto mt-1 w-[390px] h-[232px] flex items-center justify-center">
+      <svg class="absolute w-[220px] h-[220px]" id="wd-orbit" viewBox="0 0 220 220">
+        <defs>
+          <linearGradient id="wd-trail" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#E98F93" stop-opacity="0"></stop>
+            <stop offset=".78" stop-color="#E98F93" stop-opacity="0"></stop>
+            <stop offset=".94" stop-color="#E98F93" stop-opacity=".5"></stop>
+            <stop offset="1" stop-color="#ffffff" stop-opacity=".9"></stop>
+          </linearGradient>
+        </defs>
+        <circle cx="110" cy="110" r="98" fill="none" stroke="#171717" stroke-opacity=".06"></circle>
+        <circle cx="110" cy="110" r="98" fill="none" stroke="url(#wd-trail)" stroke-width="1.3"></circle>
+      </svg>
+      <div class="relative w-[180px] h-[180px] [mask-image:radial-gradient(circle,#000_55%,transparent_72%)] ring-img" id="wd-ringimg">
+        <img src="assets/ring-hero.jpg" alt="Your Unique Ring" class="w-full h-full object-cover mix-blend-multiply">
+      </div>
+    </div>
+    <div class="text-center">
+      <p class="serif text-[23px]">Your Unique Ring</p>
+      <p class="text-[13px] text-[#171717]/50 mt-0.5">Generated from your relationship.</p>
+    </div>
+    <div class="px-6 mt-3">
+      <div class="flat divide-y divide-[#171717]/[0.06] px-4">
+        <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-heart text-[16px] text-[#E98F93]"></i>Days Together</span><span class="font-medium">127</span></div>
+        <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-images text-[16px] text-[#E98F93]"></i>Memories</span><span class="font-medium" data-b="memories">18</span></div>
+        <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-hand-heart text-[16px] text-[#E98F93]"></i>Vows</span><span class="font-medium" data-b="vows">7</span></div>
+        <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-vault text-[16px] text-[#E98F93]"></i>Bond</span><span class="font-medium"><span data-b="bond">260</span> BOT</span></div>
+        <div class="flex items-center justify-between py-2.5 text-[13px]"><span class="text-[#171717]/55 flex items-center gap-2"><i class="ph-light ph-map-pin text-[16px] text-[#E98F93]"></i>First meet</span><span class="font-medium">East Lake</span></div>
+      </div>
+    </div>
+    <div class="px-6 mt-3">
+      <p class="text-[10px] tracking-[0.2em] uppercase text-[#171717]/40 mb-2.5">Material</p>
+      <div class="flex items-center gap-4" id="mats">
+        <button class="mat on" data-mat="Rose Gold" style="background:linear-gradient(135deg,#F6D3C4,#C98877)"></button>
+        <button class="mat" data-mat="Silver" style="background:linear-gradient(135deg,#F0F0F2,#B9BCC4)"></button>
+        <button class="mat" data-mat="White Gold" style="background:linear-gradient(135deg,#FAF8F4,#D9D6CE)"></button>
+        <button class="mat" data-mat="Black Titanium" style="background:linear-gradient(135deg,#4A4A4C,#171717)"></button>
+        <p class="ml-auto text-[13px] font-medium" id="mat-label">Rose Gold</p>
+      </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[60px]">
+      <button class="pill pill-dark h-[52px]" id="mint-btn">Mint Digital Ring</button>
+      <p class="text-center text-[10px] tracking-[0.16em] uppercase text-[#171717]/35 mt-2">Mint fee 2.0 BOT · BOT Chain</p>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 20 · ME ============ -->
+<section class="scr" id="scr-me">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="px-6 mt-2 flex items-center justify-between">
+      <h1 class="serif text-[30px] leading-tight">Our Ring</h1>
+      <span class="text-[10px] tracking-[0.16em] uppercase text-[#171717]/35">Relation #1024 · BOT Chain</span>
+    </div>
+    <div class="absolute inset-x-0 top-[108px] bottom-[78px] overflow-y-auto px-6 pb-4" style="scrollbar-width:none">
+    <div class="mt-0">
+      <div class="card p-4 flex items-center gap-3.5">
+        <img src="assets/alice.jpg" alt="me" class="w-[52px] h-[52px] rounded-full object-cover">
+        <div class="flex-1 min-w-0">
+          <p class="text-[15px] font-medium" id="me-name">Luna</p>
+          <p class="text-[12px] text-[#171717]/45" id="me-meta">Shanghai · 20 – 26 · Serious relationship</p>
+          <p class="text-[11.5px] text-[#171717]/55 mt-1 flex items-center gap-1.5" id="me-wallet">
+            <i class="ph-light ph-wallet text-[13px] text-[#2E9E63]"></i><span class="truncate">0x…</span>
+          </p>
+        </div>
+        <button class="chip bg-[#171717]/[0.05] text-[#171717]/50 shrink-0" id="me-switch" data-toast="Wallet · tap Disconnect to switch">Switch</button>
+      </div>
+    </div>
+    <div class="mt-3">
+      <div class="card divide-y divide-[#171717]/[0.06] px-5">
+        <div class="flex items-center justify-between py-3.5">
+          <p class="text-[13px] text-[#171717]/50">Status</p>
+          <span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]" id="me-status"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>Active</span>
+        </div>
+        <div class="flex items-center justify-between py-3.5">
+          <p class="text-[13px] text-[#171717]/50">Created</p>
+          <p class="text-[13px] font-medium">Oct 7, 2026</p>
+        </div>
+        <div class="flex items-center justify-between py-3.5">
+          <p class="text-[13px] text-[#171717]/50">Participants</p>
+          <div class="flex items-center gap-2">
+            <div class="flex items-center -space-x-1.5">
+              <img src="assets/alice.jpg" class="w-[26px] h-[26px] rounded-full object-cover border-2 border-white" alt="Alice">
+              <img src="assets/sophie.jpg" class="w-[26px] h-[26px] rounded-full object-cover border-2 border-white" alt="Sophie">
+            </div>
+            <p class="text-[13px] font-medium" id="me-participants">Luna · Sophie</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <div class="flat divide-y divide-[#171717]/[0.06] px-4">
+        <div class="flex items-center gap-3 py-3.5" data-toast="Privacy · who can see your profile">
+          <i class="ph-light ph-shield-check text-[20px] text-[#171717]/55"></i>
+          <div class="flex-1"><p class="text-[14px] font-medium">Privacy</p><p class="text-[11px] text-[#171717]/45">Manage who can see your profile</p></div>
+          <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+        </div>
+        <div class="flex items-center gap-3 py-3.5" data-toast="Encrypted archive exported">
+          <i class="ph-light ph-download-simple text-[20px] text-[#171717]/55"></i>
+          <div class="flex-1"><p class="text-[14px] font-medium">Export Memories</p><p class="text-[11px] text-[#171717]/45">Download your encrypted archive</p></div>
+          <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+        </div>
+        <div class="flex items-center gap-3 py-3.5" data-proof="Proof History">
+          <i class="ph-light ph-seal-check text-[20px] text-[#171717]/55"></i>
+          <div class="flex-1"><p class="text-[14px] font-medium">Proof History</p><p class="text-[11px] text-[#171717]/45">View all on-chain records</p></div>
+          <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+        </div>
+        <div class="flex items-center gap-3 py-3.5" data-nav="scr-vault">
+          <i class="ph-light ph-lock-simple-open text-[20px] text-[#171717]/55"></i>
+          <div class="flex-1"><p class="text-[14px] font-medium">Bell Vault</p><p class="text-[11px] text-[#171717]/45">Encrypted for both of you</p></div>
+          <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+        </div>
+        <div class="flex items-center gap-3 py-3.5" data-nav="scr-witness">
+          <i class="ph-light ph-diamond text-[20px] text-[#171717]/55"></i>
+          <div class="flex-1"><p class="text-[14px] font-medium">Witnesses</p><p class="text-[11px] text-[#171717]/45">Digital &amp; physical witnesses</p></div>
+          <i class="ph-light ph-caret-right text-[15px] text-[#171717]/25"></i>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="w-full rounded-[20px] border border-[#E98F93]/35 bg-[#E98F93]/[0.06] p-4 flex items-center gap-3 text-left" data-nav="scr-ending">
+        <i class="ph-light ph-heart-break text-[20px] text-[#C0646A]"></i>
+        <div class="flex-1">
+          <p class="text-[14px] font-medium text-[#C0646A]">End Our Ring</p>
+          <p class="text-[11px] text-[#171717]/45">You will both be free to create a new Ring.</p>
+        </div>
+        <i class="ph-light ph-caret-right text-[15px] text-[#C0646A]/50"></i>
+      </button>
+    </div>
+    </div>
+    <div class="tabbar" data-tabroot>
+      <button class="tb" data-tab="scr-home"><i class="ph-light ph-heart"></i>Ring</button>
+      <button class="tb" data-tab="scr-story"><i class="ph-light ph-images"></i>Story</button>
+      <button class="tb" data-tab="scr-vows"><i class="ph-light ph-hand-heart"></i>Vow</button>
+      <button class="tb" data-tab="scr-bond"><i class="ph-light ph-vault"></i>Bond</button>
+      <button class="tb on" data-tab="scr-me"><i class="ph-light ph-user"></i>Me</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ 20b · ENDING ============ -->
+<section class="scr" id="scr-ending">
+  <div class="sans relative w-full h-full overflow-hidden bg-[#FFF9F7] text-[#171717]">
+    <div class="flex items-center justify-between px-8 pt-[14px] h-[50px] text-[15px] font-semibold">
+      <span>9:41</span>
+      <div class="flex items-center gap-[5px] text-[16px]"><i class="ph-light ph-cell-signal-high"></i><i class="ph-light ph-wifi-high"></i><i class="ph-light ph-battery-high"></i></div>
+    </div>
+    <div class="flex items-center justify-between px-6 mt-2">
+      <button data-back class="w-[38px] h-[38px] rounded-full bg-white shadow border border-[#171717]/[0.06] flex items-center justify-center text-[17px]"><i class="ph-light ph-arrow-left"></i></button>
+      <p class="text-[10px] tracking-[0.22em] uppercase text-[#171717]/45">End Our Ring</p>
+      <span class="w-[38px]"></span>
+    </div>
+    <div class="px-10 mt-5 text-center">
+      <p class="serif text-[22px] leading-[1.4]">Ending a Ring does not<br>erase its history.</p>
+      <p class="text-[12px] text-[#171717]/50 mt-2 leading-relaxed">An archived Ring turns matte grey —<br>the story stays yours, forever readable.</p>
+    </div>
+    <div class="px-6 mt-4">
+      <div class="card p-4 flex flex-col items-center">
+        <svg width="92" height="92" viewBox="0 0 120 120" class="ring-img">
+          <circle cx="60" cy="60" r="42" fill="none" stroke="#B9B3AE" stroke-width="6" opacity=".75"></circle>
+          <circle cx="60" cy="60" r="30" fill="none" stroke="#B9B3AE" stroke-width="1" opacity=".35"></circle>
+        </svg>
+        <p class="serif text-[15px] mt-1 text-[#171717]/55">Alice <span class="text-[#171717]/30">×</span> Sophie</p>
+        <span class="chip bg-[#171717]/[0.06] text-[#171717]/50 mt-1.5">Archived · never deleted</span>
+      </div>
+    </div>
+    <div class="px-6 mt-3">
+      <div class="flat divide-y divide-[#171717]/[0.06] px-4 text-[12.5px]">
+        <div class="flex items-center gap-2.5 py-2.5"><i class="ph-light ph-check-circle text-[16px] text-[#2E9E63]"></i><span>Both confirm → archived immediately</span></div>
+        <div class="flex items-center gap-2.5 py-2.5"><i class="ph-light ph-clock text-[16px] text-[#B8732F]"></i><span>No answer → ends quietly after 7 days</span></div>
+        <div class="flex items-center gap-2.5 py-2.5"><i class="ph-light ph-archive text-[16px] text-[#171717]/50"></i><span>Memories stay encrypted &amp; exportable</span></div>
+      </div>
+    </div>
+    <div class="absolute left-6 right-6 bottom-[92px] space-y-2">
+      <button class="pill h-[48px] bg-[#C0646A] text-white" id="end-request">Request End</button>
+      <button class="pill pill-line h-[46px]" data-back>Keep Our Ring</button>
+    </div>
+    <p class="absolute bottom-[62px] inset-x-0 text-center serif italic text-[13px] text-[#171717]/55">Some things end. That doesn’t mean they never existed.</p>
+    <div class="sheet-ov" id="end-ov"></div>
+    <div class="sheet" id="end-sheet">
+      <div class="grab"></div>
+      <p class="serif text-[20px]">Request End</p>
+      <p class="text-[12.5px] text-[#171717]/50 mt-1 leading-relaxed">Sophie will be asked to confirm. Until then the Ring stays Active.</p>
+      <button class="pill pill-dark mt-4 h-[50px]" id="end-sophie">Sophie confirms · Archive now</button>
+      <button class="h-[40px] w-full text-[13px] text-[#171717]/45 mt-1" id="end-cancel">Not yet</button>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</section>
+
+<!-- ============ GLOBAL: PROOF DRAWER ============ -->
+<div class="pdrawer" id="pdrawer">
+  <div class="ov" id="pd-ov"></div>
+  <div class="pc">
+    <div class="w-9 h-1 rounded-full bg-[#171717]/15 mx-auto"></div>
+    <div class="flex items-center justify-between mt-3.5">
+      <p class="serif text-[19px]">Proof</p>
+      <span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><i class="ph-light ph-seal-check text-[14px]"></i>Verified</span>
+    </div>
+    <div class="mt-1.5">
+      <div class="prow"><span class="k">Network</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>BOT Chain</span></div>
+      <div class="prow"><span class="k">Relation</span><span>#1024</span></div>
+      <div class="prow"><span class="k">Action</span><span id="pd-action">Vow Confirmed</span></div>
+      <div class="prow"><span class="k">Initiated by</span><span>Alice</span></div>
+      <div class="prow"><span class="k">Confirmed by</span><span>Sophie</span></div>
+      <div class="prow"><span class="k">Block</span><span id="pd-block">8,431,966</span></div>
+      <div class="prow"><span class="k">Timestamp</span><span>Oct 7, 2026 · 21:43</span></div>
+      <div class="prow"><span class="k">Tx</span><span>0xf392…91ab</span></div>
+    </div>
+    <button class="pill pill-line h-[46px] mt-2 gap-1.5" data-toast="Opening BOT Chain explorer…">View Explorer <i class="ph-light ph-arrow-up-right text-[14px]"></i></button>
+    <p class="text-[11px] text-[#171717]/40 text-center mt-2.5">One component · Story / Ring / Vow / Bond / Witness</p>
+  </div>
+</div>
+
+<!-- ============ GLOBAL: TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+</div><!-- /phone -->
+<div class="stage-note">
+  <span>Consensus Bell · 可点击 App 原型 · 从 Begin 开始走完整流程</span>
+  <button id="reset-demo">重置 Demo</button>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+<script src="chain-config.js"></script>
+<script src="chain.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

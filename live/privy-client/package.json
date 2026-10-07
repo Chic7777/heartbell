@@ -1,0 +1,17 @@
+{
+  "name": "consensus-bell-privy-client",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@privy-io/react-auth": "3.47.0",
+    "esbuild": "0.25.12",
+    "permissionless": "0.2.57",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "react-doctor": "0.9.17",
+    "react-grab": "0.1.37",
+    "react-scan": "0.5.7"
+  }
+}

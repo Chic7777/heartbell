@@ -1,76 +1,82 @@
-# 心动铃铛 · Heartbell
+# Consensus Bell
 
-**从一次心动，到共同写下的未来。**
+后端 v2 的实际实现、API、运行配置和主网接入条件见 [live/BACKEND_V2.md](live/BACKEND_V2.md)。
 
-Next.js + TypeScript 全链条恋爱产品演示：**相遇 → 了解 → 我们 → 相守** 四个阶段，A/B 双窗口独立演示，内置关系状态机、履约分算法、日记版本确认、演示点数账本与 V2 承诺登记合约。默认 preview 模式无需数据库或钱包即可启动。
+> Two signatures. One ring. A shared history.
+> 恋爱产品在上，协议在底层：链上只保存双方都无法否认的关系事实。
 
-## 启动
+**链**: BOT Chain 主网 · Chain ID **677**
 
-需要 Node.js 20.9+ 及 npm。
+---
 
-```bash
-npm ci
-npm run dev
-```
+## 一、项目介绍
 
-打开 http://localhost:3000 ，并排打开 A、B 两个窗口（约 420px 宽）。主流程：
-
-1. **相遇**：双方勾选成年声明 → 选临时特征 → 开启 10 分钟雷达 → 一方摇铃 → 对方回响 → 双方档案揭晓（回响前服务端不返回档案）。
-2. **了解**：查看对方交往意向与应用内状态；对方在「我的」中授权后可见**关系履约参考**（演示人物 B 预置 71 分虚构前史，A 无历史显示"暂无足够记录"）；联系方式独立双向授权；双方确认建立关系（已有关系时服务端拦截雷达与摇铃）。
-3. **我们**：共同封面、在一起天数、时间线；日记（标题 40 字/正文 3000 字/6 张演示图）私人草稿→发送→双方确认→可存证；修改生成新版本并重新确认；重要承诺（计分项限额、履约记录、豁免与申诉）；任一方可单方结束绑定。
-4. **相守**（恋爱保险概念演示 · 演示点数）：双方各投 100 点 → 24h 冷静期 → 365 天有效期 → 达成申请核验 → 演示台审核 → 7 天争议期 → 领取点数奖励或 99 朵玫瑰演示券；普通结束进入 7 天异议窗口后失效（投入进入不可流通的演示失效账户）；例外复核独立处理；退出关系不等待结算。
-
-演示台 http://localhost:3000/demo/admin （仅 APP_MODE=demo）：场景重置、虚拟业务时间推进、审核模拟（通过/补材料/不通过）、例外复核结论、链故障模拟。
-
-## 验证命令
-
-```bash
-npm run typecheck        # TypeScript 检查
-npm run build            # 生产构建
-npm run contracts:compile # 编译 V1/V2 合约（solc 0.8.37, EVM paris）
-npm run verify:demo      # 旧演示接口回归（需重启服务保持干净状态）
-npm run verify:v2        # V2 集成验证 102 项 + 合约本地 EVM 行为测试 26 项
-```
-
-`verify:v2` 覆盖：相遇门槛与隐私、授权（联系方式/履约摘要独立授权与撤销）、履约分（71/null/样本不足/覆盖率）、关系状态机（并发绑定拦截）、日记版本与双方确认、承诺履约与豁免、相守账本（冷静期退款/审核/幂等领取/失效/例外复核/审核中退出）、承诺协议独立复算（改一字/改一字节 salt 均不匹配）、存证故障恢复。合约测试在本地 EVM 真实执行编译产物，验证 writer 权限、零承诺、重复登记、暂停、轮换与两步管理员转移。
-
-## 目录结构
-
-| 位置 | 内容 |
+| 项 | 内容 |
 |---|---|
-| `src/components/journey/` | 四栏壳（app-shell）、相遇/了解/我们/相守页、我的抽屉、证据抽屉 |
-| `src/lib/domain/` | V2 领域类型、履约分（score.ts）、相守规则（plan-rules.ts）、关系状态机 |
-| `src/lib/services` → `src/lib/server/v2/services/` | meet/relationship/trust/diary/plan/anchor/admin/view 服务（服务端权限校验） |
-| `src/lib/repositories/` | 演示内存仓库 + fixtures（B 的 71 分虚构前史、奖励池、演示图片库） |
-| `src/lib/chain/commitment.ts` | V2 承诺协议（JCS 规范化 + SHA-256 + 独立 salt） |
-| `src/app/api/v2/` | V2 统一入口（REST 路径分发到服务层） |
-| `src/app/api/demo/` | 旧 V1 演示接口（迁移期保留，live 模式禁写） |
-| `contracts/HeartbellCommitmentRegistry.sol` | V2 承诺登记合约（只写随机化 commitment） |
-| `contracts/HeartbellMemories.sol` | 旧 V1 合约（保留兼容，公开双地址） |
-| `scripts/verify-v2.mjs`、`scripts/contract-check.mjs` | V2 集成与合约行为验证 |
-| `docs/` | API.md、WEB3.md、V2-IMPLEMENTATION.md（实现说明与验证记录） |
+| 项目名 | Consensus Bell |
+| 目标用户 | 将要开始、或正在走向"在一起"的人 |
+| 解决问题 | 一段关系从开始到结束，缺少双方都无法否认的记录 |
+| 核心功能 | 三层唯一性（唯一邀请 / 唯一 Ring / 誓言只有对方签名才生效）+ 关系状态机（Active → Ending → Archived，历史不删除）+ 共同时间轴（Vow / Bond）+ 铸造持有物（Witness） |
+| **比赛期间完成的工作** | 全部代码为比赛期间新写，无沿用：`ConsensusBell.sol`（11 个外部函数）、Foundry 测试与部署脚本、可交互前端（24 屏）。**认知复用声明**：「主动陪伴」的产品概念源自我们之前的 Mira 项目；多 Agent 协作经验源自 AgentCorp 项目——两者仅作为经验输入，未复用任何代码 |
 
-## 已实现与限制
+## 二、代码与运行说明
 
-- 四栏导航 + 头像进入「我的」；`?tab=meet|know|us|future` 保存位置；360/390/430px 无横向溢出（已实测）。
-- 履约分与相守点数是两套独立数据：分数不可充值/消费/兑换，点数投入/领取不影响分数。
-- 所有业务权限与状态迁移在服务端校验（viewer 仅是本地演示会话声明，正式环境需替换为可信会话）。
-- 内存存储，重启清空（P0 明确标注的本地演示）；刷新可恢复本次服务状态。
-- 上链：默认 preview 模式只保留本地承诺指纹，**不生成假交易哈希/假区块/伪浏览器链接**；真实链需配置 `CHAIN_MODE` + RPC + 合约地址 + writer 密钥（见 docs/WEB3.md，本轮未部署、未发送真实交易）。
-- 钱包连接保留（我的抽屉内），仅用于真实存证签名；ZK 验证器未配置时拒绝验证。
-- 模拟标识始终可见：位置、演示前史、审核台结论、玫瑰券（不可实际核销）。
+### 环境依赖
 
-## 运行模式
+- Node.js ≥ 20（前端本地服务）
+- Foundry（`forge` / `forge script`，安装：`curl -L https://foundry.paradigm.xyz | bash && foundryup`）
+- 浏览器（Chrome/Edge；钱包交互用 MetaMask 或内置演示钱包）
 
-```dotenv
-APP_MODE=demo|live                 # 默认 demo；live 禁用演示台与旧接口写入口
-CHAIN_MODE=preview|bot_testnet|bot_mainnet   # 默认 preview
-REWARD_MODE=demo|partner           # 默认 demo
-CLAIM_VERIFIER_MODE=demo|manual|provider    # 默认 demo
+### 启动步骤
+
+```bash
+# 1. 合约
+cd contracts
+cp .env.example .env          # 填入 BOT_RPC_URL 与已注资的 DEPLOYER_KEY
+forge install                  # 拉取 forge-std
+forge build                    # 编译
+forge test -vvv                # 全部测试
+
+# 2. 部署到 BOT Chain 主网 (677)
+forge script script/Deploy.s.sol --rpc-url bot --broadcast --slow -vvvv
+
+# 3. 前端
+cd ../ui
+python -m http.server 8765     # 或任意静态服务器
+# 打开 http://127.0.0.1:8765
 ```
 
-真实网络模式缺少 RPC/合约地址时明确报配置错误，不降级假成功。
+### 使用方法（双窗口演示）
 
-## 分工与规则
+1. **窗口 A（Alice）**：Begin → 连接钱包 A → 创建身份 → Choose Path「Find Someone」→ Discover → Ring → Send Invitation
+2. **窗口 B（Sophie）**：打开同一地址，连接钱包 B → 收到邀请 → Accept → Sign & Accept（双方签名，Ring 诞生）
+3. 窗口 A 发 Vow → 窗口 B Confirm（`vowCount` 只在此刻 +1）→ 双方 Deposit → 任一方 Request End → 对方 Confirm End → Archived → 各自 Withdraw
 
-见 `AGENTS.md`。从最新 main 创建小任务分支；不提交密钥；正式权限必须在服务端校验。详细实现状态、验证证据与待接入项见 `docs/V2-IMPLEMENTATION.md`。
+### 沿用组件来源
+
+- 合约：v2 的 RingSBT / BellPaymaster 使用固定版本 OpenZeppelin 与官方 ERC-4337 v0.7，版本、SHA 和许可证见 `contracts/DEPENDENCIES.md`；ConsensusBell 负责双签关系与 Bond 记账
+- 前端（CDN）：Tailwind CSS（cdn.tailwindcss.com）、Phosphor Icons 2.1.2、GSAP 3.x、Noto Serif SC / Inter（Google Fonts）
+
+## 三、部署补充材料（手册 5.3）
+
+| 项 | 链接 |
+|---|---|
+| 合约地址 | _部署后填写_ |
+| 区块浏览器 | `https://scan.botchain.ai/address/<合约地址>` |
+| 源码验证 | _部署后在 Explorer 验证并贴链接_ |
+| 交易记录（≥5 笔） | ① createInvitation ② acceptInvitation ③ proposeVow+confirmVow ④ deposit ×2 ⑤ requestEnd/confirmEnd |
+
+## 四、路线图
+
+Arcived 不等于消失 —— `Some things end. That doesn't mean they never existed.`
+
+- Ring SBT：不可转移的关系凭证（每端一枚、同 relationId）
+- Bell Vault：客户端加密（X25519 + AES-256-GCM）的私密记忆库，链上只有哈希
+- Witness：从关系指纹铸造数字/实体持有物
+
+## 五、红线自查
+
+- [ ] Chain ID 677 **主网**部署（非测试网）
+- [ ] ≥ 5 笔真实交易，均贴 Explorer 链接
+- [ ] Explorer 上源码可读（已验证）
+- [ ] 演示视频 3 分钟（每笔关键交易展开到 Explorer）

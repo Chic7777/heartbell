@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consensus Bell · UI 全集（20 屏 + 组件）</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<style>
+  :root{
+    --cream:#FFF9F7; --rose:#E98F93; --ink:#171717; --green:#4ECF8B; --green-text:#2E9E63;
+    --amber:#F2A65A; --amber-text:#B8732F; --rose-gold:#C98877; --blush:#E7B7A8;
+    --card-shadow:0 1px 2px rgba(23,23,23,.03),0 8px 24px rgba(23,23,23,.04);
+    --hairline:rgba(23,23,23,.06);
+  }
+  html{scroll-behavior:smooth}
+  body{background:#F2E9E4;font-family:Inter,'PingFang SC',system-ui,sans-serif;color:#171717;
+       background-image:radial-gradient(80% 40% at 50% 0%,rgba(233,143,147,.10),rgba(242,233,228,0) 60%);}
+  .serif{font-family:'Noto Serif SC',serif}
+  .gallery-top{max-width:1720px;margin:0 auto;padding:44px 40px 8px}
+  .gallery{max-width:1720px;margin:0 auto;display:flex;flex-wrap:wrap;gap:36px 28px;justify-content:center;padding:28px 32px 80px}
+  .board{zoom:var(--zoom,0.78)}
+  .board-label{display:flex;align-items:baseline;gap:10px;margin:0 4px 10px}
+  .board-label .en{font-size:13px;font-weight:600;letter-spacing:.01em}
+  .board-label .zh{font-size:12px;color:rgba(23,23,23,.45)}
+  .phone{width:390px;height:844px;border-radius:42px;overflow:hidden;position:relative;background:var(--cream);
+         border:1px solid rgba(23,23,23,.09);
+         box-shadow:0 2px 6px rgba(23,23,23,.05),0 30px 70px -18px rgba(23,23,23,.22);}
+  .screen{width:100%;height:100%;overflow:hidden;position:relative}
+  .board.flash .phone{outline:3px solid var(--rose);outline-offset:5px}
+  .zoom-ctl button{border:1px solid rgba(23,23,23,.14);border-radius:999px;padding:5px 14px;font-size:12px;color:rgba(23,23,23,.6);background:rgba(255,255,255,.6)}
+  .zoom-ctl button.on{background:#171717;color:#fff;border-color:#171717}
+  .zx{transition:outline-color .3s}
+  /* proof sheet shared */
+  .proofsheet .row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:12.5px;border-bottom:1px solid var(--hairline)}
+  .proofsheet .row:last-of-type{border-bottom:0}
+  .proofsheet .row .k{color:rgba(23,23,23,.45)}
+  /* tab bar */
+  .tabbar .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;letter-spacing:.02em;color:rgba(23,23,23,.35)}
+  .tabbar .tb.on{color:#171717}
+  .tabbar .tb i{font-size:22px}
+  /* generic hairline card */
+  .card{background:#fff;border-radius:24px;box-shadow:var(--card-shadow)}
+  .flat{border:1px solid var(--hairline);border-radius:20px;background:#fff}
+  .pill{height:54px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;width:100%}
+  .pill-dark{background:#171717;color:#fff}
+  .pill-line{border:1px solid rgba(23,23,17,.15)}
+  .chip{height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;font-size:12px}
+  [data-go]{cursor:pointer}
+</style>
+</head>
+<body>
+<header class="gallery-top">
+  <div class="flex items-end justify-between flex-wrap gap-6 border-b border-[#171717]/10 pb-8">
+    <div>
+      <p class="text-[12px] tracking-[0.28em] uppercase text-[#171717]/45">Consensus Bell · UI Full Set</p>
+      <h1 class="serif text-[46px] leading-[1.1] mt-3">Our Ring <span class="text-[#171717]/30">/</span> 我们的戒指</h1>
+      <p class="mt-3 text-[14px] text-[#171717]/55 max-w-[640px] leading-relaxed">
+        恋爱产品在上，协议在底层。极简 · 温暖 · 克制 · 一点奢侈品感 —— 全部 20 屏 + Proof Drawer 组件，iPhone 390×844。
+      </p>
+      <div class="flex gap-2 mt-4 flex-wrap">
+        <span class="chip bg-white border border-[#171717]/10 text-[#171717]/60">四色系统 · #FFF9F7 / #E98F93 / #171717 / #4ECF8B</span>
+        <span class="chip bg-white border border-[#171717]/10 text-[#171717]/60">Noto Serif SC × Inter</span>
+        <span class="chip bg-white border border-[#171717]/10 text-[#171717]/60">Emotion · Action · Proof</span>
+        <span class="chip bg-[#4ECF8B]/12 text-[#2E9E63]"><span class="w-1.5 h-1.5 rounded-full bg-[#4ECF8B]"></span>BOT Chain</span>
+      </div>
+    </div>
+    <div class="text-right">
+      <p class="text-[12px] text-[#171717]/45 mb-2">缩放</p>
+      <div class="zoom-ctl flex gap-2 justify-end">
+        <button data-zoom="0.6">60%</button>
+        <button data-zoom="0.78" class="on">78%</button>
+        <button data-zoom="1">100%</button>
+      </div>
+      <p class="text-[11px] text-[#171717]/40 mt-3 leading-5">点击任意主按钮可在页面间跳转<br>「View Proof」可展开链上证明抽屉</p>
+    </div>
+  </div>
+</header>
+<main class="gallery">
+<!-- APPEND -->
+</main>
+<footer class="max-w-[1720px] mx-auto px-10 pb-16">
+  <div class="border-t border-[#171717]/10 pt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div>
+      <p class="serif text-[19px]">Emotion Layer <span class="text-[#171717]/30">情感层</span></p>
+      <p class="text-[13px] text-[#171717]/55 mt-2 leading-relaxed">Ring、照片、Vow、Story、情绪文案 —— 用户每天看到的，永远是爱情本身。</p>
+    </div>
+    <div>
+      <p class="serif text-[19px]">Action Layer <span class="text-[#171717]/30">行动层</span></p>
+      <p class="text-[13px] text-[#171717]/55 mt-2 leading-relaxed">Invite · Accept · Confirm · Deposit · Mint —— 一个页面只有一个清晰的主按钮。</p>
+    </div>
+    <div>
+      <p class="serif text-[19px]">Proof Layer <span class="text-[#171717]/30">证明层</span></p>
+      <p class="text-[13px] text-[#171717]/55 mt-2 leading-relaxed">Block、Timestamp、Hash、Explorer —— 默认永远隐藏，只在「View Proof」时出现。不要让 Web3 看起来像 Web3。</p>
+    </div>
+  </div>
+  <p class="text-center text-[11px] tracking-[0.16em] uppercase text-[#171717]/35 mt-12">Consensus Bell · Design v2 · Built with Kombai + ZCode · 2026.10</p>
+</footer>
+</body>
+</html>
