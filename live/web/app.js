@@ -175,6 +175,7 @@ async function action(target){
   if(routeNames.includes(action)){navigate(action);return;}
   if(action==='help'){modal('从相遇，到共同生活',notice('通过邮箱或钱包创建账户，填写身份后可寻找共鸣。邀请与接受均由各自的钱包签名。记忆在本机加密，交易证明来自真实链上回执。')+btn('开始创建身份','identity'));return;}
   if(action==='wallet-info'){modal('Wallet & Smart Account',state.user?notice('邮箱签名钱包：'+escape(state.user)+'<br>智能账户：'+escape(state.chainAddress||state.user))+btn('查看链上记录','proofs','','light'):notice('连接后，邮箱签名钱包和智能账户会显示在这里。')+btn('连接钱包','login'));return;}
+  if(action==='copy-address'){const text=target.dataset.copy||'';if(!text)throw new Error('还没有可复制的账户地址。');await navigator.clipboard.writeText(text);toast('地址已复制：'+short(text));return;}
   if(action==='proof-detail'){const proof=state.proofs.find(p=>p.hash===target.dataset.hash);if(!proof)throw new Error('真实交易证明尚未加载。');modal('On-chain Proof',proofSheet(proof,state.config));return;}
   if(state.preview&&!['login','login-privy','login-injected','logout','close','discover','stitch-back','stitch-account','stitch-wallet'].includes(action)){toast('访客模式仅供浏览，此操作需要先连接钱包。');return;}
   switch(action){
