@@ -229,3 +229,5 @@ body[data-shell="gateway"] .demo-bar,body[data-shell="gateway"] #tabs{display:no
 .bell-jewelry-medallion{transition:transform .2s ease}
 .bell-jewelry-medallion.shaking{animation:bell-shake .85s ease-in-out}
 @keyframes bell-shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-9deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(4deg)}}
+.bell-chat-day{align-self:center;font-size:var(--size-11);color:var(--muted);background:var(--bell-blush);border-radius:var(--size-999);padding:var(--size-2) var(--size-12)}
+.story-genesis{border:1px solid rgba(46,158,99,.25);background:linear-gradient(135deg,#fff,rgba(78,207,139,.06))}
