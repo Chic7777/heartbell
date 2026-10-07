@@ -1,0 +1,12 @@
+node_modules/
+data/
+.env
+.env.*
+!.env.example
+!.env.*.example
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+*.log
+*.sqlite
+*.sqlite-*
