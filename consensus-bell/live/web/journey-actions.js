@@ -20,6 +20,8 @@ export function createJourneyActions({state,navigate,modal,toast,api,refresh,sav
       if(action==='journey-back'){navigate(target.dataset.route||'home');return true;}
       if(action==='identity-back'){const form=document.querySelector('[data-form="identity-step"]');if(form)state.identityDraft=updateIdentity(state.identityDraft,state.identityStep,Object.fromEntries(new FormData(form)));state.identityStep=Math.max(1,state.identityStep-1);navigate('identity');return true;}
       if(action==='identity-interest'){const draft=state.identityDraft||{...emptyProfile(),...state.profile},value=target.dataset.value;if(draft.interests.includes(value))draft.interests=draft.interests.filter(i=>i!==value);else{if(draft.interests.length>=8)throw new Error('最多选择八项兴趣。');draft.interests=[...draft.interests,value];}state.identityDraft=draft;return true;}
+      if(action==='story-search-clear'){state.storyQuery='';return true;}
+      if(action==='vow-filter'){if(!['all','confirmed','pending'].includes(target.dataset.value))throw new Error('未知誓言筛选');state.vowFilter=target.dataset.value;return true;}
       if(action==='story-filter'){state.storyFilter=target.dataset.value;return true;}
       if(action==='witness-tab'){if(!['digital','physical'].includes(target.dataset.value))throw new Error('未知见证类型');state.witnessTab=target.dataset.value;return true;}
       if(action==='witness-detail'){state.witnessKind=target.dataset.value;navigate('witness-detail');return true;}
@@ -50,6 +52,7 @@ export function createJourneyActions({state,navigate,modal,toast,api,refresh,sav
     },
     async form(form,data){
       const value=key=>String(data.get(key)||'').trim(),kind=form.dataset.form;
+      if(kind==='story-search'){state.storyQuery=value('query').slice(0,100);return true;}
       if(kind==='identity-step'){
         const step=state.identityStep||1,draft=updateIdentity(state.identityDraft||state.profile||emptyProfile(),step,{...Object.fromEntries(data),discoverable:data.has('discoverable')});state.identityDraft=draft;
         if(step<4){state.identityStep=step+1;navigate('identity');return true;}

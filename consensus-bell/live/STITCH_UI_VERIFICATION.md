@@ -10,8 +10,8 @@ Real data comes from the authenticated backend. Guest browsing does not load acc
 
 ## Verification
 
-- Production build passes. Full regression suite: **69 passed, 0 failed**.
-- Final real-browser capture: **138 screenshots**, widths **375, 768, 1280**; no script/page errors, image failures or horizontal overflow detected.
+- Production build passes. Full regression suite: **71 passed, 0 failed**.
+- Final real-browser capture: **149 screenshots**, widths **375, 768, 1280**; no script/page errors, image failures or horizontal overflow detected.
 - Two isolated real EIP-191 signed HTTP sessions exercised candidate detail → connection request → recipient acceptance. The same browser run granted an exact draft scope, edited the resulting own-profile draft and revoked the consent. Database checks confirmed accepted connection and revoked grant. No real-user messages or chain transactions were submitted by this UI QA run.
 - Gateway Lighthouse, three mobile and three desktop runs: median **100 performance / 100 accessibility / 100 best practices / 100 SEO** for both modes. Mobile performance range 99–100, best-practices range 96–100. These scores describe the gateway only, not all authenticated pages or third-party wallet dialogs.
 - Independent final screenshot/layout and design-system review reports are held in the local task evidence folder. QA fixture captures are visibly labeled and are not production seed data.
@@ -23,3 +23,9 @@ Echo requests and acceptance are real backend records. Chat currently provides a
 ## Build and run
 
 From `live/`: `npm install`, `npm run setup:privy`, `npm run build`, then `npm start`. Keep real configuration in untracked `.env`; never publish secrets, private keys, user databases or browser sessions. `/?preview=1#journey-index` exposes the complete visitor journey. Remote use requires the correct HTTPS origin and Privy configuration.
+
+## ZIP export refinement
+
+The later supplied Stitch ZIP contains 19 valid HTML screens, eight valid PNG screenshots, ten screenshot files containing only `<FIFE Image failed to fetch>`, and one complete design specification. HTML was read as design reference; browser-extension CSS, CDN dependencies, fake profiles, ZK claims, sample balances, immutable Echo proofs and mock-success scripts were not copied into the application.
+
+The export now drives the jewelry gateway medallion, path category labels and image scale, Echo profile quote and reasons, Story month/date cards and local search, numbered Vow cards with actual confirmed/pending filters, real Ring contribution summary, and supported radar filter panel. Desktop Witness artwork uses containment to preserve the entire ring. New search/filter controls only operate on already-authorized data and never issue transaction or profile writes. The unavailable Google jewelry URL returned sign-in HTML; the existing licensed local ring artwork is retained.

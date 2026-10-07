@@ -1,6 +1,6 @@
 import {radarView} from './radar.js';
 import {journeyView} from './journey.js';
-import {icon,avatar,settingRow,agentCard} from './components.js';
+import {icon,avatar,settingRow,agentCard,gatewayHero} from './components.js';
 import {communityView} from './community.js';
 import {settingsView} from './settings.js';
 import {chainIdentity} from './aa-action.js';
@@ -16,9 +16,9 @@ const statusLabel = {UNAVAILABLE:'链上状态尚未读取',NONE:'未建立关�
 export function view(state) {
   if(state.preview)state={...state,user:null,profile:state.previewProfile||null,relation:null,memories:[],proofs:[],candidates:[],connections:[],echoAddress:null,history:[],error:''};
   if(state.user||state.preview||state.previewOnly){
-    const extra=communityView(state)??settingsView(state,{escape,short,btn,head,input,notice,submit,ring,icon,avatar,settingRow,agentCard});
+    const extra=communityView(state)??settingsView(state,{escape,short,btn,head,input,notice,submit,ring,icon,avatar,settingRow,agentCard,gatewayHero});
     if(extra!==undefined)return (state.preview?notice('访客预览 · 尚未登录，不加载私人记录。'):'')+extra;
-    const optimized=journeyView(state,{escape,short,btn,head,input,notice,submit,ring,icon,avatar,settingRow,agentCard});
+    const optimized=journeyView(state,{escape,short,btn,head,input,notice,submit,ring,icon,avatar,settingRow,agentCard,gatewayHero});
     if(optimized!==undefined)return (state.preview?notice('访客预览 · 本页草稿未上传'):'')+optimized;
   }
   if(state.preview){
@@ -30,7 +30,7 @@ export function view(state) {
     return banner+view(previewState);
   }
   const {user,profile,relation,route,memories,proofs,candidates,config,error}=state;
-  if(!user)return `<div class="gateway"><p class="eyebrow">Consensus Bell</p><p class="gateway-sub">A shared space for two people</p>${ring('NONE')}${head('Forever begins<br>with one mutual yes.','Two signatures. One ring. A shared history.')}<div class="actions">${btn('Begin · 开始','login','','rose')}${btn('先逛逛 · 跳过钱包','preview','','light')}${notice('邮箱登录会创建真实嵌入式钱包，也可连接已有钱包。访客浏览不创建账号。')}</div></div>`;
+  if(!user)return `<div class="gateway"><span class="bell-gateway-tag">${icon('spark')} Sacred Agreement</span><h1 class="bell-gateway-title">Consensus Bell</h1><p class="gateway-sub">A shared space for two people</p>${gatewayHero()}<div class="bell-gateway-promise"><span class="pill">${icon('heart')} 两个独立的选择 · 一份共同的历史</span><h2>Forever begins with<br><em>one mutual yes.</em></h2><p>Every lifelong bond is an enduring chord struck in unison.</p></div><div class="actions">${btn('Ring Bell Together '+icon('bell'),'login','','rose')}${btn('先逛逛 · 跳过钱包','preview','','light')}<p class="small muted">邮箱登录或连接已有钱包，开启属于你的故事。</p></div></div>`;
   const top=`<div class="top"><span class="eyebrow">CONSENSUS BELL</span><span class="small muted">${state.previewOnly?'访客预览':escape(profile?.name||short(user))}</span></div>`;
   const banner=error?notice(escape(error)):'';
   const chainUser=chainIdentity(state),r=relation||{id:'0',status:'UNAVAILABLE'},peer=r.a?(r.a.toLowerCase()===chainUser.toLowerCase()?r.b:r.a):null;

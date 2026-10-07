@@ -11,7 +11,7 @@ async function walletSDK(){const sdk=await loadWalletSDK();({BrowserProvider,Con
 
 const state={user:null,profile:null,relation:null,route:'home',memories:[],proofs:[],candidates:[],radar:null,radarFilters:{city:'',intention:'',radius:0},radarError:'',radarScanning:false,radarExpanded:false,history:[],config:null,error:'',balance:'0',formatAmount:()=> '0'};
 state.preview=new URLSearchParams(location.search).get('preview')==='1';
-Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',witnessKind:'digital',material:'Rose Gold',witnessTab:'digital',witnessDesign:null});
+Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',storyQuery:'',vowFilter:'all',witnessKind:'digital',material:'Rose Gold',witnessTab:'digital',witnessDesign:null});
 const routeNames=['home','path','direct-bind','identity','discover','echo-results','echo-detail','echo-chat','invite-page','invitation-preview','waiting','acceptance','ceremony','story','vows','bond','vault','witness','witness-detail','witness-configurator','me','privacy','relationship-settings','archived','proofs','history','journey-index'];
 const requestedRoute=location.hash.slice(1);if(routeNames.includes(requestedRoute))state.route=requestedRoute;
 let provider,signer,privyBridge,privyAdapter,busy=false,epoch=0,radarRevision=0,refreshing=false,selectedArchive='0',focusBeforeDialog;
@@ -33,7 +33,7 @@ function progress(stage,values={}){state.transaction={...state.transaction,stage
 function modal(title,body){focusBeforeDialog=document.activeElement;dialog.innerHTML=`<div class="dialog-top"><h2 id="sheet-title">${title}</h2><button class="icon" data-action="close" aria-label="关闭">×</button></div>${body}`;dialog.showModal();}
 dialog.addEventListener('close',()=>{if(focusBeforeDialog?.isConnected)focusBeforeDialog.focus();});
 const journey=createJourneyActions({state,navigate,modal,toast,api,refresh,saveContent,fileMedia,memoryForm,helpers:{escape,short,btn,head,input,notice,submit}});
-function resetJourney(){Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',material:'Rose Gold',witnessKind:'digital',witnessTab:'digital',witnessDesign:null,echoAddress:null,chatDraft:'',connections:[],transaction:null,agentDraft:null,agentGrant:null,agentKind:null});}
+function resetJourney(){Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',storyQuery:'',vowFilter:'all',material:'Rose Gold',witnessKind:'digital',witnessTab:'digital',witnessDesign:null,echoAddress:null,chatDraft:'',connections:[],transaction:null,agentDraft:null,agentGrant:null,agentKind:null});}
 const peer=()=>encryptionPeer(state.relation,state.user,chainIdentity(state));
 const scope=()=>state.relation?.id&&state.relation.id!=='0'?state.relation.id:'personal';
 async function refresh(){
