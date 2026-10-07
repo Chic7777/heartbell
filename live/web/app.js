@@ -125,6 +125,22 @@ async function loginInjected(){
   listenMessages();
   const draft=carryIdentityDraft(state.profile,visitorDraft);if(draft){state.identityDraft=draft;state.identityStep=4;navigate('identity');toast('已连接钱包，请核对草稿再保存真实资料。');}
 }
+async function loginShake(){
+  await walletSDK();
+  const {Wallet}=window.ethers;
+  const wallet=Wallet.createRandom();
+  const operation=++epoch;
+  const challenge=await api('/api/auth/challenge',{method:'POST',body:{address:wallet.address}});
+  const signature=await wallet.signMessage(challenge.message);
+  if(operation!==epoch)throw new Error('注册状态已变化，请重试。');
+  const verified=await api('/api/auth/verify',{method:'POST',body:{id:challenge.id,signature}});
+  state.user=verified.address;state.chainAddress=verified.address;state.authProvider='local';state.preview=false;privyAdapter=null;resetJourney();
+  try{await initializeEncryption({account:state.user,api,config:state.config,signer:{signMessage:message=>wallet.signMessage(message)}});}catch(error){toast(error.message);}
+  try{localStorage.setItem('bell-local-account',JSON.stringify({address:wallet.address,privateKey:wallet.privateKey,createdAt:Date.now()}));}catch{}
+  await refresh();listenMessages();
+  navigate('identity');
+  toast('专属 Bell 账户已创建 '+short(state.user)+' · 密钥只保存在本机浏览器');
+}
 async function logout(){
   ++epoch;
   try{const outcomes=await Promise.allSettled([api('/api/logout',{method:'POST'}),state.authProvider==='privy'?privyBridge?.logout():Promise.resolve()]);const failure=outcomes.find(result=>result.status==='rejected');if(failure)throw failure.reason;}
@@ -134,6 +150,7 @@ async function transact(method,args=[],value){
   if(dialog.open)dialog.close();progress('preparing',{label:({createInvitation:'Ring Invitation',acceptInvitation:'Create Our Ring',proposePrivateVow:'Our Vow',confirmVow:'Confirm Our Vow',deposit:'Our Bond'}[method]||'共同确认'),hash:null,error:null,message:'正在核对真实链上状态与费用。'});
   try{
   if(!state.config.chainConfigured)throw new Error('先配置真实 BOT RPC 与已部署合约。当前没有可提交的链上目标。');
+  if(state.authProvider==='local')throw new Error('快速账户暂未接入链上操作；在 Me 页导出密钥导入钱包扩展后，即可参与链上共识。');
   if(state.authProvider==='privy'){
     if(!privyAdapter)throw new Error('请重新通过邮箱连接钱包，以确认当前签名器。');
     const operation=epoch,prepared=await api('/api/userops/prepare',{method:'POST',body:walletAction(method,args,value)});
@@ -205,7 +222,7 @@ async function action(target){
     case 'agent-consent-confirm':{const grant=await api('/api/consents',{method:'POST',body:{scope:'agent:'+state.agentKind,resourceId:'profile',expiresAt:Date.now()+600000}});state.agentGrant=grant.grant.id;const response=await api('/api/agent/jobs',{method:'POST',body:{skill:state.agentKind,resourceId:'profile',points:[]}});state.agentDraft=response.job.output;dialog.close();toast('规则模板草稿已生成，你可以修改后再决定使用。');break;}
     case 'agent-revoke':if(state.agentGrant)await api('/api/consents',{method:'DELETE',body:{id:state.agentGrant}});state.agentGrant=null;state.agentDraft=null;toast('已撤回这次草稿授权。');break;
     case 'agent-use':case 'agent-edit':{if(!state.agentDraft)throw new Error('草稿尚未生成。');if(state.agentKind==='vow-draft'){if(state.relation?.status!=='ACTIVE')throw new Error('先建立活动 Ring，才能提交真实誓言。');modal('Our Vow', '<form class="form" data-form="vow"><label for="agent-vow">核对并编辑誓言</label><textarea id="agent-vow" name="text" maxlength="200" required>'+escape(state.agentDraft.text.slice(0,200))+'</textarea>'+submit('由我核对并提出誓言')+'</form>');}else{memoryForm();document.querySelector('#f-title').value=state.agentDraft.title;document.querySelector('#f-text').value=state.agentDraft.text;}break;}
-    case 'login':login();break;case 'login-privy':await loginPrivy();break;case 'login-injected':await loginInjected();break;case 'logout':await logout();break;case 'close':dialog.close();break;case 'refresh':await refresh();break;
+    case 'shake-register':await loginShake();break;case 'login':login();break;case 'login-privy':await loginPrivy();break;case 'login-injected':await loginInjected();break;case 'logout':await logout();break;case 'close':dialog.close();break;case 'refresh':await refresh();break;
     case 'discover':await refresh();navigate('discover');break;
     case 'radar-expand':state.radarExpanded=!state.radarExpanded;break;
     case 'radar-detail':{state.echoAddress=target.dataset.address;navigate('echo-detail');break;}
@@ -237,6 +254,8 @@ async function action(target){
     case 'confirm-end-confirm':{const id=state.relation.id;await transact('confirmEnd');selectedArchive=id;await refresh();dialog.close();break;}
     case 'finalize-end':await transact('finalizeEnd',[state.relation.id]);break;
     case 'archive':selectedArchive=target.dataset.id;await refresh();navigate('home');break;
+    case 'export-local-key':{const raw=localStorage.getItem('bell-local-account');if(!raw)throw new Error('本机没有快速账户密钥。');modal('导出快速账户密钥',notice('这是该账户的唯一钥匙，任何拿到它的人都能控制账户。导出后请离线保存；不要在公共设备使用。')+btn('我已了解，导出密钥文件','export-local-key-file','','danger'));break;}
+    case 'export-local-key-file':{const raw=localStorage.getItem('bell-local-account');if(!raw)throw new Error('本机没有快速账户密钥。');const blob=new Blob([raw],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='bell-local-account.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);break;}
     case 'export':{const data=await api('/api/memories?scope='+scope()),blob=new Blob([JSON.stringify({encrypted:true,address:state.user,scope:scope(),memories:data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='consensus-bell-encrypted-archive.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);break;}
     default:throw new Error('未实现的操作不会伪装成成功。');
   }
@@ -256,6 +275,8 @@ async function run(operation){
   }
 }
 document.addEventListener('error',event=>{const image=event.target;if(!(image instanceof HTMLImageElement)||!image.hasAttribute('data-avatar-fallback'))return;const fallback=document.createElement('span');fallback.className='avatar-fallback';fallback.textContent=image.dataset.avatarFallback;image.closest('.has-photo')?.classList.remove('has-photo');image.replaceWith(fallback);},true);
+let lastShake=0;
+window.addEventListener('devicemotion',event=>{const g=event.accelerationIncludingGravity;if(!g)return;const mag=Math.abs(g.x||0)+Math.abs(g.y||0)+Math.abs(g.z||0);if(mag>32&&Date.now()-lastShake>4000&&!state.user&&!state.preview&&!busy){lastShake=Date.now();const medallion=document.querySelector('.bell-jewelry-medallion');if(medallion){medallion.classList.add('shaking');setTimeout(()=>medallion.classList.remove('shaking'),900);}run(()=>loginShake());}});
 document.addEventListener('click',e=>{const target=e.target.closest('[data-action]');if(target)run(()=>action(target));});
 window.addEventListener('hashchange',()=>{const route=location.hash.slice(1);if(routeNames.includes(route))navigate(route);});
 document.querySelector('#wallet').addEventListener('click',()=>run(()=>state.user?logout():login()));
