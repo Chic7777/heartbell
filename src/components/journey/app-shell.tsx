@@ -1,0 +1,144 @@
+"use client";
+// V2 应用壳：四栏（相遇/了解/我们/相守）+ 头像进入“我的”（计划书 7.2/7.3）。
+// A/B 双窗口状态独立；?tab= 保存当前栏目，返回和刷新恢复位置。
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { PhoneFrame, Button, ErrorBanner, BellIcon, BookIcon, ChatIcon, GiftIcon, HeartbellLogo } from "../ui";
+import { Modal } from "../modal";
+import { fetchState, friendlyError, postV2 } from "../../lib/client/v2-api";
+import type { V2StateView } from "../../lib/domain/view-dtos";
+import { MeetTab } from "./meet-tab";
+import { KnowTab } from "./know-tab";
+import { UsTab } from "./us-tab";
+import { FutureTab } from "./future-tab";
+import { MeDrawer } from "./me-drawer";
+
+export type TabId = "meet" | "know" | "us" | "future";
+const tabs: { id: TabId; text: string; Icon: () => React.JSX.Element }[] = [
+  { id: "meet", text: "相遇", Icon: BellIcon },
+  { id: "know", text: "了解", Icon: ChatIcon },
+  { id: "us", text: "我们", Icon: BookIcon },
+  { id: "future", text: "相守", Icon: GiftIcon },
+];
+const phrases = ["想认识你。", "想和你聊一聊。", "想一起喝杯咖啡。"];
+
+export function JourneyShell({ user }: { user: "a" | "b" }) {
+  const [view, setView] = useState<V2StateView | null>(null);
+  const [tab, setTab] = useState<TabId>("meet");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [meOpen, setMeOpen] = useState(false);
+  const [ringOpen, setRingOpen] = useState(false);
+  const [message, setMessage] = useState(phrases[0]);
+  const [postponed, setPostponed] = useState<string[]>([]);
+  const seenEcho = useRef(false);
+  const scroll = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const urlTab = new URLSearchParams(window.location.search).get("tab");
+    if (urlTab && ["meet", "know", "us", "future"].includes(urlTab)) setTab(urlTab as TabId);
+  }, []);
+  const switchTab = useCallback((next: TabId) => {
+    setTab(next);
+    const url = new URL(window.location.href);
+    url.searchParams.set("tab", next);
+    window.history.replaceState(null, "", url);
+  }, []);
+
+  const refresh = useCallback(async () => {
+    setView(await fetchState(user));
+  }, [user]);
+  useEffect(() => {
+    const poll = () => refresh().catch(e => setError(friendlyError(e)));
+    poll();
+    const timer = setInterval(poll, 1200);
+    return () => clearInterval(timer);
+  }, [refresh]);
+  // 回响成功后引导到“了解”
+  useEffect(() => {
+    if (view?.know.hasAnyEcho && !seenEcho.current) {
+      const anyAccepted = view.meet.bells.some(b => b.status === "accepted");
+      if (anyAccepted) { seenEcho.current = true; switchTab("know"); }
+    }
+  }, [view?.know.hasAnyEcho, view?.meet.bells, switchTab]);
+  useEffect(() => { scroll.current?.scrollTo({ top: 0 }); }, [tab]);
+
+  const act = useCallback(async (path: string, body: Record<string, unknown> = {}): Promise<boolean> => {
+    setBusy(true); setError("");
+    try {
+      await postV2(path, { ...body, viewer: user });
+      await refresh();
+      return true;
+    } catch (e) {
+      setError(friendlyError(e));
+      return false;
+    } finally { setBusy(false); }
+  }, [user, refresh]);
+
+  const incoming = useMemo(() =>
+    view?.meet.bells.find(b => b.status === "pending" && b.to === user && !postponed.includes(b.id)) ?? null,
+    [view?.meet.bells, user, postponed]);
+
+  const badges = {
+    meet: view?.meet.bells.some(b => b.status === "pending" && b.to === user) ?? false,
+    know: false,
+    us: view?.us.timeline.some(t => t.needsMyAction) || !!view?.us.incomingInvite || false,
+    future: false,
+  };
+  const needsAdult = view && !view.me.adultDeclared;
+  void needsAdult;
+
+  return <PhoneFrame>
+    <header className="app-header">
+      <div className="brand"><HeartbellLogo size={32} /><span>心动铃铛<small>{user === "a" ? "小铃" : "阿响"} · 演示窗口 {user.toUpperCase()}</small></span></div>
+      <button className="avatar-button" aria-label="打开我的" onClick={() => setMeOpen(true)}>
+        {view?.me.profile.avatar ?? "♡"}{badges.us && <i className="dot" />}
+      </button>
+    </header>
+    <div className="phone-scroll" ref={scroll}>
+      {error && <ErrorBanner message={error} onDismiss={() => setError("")} />}
+      {!view ? <div className="empty-state">正在连接演示服务……</div> : <>
+        {tab === "meet" && <MeetTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} onRing={() => setRingOpen(true)} onNeedAdult={() => setMeOpen(true)} />}
+        {tab === "know" && <KnowTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} />}
+        {tab === "us" && <UsTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} />}
+        {tab === "future" && <FutureTab view={view} user={user} busy={busy} act={act} switchTab={switchTab} />}
+      </>}
+      <details className="demo-details">
+        <summary>演示说明与边界</summary>
+        <p>位置、用户与演示前史均为模拟数据，不显示真实距离。履约分仅反映应用内已记录事项，不代表人格、现实单身或未来表现。相守计划为“恋爱保险概念演示 · 使用演示点数”，点数不可购买、转让或提现。默认 preview 存证模式未连接真实链：只保留本地承诺指纹，不生成模拟交易链接。</p>
+        <a href="/">返回演示入口</a> · <a href="/demo/admin" target="_blank" rel="noopener noreferrer">演示审核台</a>
+      </details>
+    </div>
+    <nav className="bottom-nav" aria-label="主要导航">
+      {tabs.map(({ id, text, Icon }) => (
+        <button key={id} aria-current={tab === id ? "page" : undefined} className={tab === id ? "active" : ""}
+          onClick={() => switchTab(id)}>
+          <span><Icon />{badges[id] && <i className="notification-dot" />}</span>{text}
+        </button>
+      ))}
+    </nav>
+
+    <MeDrawer open={meOpen} onClose={() => setMeOpen(false)} view={view} busy={busy} act={act} />
+
+    {ringOpen && view && <Modal title="轻轻摇一下" onClose={() => setRingOpen(false)}>
+      <div className="ring-bell-hero" aria-hidden="true"><span className="hb-ring" style={{ display: "inline-flex", width: 46, height: 46, color: "var(--brand)" }}><BellIcon /></span></div>
+      <p>{view.meet.nearby[0]?.traits.map(t => t.value).join(" · ")}</p>
+      {view.meet.nearby[0]?.bio && <p className="quote-sm">“{view.meet.nearby[0].bio}”</p>}
+      <p className="muted">选择一句你想对 TA 说的话。同轮次对同一个人只能摇一次。</p>
+      <div className="phrase-options">
+        {phrases.map(phrase => (
+          <button key={phrase} className={message === phrase ? "chosen" : ""} aria-pressed={message === phrase} onClick={() => setMessage(phrase)}>{phrase}</button>
+        ))}
+      </div>
+      <Button disabled={busy} onClick={async () => { if (await act("ring", { message })) setRingOpen(false); }}>送出这次心动</Button>
+    </Modal>}
+
+    {incoming && <Modal title="叮——有人想认识你" onClose={() => setPostponed(p => [...p, incoming.id])}>
+      <div className="reveal-avatar" aria-hidden="true"><span className="hb-ring" style={{ display: "inline-flex", width: 34, height: 34, color: "var(--brand)" }}><BellIcon /></span></div>
+      <p className="center" style={{ fontSize: 18, color: "var(--brand)" }}>“{incoming.message}”</p>
+      <p className="muted center">回响后，双方才会看到昵称、头像和兴趣。回响只代表愿意认识，不代表更多。</p>
+      <Button disabled={busy} onClick={() => act("respond", { bellId: incoming.id, status: "accepted" })}>我也想认识 TA</Button>
+      <Button className="secondary" disabled={busy} onClick={() => act("respond", { bellId: incoming.id, status: "dismissed" })}>让铃声消散</Button>
+      <button className="text-button" onClick={() => setPostponed(p => [...p, incoming.id])}>稍后决定</button>
+    </Modal>}
+  </PhoneFrame>;
+}

@@ -1,0 +1,346 @@
+"use client";
+// 我们（计划书第 5 节 / UI-08/09/10）：关系空间、日记版本、双方确认、承诺与归档。
+import { useCallback, useEffect, useState } from "react";
+import { Button, Card, Chip, EmptyState, BookIcon, GiftIcon, BellIcon, StageArt, anchorStatusChip, zhDate } from "../ui";
+import { Modal } from "../modal";
+import { getV2, postV2 } from "../../lib/client/v2-api";
+import { demoImageLibrary } from "../../lib/repositories/demo-images";
+import type { DiaryDetailDto, TimelineItemDto, V2StateView } from "../../lib/domain/view-dtos";
+import { EvidenceDrawer } from "./evidence-drawer";
+import type { TabId } from "./app-shell";
+
+type Filter = "all" | "diary" | "promise" | "milestone";
+// 日期默认值/上限跟随虚拟业务时钟（演示台推进时间后表单仍与服务端一致）。
+const todayOf = (virtualNow: number) => new Date(virtualNow).toISOString().slice(0, 10);
+
+export function UsTab({ view, user, busy, act, switchTab }: {
+  view: V2StateView; user: string; busy: boolean;
+  act(path: string, body?: Record<string, unknown>): Promise<boolean>;
+  switchTab(tab: TabId): void;
+}) {
+  const [filter, setFilter] = useState<Filter>("all");
+  const [creating, setCreating] = useState(false);
+  const [openDiary, setOpenDiary] = useState<string | null>(null);
+  const [openPromise, setOpenPromise] = useState<string | null>(null);
+  const [promiseCreating, setPromiseCreating] = useState(false);
+  const [endOpen, setEndOpen] = useState(false);
+  const [evidence, setEvidence] = useState<{ anchor: TimelineItemDto["anchor"]; business: string; recordId?: string } | null>(null);
+
+  const rel = view.us.relationship;
+  const timeline = view.us.timeline.filter(t =>
+    filter === "all" ? true : filter === "diary" ? t.type === "diary" : filter === "promise" ? t.type === "promise" : t.type === "milestone" || t.type === "auto-milestone");
+
+  if (!rel) {
+    return <>
+      <p className="eyebrow">一起记录</p>
+      <h1>我们</h1>
+      <StageArt stage="us" />
+      <EmptyState title="确认关系后，一起写下第一天" hint="共同日记、重要承诺和纪念时间线，都属于你们的关系空间。"
+        action={<Button onClick={() => switchTab("know")}>去了解并邀请关系</Button>} />
+      {view.us.archives.length > 0 && <Card className="tight">
+        <h3>我的旧归档</h3>
+        {view.us.archives.map(a => <div className="me-row" key={a.id}>
+          <span>{a.partnerLabel}</span>
+          <span className="muted">{a.timelineCount} 条记录 · 只读</span>
+        </div>)}
+        <p className="muted">归档仅本人可见，不能新增共同内容；已有承诺的结果确认与计划结算走独立接口。</p>
+      </Card>}
+    </>;
+  }
+
+  return <>
+    <div className="us-hero">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div>
+          <p className="eyebrow" style={{ marginTop: 0 }}>我们的空间</p>
+          <div className="us-days">{rel.status === "married" ? "已婚（应用内标记）" : `我们的第 ${view.us.daysTogether ?? 1} 天`}</div>
+          <p className="muted">{view.us.nextAnniversaryInDays !== null ? `下一个纪念日还有 ${view.us.nextAnniversaryInDays} 天` : ""}{rel.startedAt ? ` · 自 ${zhDate(rel.startedAt)}` : ""}</p>
+        </div>
+        <button className="text-button" onClick={() => setEndOpen(true)}>设置</button>
+      </div>
+      <div className="status-line">
+        <Chip tone="brand">{rel.status === "married" ? "应用内已婚标记（非婚姻核验）" : "在一起"}</Chip>
+        <Chip tone="outline">存证范围：双方确认后可选择</Chip>
+      </div>
+    </div>
+
+    <div className="filter-row">
+      {([["all", "全部"], ["diary", "日记"], ["promise", "承诺"], ["milestone", "纪念"]] as const).map(([id, label]) => (
+        <button key={id} className={filter === id ? "active" : ""} onClick={() => setFilter(id)}>{label}</button>
+      ))}
+    </div>
+
+    <div className="timeline">
+      {timeline.length === 0 && <EmptyState compact title="还没有记录" hint="第一天，从一页日记或一个小承诺开始。" />}
+      {timeline.map(item => <TimelineRow key={item.id} item={item} onOpen={() => {
+        if (item.type === "promise") setOpenPromise(item.id); else setOpenDiary(item.id);
+      }} onEvidence={() => setEvidence({ anchor: item.anchor, business: item.statusText, recordId: item.id })} />)}
+    </div>
+
+    <button className="diary-new" onClick={() => setCreating(true)}>＋ 写下今天</button>
+    <button className="text-button" style={{ margin: "10px auto", display: "block" }} onClick={() => setPromiseCreating(true)}>立下一个重要承诺</button>
+    <p className="muted center">计分承诺：已用 {view.us.scoringUsage.used}/{view.us.scoringUsage.max} 项（今日已新增 {view.us.scoringUsage.todayNew} 项）</p>
+
+    <DiaryEditor open={creating} onClose={() => setCreating(false)} busy={busy} act={act} virtualNow={view.modes.virtualNow} />
+    <DiaryDetail open={openDiary} onClose={() => setOpenDiary(null)} user={user} busy={busy} act={act} onEvidence={setEvidence} />
+    <PromiseFlow open={openPromise} onClose={() => setOpenPromise(null)} view={view} user={user} busy={busy} act={act} creating={promiseCreating} setCreating={setPromiseCreating} onEvidence={setEvidence} />
+
+    {endOpen && <Modal title="关系设置" onClose={() => setEndOpen(false)}>
+      <h3>关系详情</h3>
+      <div className="me-row"><b>成员</b><span>{rel.members.map(m => rel.nicknameOf?.[m] ?? m).join(" · ")}</span></div>
+      <div className="me-row"><b>状态</b><span>{rel.status === "married" ? "已婚（应用内标记）" : "在一起"}</span></div>
+      <div className="me-row"><b>开始于</b><span className="date">{zhDate(rel.startedAt)}</span></div>
+      <div className="me-row"><b>在一起</b><span className="points">{view.us.daysTogether ?? 1} 天</span></div>
+      <div className="me-row"><b>条款版本</b><span>{rel.termsVersion}</span></div>
+      <h3 style={{ marginTop: 16 }}>存证与证据</h3>
+      <p className="muted">关系建立/结束事件、双方确认的日记与承诺都会生成存证任务（preview 模式保留本地承诺指纹，无需钱包）。可在各记录的「查看证据」中核对与导出证据包。</p>
+      <Button className="secondary" onClick={() => { setEndOpen(false); switchTab("future"); }}>查看相守计划</Button>
+      <h3 style={{ marginTop: 16, color: "var(--danger)" }}>结束当前绑定</h3>
+      <p className="muted">结束只需你本人确认，立即生效：共享写入关闭、雷达限制解除、后续联系方式共享停止。不等待对方同意、不等待链上确认、不等待相守计划结算。已有争议或资金处理继续按独立流程进行。</p>
+      <p className="muted">进行中的相守计划会按规则独立处理（复核或进入失效等待），不会锁住这次退出。</p>
+      <Button className="danger" disabled={busy} onClick={async () => { if (await act("relationships/end", { relationshipId: rel.id })) setEndOpen(false); }}>结束当前绑定</Button>
+      <Button className="ghost" onClick={() => setEndOpen(false)}>继续这段关系</Button>
+    </Modal>}
+
+    <EvidenceDrawer open={!!evidence} onClose={() => setEvidence(null)} anchor={evidence?.anchor ?? null}
+      businessStatus={evidence?.business ?? ""} sourceLabel="双方确认（应用内）"
+      onExport={evidence?.recordId ? () => exportEvidence(evidence.recordId!, user) : undefined} />
+  </>;
+}
+
+function TimelineRow({ item, onOpen, onEvidence }: { item: TimelineItemDto; onOpen: () => void; onEvidence: () => void }) {
+  const anchor = item.anchor;
+  const icon = item.type === "promise" ? <GiftIcon /> : item.type === "diary" ? <BookIcon /> : <BellIcon />;
+  return <button className="timeline-item" onClick={onOpen}>
+    <span className="t-icon">{icon}</span>
+    <span className="t-main">
+      <strong>{item.title}</strong>
+      <small>{item.dateLabel} · {item.subtitle}</small>
+      <small className="muted">{item.confirmSummary}</small>
+    </span>
+    <span className="t-side">
+      {item.needsMyAction ? <Chip tone="warning">{item.statusText}</Chip> : <Chip>{item.statusText}</Chip>}
+      {anchor && <button className="text-button" style={{ fontSize: 10.5 }} onClick={e => { e.stopPropagation(); onEvidence(); }}>证据</button>}
+    </span>
+  </button>;
+}
+
+function DiaryEditor({ open, onClose, busy, act, virtualNow }: { open: boolean; onClose: () => void; busy: boolean; virtualNow: number; act: (p: string, b?: Record<string, unknown>) => Promise<boolean> }) {
+  const [kind, setKind] = useState<"diary" | "milestone">("diary");
+  const [date, setDate] = useState(todayOf(virtualNow));
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [asDraft, setAsDraft] = useState(false);
+  useEffect(() => { if (open) { setDate(todayOf(virtualNow)); setTitle(""); setBody(""); setPhotos([]); setAsDraft(false); setKind("diary"); } }, [open, virtualNow]);
+  if (!open) return null;
+  return <Modal title="写下今天" onClose={onClose}>
+    <div className="kind-options">
+      <button className={kind === "diary" ? "chosen" : ""} onClick={() => setKind("diary")}><span>📖</span>共同日记</button>
+      <button className={kind === "milestone" ? "chosen" : ""} onClick={() => setKind("milestone")}><span>🎀</span>纪念节点</button>
+    </div>
+    <label className="field-label" htmlFor="diary-date">这一天发生在</label>
+    <input id="diary-date" type="date" value={date} max={todayOf(virtualNow)} onChange={e => setDate(e.target.value)} />
+    <label className="field-label" htmlFor="diary-title">标题（40 字内）</label>
+    <input id="diary-title" maxLength={40} value={title} placeholder="例如：一起等了一场雨" onChange={e => setTitle(e.target.value)} />
+    <label className="field-label" htmlFor="diary-body">正文（3000 字内）</label>
+    <textarea id="diary-body" maxLength={3000} rows={5} value={body} placeholder="当时的心情、地点，或只有你们懂的话。" onChange={e => setBody(e.target.value)} />
+    <label className="field-label">演示图片（可选，最多 6 张 · 本地演示库）</label>
+    <div className="photo-picker">
+      {demoImageLibrary.map(img => (
+        <button key={img.id} className={photos.includes(img.id) ? "chosen" : ""} aria-pressed={photos.includes(img.id)}
+          onClick={() => setPhotos(photos.includes(img.id) ? photos.filter(p => p !== img.id) : photos.length >= 6 ? photos : [...photos, img.id])}>
+          {img.name}
+        </button>
+      ))}
+    </div>
+    <label className="checkbox"><input type="checkbox" checked={asDraft} onChange={e => setAsDraft(e.target.checked)} />先存为私人草稿（仅你可见，不通知对方、不存证）</label>
+    <Button disabled={busy || !date || !title.trim() || !body.trim()} onClick={async () => {
+      if (await act("diaries", { kind, date, title, body, attachmentIds: photos, visibility: asDraft ? "draft" : "shared" })) onClose();
+    }}>{busy ? "保存中…" : asDraft ? "保存草稿" : "发给 TA 确认"}</Button>
+  </Modal>;
+}
+
+function DiaryDetail({ open, onClose, user, busy, act, onEvidence }: {
+  open: string | null; onClose: () => void; user: string; busy: boolean;
+  act(path: string, body?: Record<string, unknown>): Promise<boolean>;
+  onEvidence(e: { anchor: TimelineItemDto["anchor"]; business: string; recordId?: string }): void;
+}) {
+  const [detail, setDetail] = useState<DiaryDetailDto | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [returnNote, setReturnNote] = useState("");
+  const load = useCallback(async (id: string) => {
+    try { setDetail(await getV2<DiaryDetailDto>(`diaries/detail?id=${id}&viewer=${user}`)); }
+    catch { setDetail(null); }
+  }, [user]);
+  useEffect(() => { if (open) { load(open); setEditing(false); setReturnNote(""); } else setDetail(null); }, [open, load]);
+  if (!open || !detail) return null;
+  const version = detail.versions[detail.versions.length - 1];
+  const myConfirmed = !!version.confirmations[user];
+  const author = version.author === user ? "你" : "TA";
+  const anchorChip = anchorStatusChip(detail.anchor?.chainStatus);
+  return <Modal title={version.kind === "milestone" ? "纪念节点" : "这一页日记"} onClose={onClose}>
+    <div className="promise-card">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+        <div>
+          <h3>{version.title}</h3>
+          <p className="muted">{version.date} · 版本 {version.version} · {author}写下</p>
+        </div>
+        <span className={`stamp ${version.status === "confirmed" ? "confirmed" : "waiting"}`}>{version.status === "confirmed" ? "共同\n确认" : "待确认"}</span>
+      </div>
+      <p style={{ whiteSpace: "pre-wrap", marginTop: 8 }}>{version.body}</p>
+      {version.attachments.length > 0 && <div className="attachment-preview">{version.attachments.map(a => <span key={a.id}>🖼 {a.name}</span>)}</div>}
+      <p className="muted">{Object.keys(version.confirmations).length >= 2 ? "双方已确认这一版本" : myConfirmed ? "你已确认，等待 TA" : "等待你确认"}{detail.versions.length > 1 ? ` · 历史共 ${detail.versions.length} 版` : ""}</p>
+      {version.returnedNote && <p className="muted">退回备注：{version.returnedNote}</p>}
+    </div>
+    <div className="status-line">
+      <Chip tone={version.status === "confirmed" ? "success" : "warning"}>业务：{version.status === "confirmed" ? "双方已确认" : version.status === "awaiting" ? "等待确认" : version.status === "returned" ? "已退回" : version.status === "withdrawn" ? "已撤回" : "私人草稿"}</Chip>
+      {detail.anchor && <Chip tone={anchorChip.tone}>存证：{anchorChip.label}</Chip>}
+      <Chip tone="outline">来源：应用内记录</Chip>
+    </div>
+    {version.status === "awaiting" && !myConfirmed && version.author !== user && <>
+      <p className="muted">确认绑定的是版本 {version.version} 的内容；TA 之后任何修改都会生成新版本并重新确认。</p>
+      <Button disabled={busy} onClick={() => act("diaries/confirm", { diaryId: detail.id })}>确认这一版</Button>
+      <input aria-label="退回备注" placeholder="退回时可以留一句话（可选）" value={returnNote} maxLength={120} onChange={e => setReturnNote(e.target.value)} style={{ marginTop: 10 }} />
+      <Button className="secondary" disabled={busy} onClick={() => act("diaries/return", { diaryId: detail.id, note: returnNote })}>退回请 TA 修改</Button>
+    </>}
+    {version.status === "awaiting" && version.author === user && <>
+      <Button className="ghost" disabled={busy} onClick={() => act("diaries/withdraw", { diaryId: detail.id })}>撤回这一页（不再提交）</Button>
+    </>}
+    {version.status === "draft" && version.author === user && <>
+      <p className="muted">私人草稿仅你可见。发送后将等待 TA 确认。</p>
+      <Button disabled={busy} onClick={() => act("diaries/share", { diaryId: detail.id })}>发给 TA 确认</Button>
+    </>}
+    {editing ? <>
+      <label className="field-label" htmlFor="edit-title">修改标题</label>
+      <input id="edit-title" maxLength={40} value={title} onChange={e => setTitle(e.target.value)} />
+      <label className="field-label" htmlFor="edit-body">修改正文</label>
+      <textarea id="edit-body" maxLength={3000} rows={4} value={body} onChange={e => setBody(e.target.value)} />
+      <Button disabled={busy || !title.trim() || !body.trim()} onClick={async () => {
+        if (await act("diaries/version", { diaryId: detail.id, expectedVersion: detail.versions.length, date: version.date, title, body, attachmentIds: version.attachments.map(a => a.id), visibility: "shared" })) {
+          setEditing(false); await load(detail.id);
+        }
+      }}>生成新版本并重新确认</Button>
+      <Button className="ghost" onClick={() => setEditing(false)}>取消</Button>
+    </> : <Button className="secondary" onClick={() => { setEditing(true); setTitle(version.title); setBody(version.body); }}>修改内容（生成新版本）</Button>}
+    {version.status !== "confirmed" && !detail.anchor && <>
+      <Button disabled title="需要双方确认这一版本后才能存证">为这一版生成存证</Button>
+      <p className="muted center">需要双方确认这一版本后才能生成存证；当前状态：{version.status === "awaiting" ? (myConfirmed ? "等待 TA 确认" : "等待你确认") : version.status === "draft" ? "私人草稿" : "已退回/撤回"}。</p>
+    </>}
+    {version.status === "confirmed" && !detail.anchor && <>
+      <Button disabled={busy} onClick={() => act("diaries/anchor", { diaryId: detail.id })}>为这一版生成存证</Button>
+      <p className="muted center">preview 模式无需连接钱包：生成的是本地承诺指纹（可导出核验），不会发起链上交易。</p>
+    </>}
+    {detail.anchor && <Button className="ghost" onClick={() => onEvidence({ anchor: detail.anchor, business: "双方已确认的日记版本", recordId: detail.id })}>查看证据</Button>}
+    <p className="muted">这一版内容会留下可核验的指纹；原文与附件保存在应用里，哈希无法恢复丢失的内容，请及时导出备份。</p>
+  </Modal>;
+}
+
+function PromiseFlow({ open, onClose, view, user, busy, act, creating, setCreating, onEvidence }: {
+  open: string | null; onClose: () => void; view: V2StateView; user: string; busy: boolean;
+  act(path: string, body?: Record<string, unknown>): Promise<boolean>;
+  creating: boolean; setCreating(v: boolean): void;
+  onEvidence(e: { anchor: TimelineItemDto["anchor"]; business: string; recordId?: string }): void;
+}) {
+  const [content, setContent] = useState("");
+  const [dueAt, setDueAt] = useState("");
+  const [criteria, setCriteria] = useState("");
+  const [responsible, setResponsible] = useState<"me" | "both">("both");
+  const [scoring, setScoring] = useState(false);
+  const [evidenceNote, setEvidenceNote] = useState("");
+  const promise = view.us.promises.find(p => p.id === open) ?? null;
+  const defaultDueAt = () => {
+    const d = new Date(view.modes.virtualNow + 3 * 86_400_000);
+    return d.toISOString().slice(0, 10);
+  };
+  useEffect(() => { if (creating) { setContent(""); setDueAt(defaultDueAt()); setCriteria(""); setResponsible("both"); setScoring(false); } }, [creating]);
+
+  if (creating) return <Modal title="立下一个重要承诺" onClose={() => setCreating(false)}>
+    <label className="field-label" htmlFor="promise-content">承诺内容（4–80 字）</label>
+    <input id="promise-content" maxLength={80} value={content} placeholder="例如：每周留一个共同的晚上" onChange={e => setContent(e.target.value)} />
+    <label className="field-label" htmlFor="promise-due">截止日期</label>
+    <input id="promise-due" type="date" value={dueAt} min={todayOf(view.modes.virtualNow + 86_400_000)} onChange={e => setDueAt(e.target.value)} />
+    <label className="field-label" htmlFor="promise-criteria">验收方式（2–60 字）</label>
+    <input id="promise-criteria" maxLength={60} value={criteria} placeholder="例如：双方确认本次安排即可" onChange={e => setCriteria(e.target.value)} />
+    <div className="choice-list">
+      <button className={responsible === "both" ? "chosen" : ""} onClick={() => setResponsible("both")}>双方共同负责</button>
+      <button className={responsible === "me" ? "chosen" : ""} onClick={() => setResponsible("me")}>我负责（只考核我）</button>
+    </div>
+    <label className="checkbox"><input type="checkbox" checked={scoring} onChange={e => setScoring(e.target.checked)} />
+      双方同意此项计入履约参考（需在截止前至少 24 小时创建；每段关系最多 10 项）</label>
+    <p className="muted">限制人身选择或难以客观判定的承诺（如“永不分手”、亲密行为、密码/定位、借钱）会被拒绝。</p>
+    <Button disabled={busy || !content.trim() || !dueAt || !criteria.trim()} onClick={async () => {
+      if (await act("promises", { content, dueAt: Date.parse(`${dueAt}T12:00:00Z`), criteria, responsible, scoringOptIn: scoring })) setCreating(false);
+    }}>{busy ? "保存中…" : "提交承诺（等待 TA 确认）"}</Button>
+  </Modal>;
+
+  if (!open || !promise) return null;
+  const myResponsible = promise.responsibleUserIds.includes(user);
+  const other = promise.responsibleUserIds.find(uid => uid !== user);
+  const myResolution = promise.resolutions[user];
+  const otherResolution = other ? promise.resolutions[other] : undefined;
+  return <Modal title="重要承诺" onClose={onClose}>
+    <div className="promise-card">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+        <div>
+          <h3>{promise.content}</h3>
+          <p className="muted">截止 {zhDate(promise.dueAt)} · 验收：{promise.criteria}</p>
+          <p className="muted">责任人：{promise.responsibleUserIds.length > 1 ? "双方" : myResponsible ? "我" : "TA"}</p>
+        </div>
+        <span className={`stamp ${promise.status === "active" ? "confirmed" : "waiting"}`}>{promise.status === "active" ? "承诺\n生效" : "待确认"}</span>
+      </div>
+      <p className="muted">{promise.scoringOptIn ? "此项计入履约参考（双方事前同意）" : "浪漫约定，不计入履约分"}</p>
+    </div>
+    {promise.status === "proposed" && !promise.confirmations[user] && <>
+      <p className="muted">提出者单方面写下不代表你同意。确认后承诺生效。</p>
+      <Button disabled={busy} onClick={() => act("promises/confirm", { promiseId: promise.id, expectedRevision: promise.revision })}>确认承诺</Button>
+      <Button className="secondary" disabled={busy} onClick={() => act("promises/return", { promiseId: promise.id })}>退回</Button>
+    </>}
+    {promise.status === "active" && myResponsible && (!myResolution || (myResolution.result === "pending" && myResolution.confirmedBy.length === 0)) && <>
+      <label className="field-label" htmlFor="evidence-note">履约证据说明</label>
+      <input id="evidence-note" maxLength={120} value={evidenceNote} placeholder="例如：10 月 18 日晚一起做了饭（双方都在）" onChange={e => setEvidenceNote(e.target.value)} />
+      <Button disabled={busy || !evidenceNote.trim()} onClick={() => act("promises/resolutions", { promiseId: promise.id, result: "fulfilled", note: evidenceNote })}>记录本次完成（待 TA 确认证据）</Button>
+      <Button className="secondary" disabled={busy} onClick={() => act("promises/resolutions", { promiseId: promise.id, result: "unfulfilled" })}>确认未完成</Button>
+    </>}
+    {promise.status === "active" && myResponsible && myResolution?.result === "pending" && myResolution.confirmedBy.length > 0 && <>
+      <p className="muted">已提交证据，等待 TA 确认：“{myResolution.note}”</p>
+    </>}
+    {promise.status === "active" && otherResolution?.result === "pending" && otherResolution.confirmedBy.length > 0 && <>
+      <p className="muted">TA 提交了履约证据：“{otherResolution.note}”</p>
+      <Button disabled={busy} onClick={() => act("promises/resolutions/confirm", { promiseId: promise.id, subjectUserId: other, outcome: "fulfilled" })}>确认这份证据</Button>
+      <Button className="secondary" disabled={busy} onClick={() => act("promises/resolutions/confirm", { promiseId: promise.id, subjectUserId: other, outcome: "waived" })}>一起豁免这项承诺</Button>
+    </>}
+    {(["fulfilled", "unfulfilled"] as const).map(result => {
+      const entry = myResolution?.result === result ? myResolution : otherResolution?.result === result ? otherResolution : null;
+      if (!entry) return null;
+      const subject = myResolution?.result === result ? user : other;
+      return <Card className="tight" key={result}>
+        <div className="me-row"><b>{result === "fulfilled" ? "已完成" : "未完成"}</b>
+          <button className="text-button" disabled={busy} onClick={() => act("promises/resolutions/dispute", { promiseId: promise.id, subjectUserId: subject })}>申诉</button>
+        </div>
+        {entry.note && <p className="muted">证据：{entry.note}</p>}
+      </Card>;
+    })}
+    <p className="muted">单方申诉不会直接扣分：分数冻结为“申诉中”，由人工复核后更新摘要版本。</p>
+  </Modal>;
+}
+
+export async function exportEvidence(recordId: string, user: string): Promise<void> {
+  try {
+    const data = await getV2<unknown>(`export?recordId=${recordId}&viewer=${user}`);
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url; link.download = `heartbell-evidence-${recordId}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert(e instanceof Error ? e.message : "导出失败");
+  }
+}
+export async function retryAnchorTask(recordId: string, user: string): Promise<boolean> {
+  try { await postV2("anchors/retry", { viewer: user, recordId }); return true; }
+  catch { return false; }
+}
