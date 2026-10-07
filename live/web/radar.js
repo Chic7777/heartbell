@@ -1,6 +1,6 @@
 const escape = value => String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initial = candidate => escape(Array.from(candidate.name || '?')[0]);
-const face = candidate => candidate.avatarUrl && /^https:\/\//.test(candidate.avatarUrl) ? `<img class="bell-face" src="${escape(candidate.avatarUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : initial(candidate);
+const face = candidate => candidate.avatarUrl && /^(https:\/\/|\/assets\/)/.test(candidate.avatarUrl) ? `<img class="bell-face" src="${escape(candidate.avatarUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : initial(candidate);
 const proximity = candidate => candidate.distanceKm===null?'距离未知':candidate.distanceKm===0?'同一粗略区域':'区域估算约 '+candidate.distanceKm+' km';
 export function candidateDetail(candidate) {
   return `<div class="radar-detail"><div class="radar-avatar">${face(candidate)}</div><h2>${escape(candidate.name)}</h2><p>${escape([candidate.occupation,candidate.city||'未填写城市',candidate.age||'未填写年龄'].filter(Boolean).join(' · '))}</p><p>${escape(candidate.statement||'还没有自我介绍')}</p><div class="chips">${candidate.interests.map(i=>`<span class="pill">${escape(i)}</span>`).join('')}</div><div class="notice"><b>O 为什么推荐</b><p>${candidate.reasons.map(escape).join('<br>')}</p><p class="small muted">来自自填资料，匹配不代表身份核验或关系承诺。</p></div><p class="small muted">${escape(candidate.address)}</p><button class="btn" data-action="invite" data-address="${escape(candidate.address)}">发送 Ring 邀请</button></div>`;

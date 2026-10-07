@@ -159,9 +159,6 @@ body[data-shell="gateway"] .demo-bar,body[data-shell="gateway"] #tabs{display:no
 .bell-me-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--size-24) 0 var(--size-8)}
 .bell-me-avatars{position:relative;display:flex;align-items:flex-start;justify-content:center;margin-bottom:var(--size-20)}
 .bell-me-glow{position:absolute;top:50%;left:50%;width:var(--size-112);height:var(--size-112);transform:translate(-50%,-50%);border-radius:50%;background:rgba(217,140,149,.2);filter:blur(var(--size-20));pointer-events:none}
-.bell-me-avatars .bell-avatar{position:relative;z-index:1;width:var(--size-80);height:var(--size-80);font-size:var(--size-28);box-shadow:0 8px 24px rgba(217,140,149,.22);background:var(--surface-white,#fff)}
-.bell-me-avatars .bell-avatar + .bell-avatar{z-index:2;margin:var(--size-24) 0 0 calc(-1 * var(--size-24));width:var(--size-56);height:var(--size-56);font-size:var(--size-20)}
-.bell-me-avatars b{position:absolute;z-index:3;top:var(--size-4);right:calc(50% - var(--size-52));width:var(--size-20);height:var(--size-20);border-radius:50%;background:var(--bell-rose-gold,#C98877);color:var(--surface-white,#fff);font-size:var(--size-10);display:grid;place-items:center;font-style:normal}
 .bell-me-avatars em{position:absolute;z-index:3;bottom:calc(-1 * var(--size-10));left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:var(--size-4);background:var(--surface-white,#fff);box-shadow:0 2px 8px rgba(23,23,23,.06);border-radius:var(--size-999);padding:var(--size-4) var(--size-12);font-size:var(--size-11);font-style:normal;font-weight:500;white-space:nowrap}
 .bell-me-avatars em .bell-icon{width:var(--size-12);height:var(--size-12);color:var(--bell-rose)}
 .bell-me-hero h1{font:400 var(--size-32)/1.2 var(--serif);letter-spacing:-.02em;margin:var(--size-8) 0 0}
@@ -189,7 +186,6 @@ body[data-shell="gateway"] .demo-bar,body[data-shell="gateway"] #tabs{display:no
 .bell-me-signoff .line{width:var(--size-32);height:1px;background:var(--bell-blush)}
 .bell-me-signoff small{font-size:var(--size-11)}
 .bell-face{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
-.bell-me-avatars .bell-face{width:var(--size-80);height:var(--size-80);box-shadow:0 8px 24px rgba(217,140,149,.22)}
 .radar-avatar .bell-face,.bell-portrait .bell-face,.bell-profile-hero .bell-face,.bell-chat-header .bell-face{width:100%;height:100%;object-fit:cover}
 .bell-me-row{display:flex;align-items:center;gap:var(--size-12);width:100%;text-align:left;background:none;border:0;padding:var(--size-12);border-radius:var(--size-16);cursor:pointer;transition:background var(--bell-fast)}
 .bell-me-row:hover{background:var(--bell-blush)}
@@ -203,3 +199,9 @@ body[data-shell="gateway"] .demo-bar,body[data-shell="gateway"] #tabs{display:no
 .bell-me-pill{display:inline-flex;align-items:center;font-size:var(--size-11);font-weight:500;border-radius:var(--size-999);padding:var(--size-2) var(--size-10)}
 .bell-me-pill.blush{background:var(--bell-blush);color:var(--bell-deep-rose)}
 .bell-me-pill.ok{background:rgba(46,158,99,.14);color:var(--sage-deep,#2E9E63)}
+.bell-me-photo{position:relative;z-index:1;display:block;width:88px;height:88px;border-radius:50%;padding:var(--size-4);background:var(--surface-white,#fff);box-shadow:0 8px 24px rgba(217,140,149,.22)}
+.bell-me-photo .bell-face,.bell-me-photo .bell-avatar{width:100%;height:100%;border-radius:50%;font-size:var(--size-28)}
+.bell-me-partner{position:relative;z-index:2;margin:var(--size-28) 0 0 calc(-1 * var(--size-24));display:block;width:var(--size-60);height:var(--size-60);border-radius:50%;padding:var(--size-3);background:var(--surface-white,#fff);box-shadow:0 4px 16px rgba(23,23,23,.08)}
+.bell-me-partner .bell-avatar{width:100%;height:100%;border-radius:50%;font-size:var(--size-20)}
+.bell-me-partner b{position:absolute;z-index:3;top:calc(-1 * var(--size-4));right:calc(-1 * var(--size-4));width:var(--size-20);height:var(--size-20);border-radius:50%;background:var(--bell-rose-gold,#C98877);color:var(--surface-white,#fff);font-size:var(--size-10);display:grid;place-items:center;font-style:normal;box-shadow:0 1px 4px rgba(23,23,23,.12)}
+.bell-me-avatars{padding-bottom:var(--size-12)}

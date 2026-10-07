@@ -2,7 +2,7 @@ import {text as e,icon,avatar} from './components.js';
 import {interestChoices} from './onboarding.js';
 const action=(label,name,attrs='',cls='')=>`<button class="btn ${cls}" data-action="${name}" ${attrs}>${label}</button>`;
 const heading=(title,sub)=>`<header class="head"><h1>${title}</h1><p>${sub}</p></header>`;
-const face=(name,url)=>url&&/^https:\/\//.test(url)?`<img class="bell-face" src="${e(url)}" alt="${e(name)}" loading="lazy" referrerpolicy="no-referrer">`:avatar(name);
+const face=(name,url)=>url&&/^(https:\/\/|\/assets\/)/.test(url)?`<img class="bell-face" src="${e(url)}" alt="${e(name)}" loading="lazy" referrerpolicy="no-referrer">`:avatar(name);
 export function communityView(state){
   const candidate=state.candidates.find(c=>c.address===state.echoAddress),preview=state.preview||state.previewOnly;
   const back=action(icon('back')+' 共鸣雷达','discover','','light compact');
