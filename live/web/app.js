@@ -19,7 +19,9 @@ const PHASE_B_STATUS=['ACTIVE','ENDING','ARCHIVED'];
 const PHASE_B_ONLY=['vault','witness','witness-detail','witness-configurator','privacy','relationship-settings','archived','proofs','history'];
 const phaseB=()=>PHASE_B_STATUS.includes(state.relation?.status);
 const requestedRoute=location.hash.slice(1);if(routeNames.includes(requestedRoute))state.route=requestedRoute;
-let provider,signer,privyBridge,privyAdapter,busy=false,epoch=0,radarRevision=0,refreshing=false,selectedArchive='0',focusBeforeDialog;
+let provider,signer,privyBridge,privyAdapter,busy=false,epoch=0,radarRevision=0,refreshing=false,selectedArchive='0',focusBeforeDialog,localSigner=null;
+function localEntry(){try{const raw=localStorage.getItem('bell-local-account');return raw?JSON.parse(raw):null;}catch{return null;}}
+async function localSignerFor(){await walletSDK();const entry=localEntry();if(!entry)throw new Error('本机没有快速账户密钥，请重新注册或导入。');const {Wallet:W,JsonRpcProvider:J}=window.ethers;localSigner=new W(entry.privateKey,new J(state.config.rpc));return localSigner;}
 const app=document.querySelector('#app'),tabs=document.querySelector('#tabs'),dialog=document.querySelector('#sheet');
 export async function api(url,options={}){
   const response=await fetch(url,{credentials:'same-origin',...options,headers:{'Content-Type':'application/json',...options.headers},body:options.body?JSON.stringify(options.body):undefined});
@@ -141,6 +143,25 @@ async function loginShake(){
   navigate('identity');
   toast('专属 Bell 账户已创建 '+short(state.user)+' · 密钥只保存在本机浏览器');
 }
+async function loginImport(){
+  await walletSDK();
+  const {Wallet}=window.ethers;
+  const pk=state.importPk||'';
+  if(!/^0x[0-9a-fA-F]{64}$/.test(pk||''))throw new Error('私钥格式无效：0x 开头 64 位十六进制。');
+  const wallet=new Wallet(pk);
+  const operation=++epoch;
+  const challenge=await api('/api/auth/challenge',{method:'POST',body:{address:wallet.address}});
+  const signature=await wallet.signMessage(challenge.message);
+  if(operation!==epoch)throw new Error('注册状态已变化，请重试。');
+  const verified=await api('/api/auth/verify',{method:'POST',body:{id:challenge.id,signature}});
+  state.user=verified.address;state.chainAddress=verified.address;state.authProvider='local';state.preview=false;privyAdapter=null;resetJourney();
+  try{await initializeEncryption({account:state.user,api,config:state.config,signer:{signMessage:message=>wallet.signMessage(message)}});}catch(error){toast(error.message);}
+  try{localStorage.setItem('bell-local-account',JSON.stringify({address:wallet.address,privateKey:wallet.privateKey,createdAt:Date.now(),imported:true}));}catch{}
+  localSigner=wallet;
+  await refresh();listenMessages();
+  navigate('identity');
+  toast('已导入钱包 '+short(state.user)+' · 密钥保存在本机浏览器');
+}
 async function logout(){
   ++epoch;
   try{const outcomes=await Promise.allSettled([api('/api/logout',{method:'POST'}),state.authProvider==='privy'?privyBridge?.logout():Promise.resolve()]);const failure=outcomes.find(result=>result.status==='rejected');if(failure)throw failure.reason;}
@@ -150,7 +171,19 @@ async function transact(method,args=[],value){
   if(dialog.open)dialog.close();progress('preparing',{label:({createInvitation:'Ring Invitation',acceptInvitation:'Create Our Ring',proposePrivateVow:'Our Vow',confirmVow:'Confirm Our Vow',deposit:'Our Bond'}[method]||'共同确认'),hash:null,error:null,message:'正在核对真实链上状态与费用。'});
   try{
   if(!state.config.chainConfigured)throw new Error('先配置真实 BOT RPC 与已部署合约。当前没有可提交的链上目标。');
-  if(state.authProvider==='local')throw new Error('快速账户暂未接入链上操作；在 Me 页导出密钥导入钱包扩展后，即可参与链上共识。');
+  if(state.authProvider==='local'){
+    const localSigner=await localSignerFor();
+    progress('signature',{message:'快速账户直接签名，无需钱包扩展。'});
+    const bell=new Contract(state.config.contract,state.config.abi,localSigner);
+    const transaction=await bell[method](...args,...(value!==undefined?[{value}]:[]));
+    progress('submitted',{hash:transaction.hash,message:'已提交，等待真实交易回执。'});
+    toast('交易已提交，等待两次区块确认：'+short(transaction.hash));
+    const included=await transaction.wait(1);if(!included||included.status!==1)throw new Error('交易未成功执行。');
+    progress('included',{hash:included.hash,message:'已进入区块，等待第二次确认。'});
+    const receipt=await transaction.wait(2);if(!receipt||receipt.status!==1)throw new Error('交易没有成功，界面状态未修改。');
+    try{await api('/api/transactions',{method:'POST',body:{hash:receipt.hash}});}catch(error){toast('链上已确认，但记录同步失败：'+error.message);}
+    progress('confirmed',{hash:receipt.hash,message:'双方共同选择已由链上确认。'});selectedArchive='0';await refresh();toast('交易已由链上确认。');return;
+  }
   if(state.authProvider==='privy'){
     if(!privyAdapter)throw new Error('请重新通过邮箱连接钱包，以确认当前签名器。');
     const operation=epoch,prepared=await api('/api/userops/prepare',{method:'POST',body:walletAction(method,args,value)});
@@ -222,7 +255,8 @@ async function action(target){
     case 'agent-consent-confirm':{const grant=await api('/api/consents',{method:'POST',body:{scope:'agent:'+state.agentKind,resourceId:'profile',expiresAt:Date.now()+600000}});state.agentGrant=grant.grant.id;const response=await api('/api/agent/jobs',{method:'POST',body:{skill:state.agentKind,resourceId:'profile',points:[]}});state.agentDraft=response.job.output;dialog.close();toast('规则模板草稿已生成，你可以修改后再决定使用。');break;}
     case 'agent-revoke':if(state.agentGrant)await api('/api/consents',{method:'DELETE',body:{id:state.agentGrant}});state.agentGrant=null;state.agentDraft=null;toast('已撤回这次草稿授权。');break;
     case 'agent-use':case 'agent-edit':{if(!state.agentDraft)throw new Error('草稿尚未生成。');if(state.agentKind==='vow-draft'){if(state.relation?.status!=='ACTIVE')throw new Error('先建立活动 Ring，才能提交真实誓言。');modal('Our Vow', '<form class="form" data-form="vow"><label for="agent-vow">核对并编辑誓言</label><textarea id="agent-vow" name="text" maxlength="200" required>'+escape(state.agentDraft.text.slice(0,200))+'</textarea>'+submit('由我核对并提出誓言')+'</form>');}else{memoryForm();document.querySelector('#f-title').value=state.agentDraft.title;document.querySelector('#f-text').value=state.agentDraft.text;}break;}
-    case 'shake-register':await loginShake();break;case 'login':login();break;case 'login-privy':await loginPrivy();break;case 'login-injected':await loginInjected();break;case 'logout':await logout();break;case 'close':dialog.close();break;case 'refresh':await refresh();break;
+    case 'shake-register':await loginShake();break;
+case 'import-wallet':modal('导入已有钱包',`<form class="form" data-form="import-pk">${input('私钥（仅保存在本机浏览器）','importPk','','type="password" autocomplete="off" placeholder="0x…"')}${notice('私钥不会上传服务器；导入后即可参与雷达、连接与主网共识。请勿在公共设备使用。')}${submit('导入并登录')}</form>`);break;case 'login':login();break;case 'login-privy':await loginPrivy();break;case 'login-injected':await loginInjected();break;case 'logout':await logout();break;case 'close':dialog.close();break;case 'refresh':await refresh();break;
     case 'discover':await refresh();navigate('discover');break;
     case 'radar-expand':state.radarExpanded=!state.radarExpanded;break;
     case 'radar-detail':{state.echoAddress=target.dataset.address;navigate('echo-detail');break;}
@@ -244,6 +278,7 @@ async function action(target){
     case 'new-vow':if(state.relation?.status!=='ACTIVE')throw new Error('先建立 Active Ring，才可以提出誓言。');modal('Our Vow',`<form class="form" data-form="vow"><label for="f-vow">只有你们两人选择它，才成为誓言。</label><textarea id="f-vow" name="text" maxlength="200" required></textarea>${submit('加密正文并提出链上誓言')}</form>`);break;
     case 'confirm-vow':{const vow=state.relation.vows.find(v=>v.index===Number(target.dataset.index));const memory=state.memories.find(m=>m.body.hash?.toLowerCase()===vow?.hash.toLowerCase());const text=memory?.content?.text||vow?.text;if(!vow||!text||keccak256(toUtf8Bytes(text))!==vow.hash)throw new Error('无法核对正文与链上哈希，不会请求你确认未知内容。');await transact('confirmVow',[vow.index]);break;}
     case 'deposit':modal('Contribute to Our Bond',`<form class="form" data-form="deposit"><div class="deposit-quick" aria-label="快捷金额">${[25,50,100].map(amount=>btn('+'+amount+' BOT','deposit-quick',`data-fill="${amount}" type="button"`,'light compact')).join('')}</div>${input('存入 BOT 数量','amount','','required type="number" min="0.000000000000000001" step="any" placeholder="0.0"')}${notice('快捷金额会累加到输入框。提交后由你的钱包签名，把真实 BOT 转入合约；出资记在你的钱包名下。')}${submit('核对并使用钱包存入')}</form>`);break;
+    case 'import-pk-form':{state.importPk=value('importPk');await loginImport();break;}
     case 'avatar-url-apply':{const url=value('avatarUrl');state.identityDraft={...(state.identityDraft||{}),avatarUrl:url};dialog.close();toast(url?'外部头像链接已记录，保存身份后生效。':'已清除外部链接。');if(state.route==='identity'){state.identityStep=1;render();}break;}
     case 'deposit-quick':{const form=target.closest('form'),el=form?.querySelector('[name="amount"]');if(el)el.value=String(Math.max(0,(Number(el.value)||0)+Number(target.dataset.fill)));break}
     case 'withdraw':modal('取回我的剩余贡献',notice('只有当前钱包在已归档 Ring 中的剩余贡献可以取回。')+btn('钱包确认提现','withdraw-confirm'));break;
