@@ -41,7 +41,7 @@ function navigate(route){
   if(dialog.open)dialog.close();state.route=route;history.replaceState(null,'','#'+route);render();app.scrollTop=0;app.focus({preventScroll:true});
 }
 function progress(stage,values={}){state.transaction={...state.transaction,stage,...values};const current=app.querySelector('.bell-transaction');if(current)current.outerHTML=transactionStepper(state.transaction);else app.querySelector('.page')?.insertAdjacentHTML('afterbegin',transactionStepper(state.transaction));}
-function modal(title,body){focusBeforeDialog=document.activeElement;dialog.innerHTML=`<div class="dialog-top"><h2 id="sheet-title">${title}</h2><button class="icon" data-action="close" aria-label="关闭">×</button></div>${body}`;dialog.showModal();}
+function modal(title,body){if(dialog.open)dialog.close();focusBeforeDialog=document.activeElement;dialog.innerHTML=`<div class="dialog-top"><h2 id="sheet-title">${title}</h2><button class="icon" data-action="close" aria-label="关闭">×</button></div>${body}`;dialog.showModal();}
 dialog.addEventListener('close',()=>{if(focusBeforeDialog?.isConnected)focusBeforeDialog.focus();});
 const journey=createJourneyActions({state,navigate,modal,toast,api,refresh,saveContent,fileMedia,memoryForm,helpers:{escape,short,btn,head,input,notice,submit}});
 function resetJourney(){Object.assign(state,{identityStep:1,identityDraft:null,previewProfile:null,previewMemories:[],storyFilter:'all',storyQuery:'',vowFilter:'all',material:'Rose Gold',witnessKind:'digital',witnessTab:'digital',witnessDesign:null,echoAddress:null,chatDraft:'',chatDraftPeer:null,chatMessages:[],chatConnection:null,ephemeralRoom:false,connections:[],transaction:null,agentDraft:null,agentGrant:null,agentKind:null});}
@@ -96,7 +96,7 @@ function listenMessages(){
     stream.onerror=()=>{stream.close();if(state.messageStream===stream)state.messageStream=null;};
   }catch{/* EventSource unavailable; the chat poll still delivers new messages */}
 }
-function login(){modal('开启你的真实账户',notice('邮箱登录会创建由你控制的嵌入式钱包。已有钱包也可直接签名登录。')+(state.config.privy?.appId?btn('邮箱登录 · Privy','login-privy'):'')+btn('连接已有钱包','login-injected','','light'));}
+function login(){modal('开启你的真实账户',notice('邮箱登录会创建由你控制的嵌入式钱包。已有钱包也可直接签名登录。')+(state.config.privy?.appId?btn('邮箱登录 · Privy','login-privy'):'')+btn('导入已有钱包私钥','import-wallet','','light')+btn('连接已有钱包','login-injected','','light'));}
 async function loginPrivy(){
   await walletSDK();
   const visitorDraft=state.preview?state.previewProfile:null,operation=++epoch;
@@ -137,11 +137,11 @@ async function loginShake(){
   if(operation!==epoch)throw new Error('注册状态已变化，请重试。');
   const verified=await api('/api/auth/verify',{method:'POST',body:{id:challenge.id,signature}});
   state.user=verified.address;state.chainAddress=verified.address;state.authProvider='local';state.preview=false;privyAdapter=null;resetJourney();
-  try{await initializeEncryption({account:state.user,api,config:state.config,signer:{signMessage:message=>wallet.signMessage(message)}});}catch(error){toast(error.message);}
   try{localStorage.setItem('bell-local-account',JSON.stringify({address:wallet.address,privateKey:wallet.privateKey,createdAt:Date.now()}));}catch{}
   await refresh();listenMessages();
   navigate('identity');
   toast('专属 Bell 账户已创建 '+short(state.user)+' · 密钥只保存在本机浏览器');
+  initializeEncryption({account:state.user,api,config:state.config,signer:{signMessage:message=>wallet.signMessage(message)}}).catch(error=>toast('加密功能待登记：'+error.message));
 }
 async function loginImport(){
   await walletSDK();
@@ -155,12 +155,12 @@ async function loginImport(){
   if(operation!==epoch)throw new Error('注册状态已变化，请重试。');
   const verified=await api('/api/auth/verify',{method:'POST',body:{id:challenge.id,signature}});
   state.user=verified.address;state.chainAddress=verified.address;state.authProvider='local';state.preview=false;privyAdapter=null;resetJourney();
-  try{await initializeEncryption({account:state.user,api,config:state.config,signer:{signMessage:message=>wallet.signMessage(message)}});}catch(error){toast(error.message);}
   try{localStorage.setItem('bell-local-account',JSON.stringify({address:wallet.address,privateKey:wallet.privateKey,createdAt:Date.now(),imported:true}));}catch{}
   localSigner=wallet;
   await refresh();listenMessages();
   navigate('identity');
   toast('已导入钱包 '+short(state.user)+' · 密钥保存在本机浏览器');
+  initializeEncryption({account:state.user,api,config:state.config,signer:{signMessage:message=>wallet.signMessage(message)}}).catch(error=>toast('加密功能待登记：'+error.message));
 }
 async function logout(){
   ++epoch;
@@ -256,7 +256,7 @@ async function action(target){
     case 'agent-revoke':if(state.agentGrant)await api('/api/consents',{method:'DELETE',body:{id:state.agentGrant}});state.agentGrant=null;state.agentDraft=null;toast('已撤回这次草稿授权。');break;
     case 'agent-use':case 'agent-edit':{if(!state.agentDraft)throw new Error('草稿尚未生成。');if(state.agentKind==='vow-draft'){if(state.relation?.status!=='ACTIVE')throw new Error('先建立活动 Ring，才能提交真实誓言。');modal('Our Vow', '<form class="form" data-form="vow"><label for="agent-vow">核对并编辑誓言</label><textarea id="agent-vow" name="text" maxlength="200" required>'+escape(state.agentDraft.text.slice(0,200))+'</textarea>'+submit('由我核对并提出誓言')+'</form>');}else{memoryForm();document.querySelector('#f-title').value=state.agentDraft.title;document.querySelector('#f-text').value=state.agentDraft.text;}break;}
     case 'shake-register':await loginShake();break;
-case 'import-wallet':modal('导入已有钱包',`<form class="form" data-form="import-pk">${input('私钥（仅保存在本机浏览器）','importPk','','type="password" autocomplete="off" placeholder="0x…"')}${notice('私钥不会上传服务器；导入后即可参与雷达、连接与主网共识。请勿在公共设备使用。')}${submit('导入并登录')}</form>`);break;case 'login':login();break;case 'login-privy':await loginPrivy();break;case 'login-injected':await loginInjected();break;case 'logout':await logout();break;case 'close':dialog.close();break;case 'refresh':await refresh();break;
+case 'import-wallet':modal('导入已有钱包',`<form class="form" data-form="import-pk-form">${input('私钥（仅保存在本机浏览器）','importPk','','type="password" autocomplete="off" placeholder="0x…"')}${notice('私钥不会上传服务器；导入后即可参与雷达、连接与主网共识。请勿在公共设备使用。')}${submit('导入并登录')}</form>`);break;case 'login':login();break;case 'login-privy':await loginPrivy();break;case 'login-injected':await loginInjected();break;case 'logout':await logout();break;case 'close':dialog.close();break;case 'refresh':await refresh();break;
     case 'discover':await refresh();navigate('discover');break;
     case 'radar-expand':state.radarExpanded=!state.radarExpanded;break;
     case 'radar-detail':{state.echoAddress=target.dataset.address;navigate('echo-detail');break;}
@@ -313,6 +313,24 @@ document.addEventListener('error',event=>{const image=event.target;if(!(image in
 let lastShake=0;
 window.addEventListener('devicemotion',event=>{const g=event.accelerationIncludingGravity;if(!g)return;const mag=Math.abs(g.x||0)+Math.abs(g.y||0)+Math.abs(g.z||0);if(mag>32&&Date.now()-lastShake>4000&&!state.user&&!state.preview&&!busy){lastShake=Date.now();const medallion=document.querySelector('.bell-jewelry-medallion');if(medallion){medallion.classList.add('shaking');setTimeout(()=>medallion.classList.remove('shaking'),900);}run(()=>loginShake());}});
 document.addEventListener('click',e=>{const target=e.target.closest('[data-action]');if(target)run(()=>action(target));});
+document.addEventListener('change',async e=>{
+  const input=e.target.closest('input[data-avatar-file]');
+  if(!input)return;
+  const file=input.files&&input.files[0];
+  if(!file)return;
+  try{
+    const bitmap=await createImageBitmap(file);
+    const side=Math.min(320,Math.max(bitmap.width,bitmap.height)),scale=side/Math.max(bitmap.width,bitmap.height);
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
+    canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);
+    const dataURL=canvas.toDataURL('image/jpeg',0.85);
+    const res=await api('/api/avatar',{method:'POST',body:{data:dataURL}});
+    state.identityDraft={...(state.identityDraft||{}),avatarUrl:res.url};
+    toast('头像已上传，保存身份后生效。');
+    if(state.route==='identity'){state.identityStep=1;render();}
+  }catch(error){toast('头像上传失败：'+error.message);}
+});
 window.addEventListener('hashchange',()=>{const route=location.hash.slice(1);if(routeNames.includes(route))navigate(route);});
 document.querySelector('#wallet').addEventListener('click',()=>run(()=>state.user?logout():login()));
 document.addEventListener('input',e=>{if(e.target.id==='chat-message'){state.chatDraft=e.target.value;state.chatDraftPeer=state.echoAddress;}});

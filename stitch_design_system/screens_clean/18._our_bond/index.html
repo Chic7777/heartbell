@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><title>Consensus Bell</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed-variant": "#6b392c", "tertiary-container": "#30b776", "primary-fixed": "#ffd9dc", "on-primary-fixed-variant": "#70343d", "on-primary-fixed": "#390914", "inverse-on-surface": "#f5efef", "secondary-fixed-dim": "#fdb5a3", "inverse-surface": "#323030", "on-surface-variant": "#524344", "sage-deep": "#2E9E63", "secondary-container": "#fdb5a3", "secondary": "#875041", "error": "#ba1a1a", "on-tertiary-fixed-variant": "#005230", "ink-primary": "#171717", "on-error": "#ffffff", "surface-variant": "#e7e1e1", "on-secondary-container": "#794436", "confirmed-green": "#4ECF8B", "blush-soft": "#E7B7A8", "primary-fixed-dim": "#ffb2ba", "tertiary": "#006d41", "tertiary-fixed": "#7cfbb2", "surface-white": "#FFFFFF", "surface": "#fef8f7", "surface-container-highest": "#e7e1e1", "pending-amber": "#F2A65A", "surface-bright": "#fef8f7", "secondary-fixed": "#ffdbd1", "inverse-primary": "#ffb2ba", "sage-muted": "#7B9D86", "on-surface": "#1d1b1b", "primary": "#8c4b54", "surface-container-low": "#f8f2f2", "outline-variant": "#d7c1c3", "tertiary-fixed-dim": "#5ede98", "rose-accent": "#E98F93", "background-cream": "#FFF9F7", "on-background": "#1d1b1b", "ink-secondary": "#252323", "outline": "#857374", "background": "#fef8f7", "surface-container": "#f2ecec", "blush-tint": "#F4DDE0", "on-error-container": "#93000a", "surface-tint": "#8c4b54", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "on-secondary-fixed": "#350f06", "on-tertiary-container": "#004125", "error-container": "#ffdad6", "on-primary-container": "#5d262f", "surface-container-high": "#ede7e6", "on-primary": "#ffffff", "rose-gold": "#C98877", "pending-dark": "#B8732F", "on-tertiary-fixed": "#002110", "on-tertiary": "#ffffff", "primary-container": "#d98c95", "surface-dim": "#ded9d8", "destructive-rose": "#C0646A" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-md": "1rem", "gutter": "1rem", "space-xl": "2rem", "margin": "1.5rem" }, "fontFamily": { "headline-sm": ["Noto Serif"], "body-sm": ["Inter"], "body-md": ["Inter"], "headline-lg-mobile": ["Noto Serif"], "headline-xl-mobile": ["Noto Serif"], "label-lg": ["Inter"], "headline-xl": ["Noto Serif"], "headline-lg": ["Noto Serif"], "label-sm": ["Inter"], "headline-md": ["Noto Serif"], "body-lg": ["Inter"], "label-md": ["Inter"] }, "fontSize": { "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-xl-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-xl": ["48px", { "lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #FFF9F7; } body { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../../ui/fonts.css">
+
+</head><body class="bg-background-cream text-ink-primary font-body-md antialiased min-h-screen flex flex-col"><header class="fixed top-0 inset-x-0 z-50 bg-background-cream/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(23,23,23,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-full flex items-center justify-center bg-blush-tint/40"><span class="material-symbols-outlined text-rose-gold text-[20px]">notifications_active</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-ink-primary tracking-tight leading-none">Consensus Bell</span><span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-confirmed-green inline-block animate-pulse"></span>Our Shared Life</span></div></div><div class="flex items-center gap-space-sm"><div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-white/80 shadow-[0_1px_4px_rgba(23,23,23,0.04)]"><span class="material-symbols-outlined text-sage-deep text-[14px]">verified</span><span class="font-label-sm text-label-sm text-ink-secondary">Synced</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-blush-tint/60" src="https://lh3.googleusercontent.com/aida/AEtjO1WUDvw8Vog_Q11MCAeQca-Jao7qtTktWUl4hpKPqm4hVoQyXkFA0lzVegjfsZScA9aXmyPj_0BJ7-AvvKUJka59kZh7MlTJ8ukkztH8eqKbSTbfeN5IeMV3CI6lNLJ8k9b004fXMS-avx1NamT3jUJMJT4pBdrwNgCK_Kcy971nY75IhC9_XKEumlf6reh9XGyU0EnNrPVQ1KOOqfPHOgUFoBhSI47v13sdAvzmyxsz6KM7dpveE0UsWQ"/></div></div></header><main class="flex-1 flex flex-col w-full max-w-[720px] mx-auto pt-16 pb-24 bg-background-cream"><div class="flex flex-col w-full">
+<!-- Interactive Script for Bond Tab Micro-interactions -->
+<script>
+    function toggleDepositModal(show) {
+      const modal = document.getElementById('depositModal');
+      if (!modal) return;
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+          modal.classList.remove('opacity-0');
+          modal.querySelector('.modal-card')?.classList.remove('translate-y-6', 'opacity-0');
+        }, 10);
+      } else {
+        modal.classList.add('opacity-0');
+        modal.querySelector('.modal-card')?.classList.add('translate-y-6', 'opacity-0');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        }, 200);
+      }
+    }
+
+    function selectQuickAmount(amt, btn) {
+      const input = document.getElementById('depositInput');
+      if (input) input.value = amt;
+      document.querySelectorAll('.quick-chip').forEach(el => {
+        el.classList.remove('bg-ink-primary', 'text-surface-white');
+        el.classList.add('bg-surface-container', 'text-ink-secondary');
+      });
+      btn.classList.remove('bg-surface-container', 'text-ink-secondary');
+      btn.classList.add('bg-ink-primary', 'text-surface-white');
+    }
+
+    function showProofSheet() {
+      const sheet = document.getElementById('proofSheet');
+      if (!sheet) return;
+      sheet.classList.remove('hidden');
+      sheet.classList.add('flex');
+      setTimeout(() => {
+        sheet.classList.remove('opacity-0');
+        sheet.querySelector('.sheet-content')?.classList.remove('translate-y-full');
+      }, 10);
+    }
+
+    function closeProofSheet() {
+      const sheet = document.getElementById('proofSheet');
+      if (!sheet) return;
+      sheet.classList.add('opacity-0');
+      sheet.querySelector('.sheet-content')?.classList.add('translate-y-full');
+      setTimeout(() => {
+        sheet.classList.add('hidden');
+        sheet.classList.remove('flex');
+      }, 250);
+    }
+  </script>
+<!-- Ambient Top Header Section -->
+<div class="px-margin pt-4 pb-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ink-primary tracking-tight">Our Bond</span>
+<button class="w-6 h-6 rounded-full bg-blush-tint/50 flex items-center justify-center text-primary hover:bg-blush-tint transition-all" onclick="showProofSheet()" title="View Bond Proof">
+<span class="material-symbols-outlined text-[15px]">verified_user</span>
+</button>
+</div>
+<!-- Shared Total Counter -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-white shadow-[0_1px_4px_rgba(23,23,23,0.04)]">
+<span class="material-symbols-outlined text-rose-gold text-[16px]">savings</span>
+<span class="font-label-sm text-label-sm text-ink-primary font-medium">860 BOT Total</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant font-light">Give a future plan some weight.</p>
+</div>
+<!-- Agent Suggestion Card -->
+<div class="px-margin py-2">
+<div class="p-4 rounded-DEFAULT bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] relative overflow-hidden">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed/40 flex items-center justify-center shrink-0 mt-0.5">
+<span class="text-primary font-serif text-[15px] select-none">✦</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider font-semibold">Resonance Agent</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/70">Synced 2h ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-secondary mt-1 leading-relaxed">
+            Both of you saved the Kyoto Ryokan story. Would you like to set an auto-deposit rule for your upcoming <span class="font-medium text-ink-primary">Japan Trip</span>?
+          </p>
+<div class="flex items-center gap-3 mt-3">
+<button class="px-3.5 py-1 rounded-full bg-ink-primary text-surface-white font-label-sm text-label-sm hover:opacity-90 active:scale-95 transition-all" onclick="toggleDepositModal(true)">
+              Auto-pledge 50 BOT
+            </button>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-ink-primary transition-colors">
+              Maybe later
+            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Goal Card: Japan Trip (Detailed Visual Showcase) -->
+<div class="px-margin py-2.5">
+<div class="relative rounded-lg bg-surface-white shadow-[0_4px_20px_rgba(23,23,23,0.05),0_12px_32px_rgba(217,140,149,0.14)] overflow-hidden">
+<!-- Background Visual Frame -->
+<div class="relative h-44 w-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Serene aesthetic photograph of romantic Kyoto bamboo grove in soft morning sunrise mist, muted warm cream tones, subtle rose gold reflections on wooden lanterns, film grain luxury travel editorial" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWLrzLcD4glD4qro1flF7s7PD5miVPl0j4CLYfk2McyYEacXLKdFdCqTftGl1Px9D60JJn7HaqNtYIBIjZk8LhcpnLh4IbDP1YTJ-uDnLeDvbn23mkXIcSKDurVqjZ_wTxgH_LMNXMA9QUgIkEbRyImUDQxFB4mriVTS7BkUYlqE6-3RP1sf8-BmQ10PuVw4-VcB-wY61O7m2Hyo7C6SY6R1NaZIwxohGtar2_HDc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-white via-surface-white/40 to-transparent"></div>
+<!-- Target Badge Pill -->
+<div class="absolute top-3.5 left-3.5 px-3 py-1 rounded-full bg-surface-white/90 backdrop-blur-md shadow-[0_2px_8px_rgba(23,23,23,0.06)] flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-confirmed-green"></span>
+<span class="font-label-sm text-label-sm text-ink-primary font-medium tracking-tight">Active Mutual Vow</span>
+</div>
+<div class="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-surface-white/90 backdrop-blur-md flex items-center justify-center text-ink-secondary shadow-sm">
+<span class="material-symbols-outlined text-[18px]">flight_takeoff</span>
+</div>
+</div>
+<!-- Hero Card Details -->
+<div class="p-5 pt-1">
+<div class="flex items-start justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-ink-primary leading-tight">Japan Trip</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">A journey to see more of the world together.</p>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-blush-tint/40 text-primary font-semibold">2026 Autumn</span>
+</div>
+<!-- Mutual Signers Avatars & Progress Metric -->
+<div class="flex items-center justify-between mt-4 pb-1">
+<div class="flex items-center">
+<!-- Alice Avatar -->
+<div class="relative group">
+<img class="w-9 h-9 rounded-full object-cover shadow-sm ring-2 ring-surface-white" data-alt="Warm intimate soft-lit candid portrait of Alice smiling gently against natural linen background, minimalist romantic editorial style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWEjDGnO7t-sAjKDq-AnGNPyw6EzY4LB_1tvd9iTRaqYm42S8vArwqwOa1k-C6KSRzrcyq8PbpNbWR93pNfs_YbjrWvRn6M3gYFZh8-SKSs-gHG_suLBNNKcUx_kmNOfCGLGGsIgu1iQ4sFzHn7s3Bfyzxs5IY__QQbLHrJTPUJcfl2oxuy1cczE8Y9cApGwaE3mg7q-OMp9zkp9JWQqRvYG29Tqhtn60KdQfRxsY"/>
+<span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-surface-white shadow-xs flex items-center justify-center text-[9px] font-bold text-rose-gold">A</span>
+</div>
+<!-- Sophie Avatar (Overlap) -->
+<div class="relative -ml-2.5 group">
+<img class="w-9 h-9 rounded-full object-cover shadow-sm ring-2 ring-surface-white" data-alt="Artistic warm natural film photo of Sophie with relaxed demeanor, soft warm sunlight, editorial portrait photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL2z3mI3ezSRW12_Bg7mQhv89ha5Hvc6q_lQUHP1KownN1PzDdfygw-YSKK8nnSC1WHCgtRl-n0LNhgHpaJsOJYlmkeMee9stYMPpvjDtk8M5IwlQab0E7IHEQU4hxe-6aihFo3J4ZAwnJPZ1MhShcXkXee-9p8NcfQPdRcpfBTVTOIYPjDDbR7bUKc1bf2J1UYOShETbBlFBm5Z9QSbgMpQmCgsG723HeUaPDBf0"/>
+<span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-surface-white shadow-xs flex items-center justify-center text-[9px] font-bold text-sage-deep">S</span>
+</div>
+<!-- Mutual Consensus Link Icon -->
+<div class="ml-2.5 flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px] text-rose-gold">all_inclusive</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dual Signers</span>
+</div>
+</div>
+<!-- Numerical Target -->
+<div class="text-right">
+<div class="flex items-baseline justify-end gap-1">
+<span class="font-headline-sm text-headline-sm text-ink-primary font-semibold">200</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-normal">/ 1,000 BOT</span>
+</div>
+<span class="font-label-sm text-label-sm text-confirmed-green font-medium">20% Reached</span>
+</div>
+</div>
+<!-- Progress Bar Meter -->
+<div class="w-full h-2 rounded-full bg-surface-container mt-3 overflow-hidden relative">
+<!-- Alice Contribution Portion (120 BOT = 12%) -->
+<div class="absolute left-0 top-0 bottom-0 bg-primary rounded-l-full" style="width: 12%;"></div>
+<!-- Sophie Contribution Portion (80 BOT = 8%) -->
+<div class="absolute left-[12%] top-0 bottom-0 bg-primary-container rounded-r-full" style="width: 8%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant/80 mt-1.5 px-0.5">
+<span>Alice: 120 BOT</span>
+<span>Sophie: 80 BOT</span>
+</div>
+<!-- Action Bar Inside Hero Card -->
+<div class="flex items-center gap-3 mt-5">
+<button class="flex-1 h-12 rounded-full bg-ink-primary text-surface-white flex items-center justify-center gap-2 font-label-md text-label-md shadow-md hover:opacity-95 active:scale-[0.98] transition-all" onclick="toggleDepositModal(true)">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+            Deposit Funds
+          </button>
+<button class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-ink-secondary hover:bg-blush-tint/50 active:scale-95 transition-all" onclick="showProofSheet()" title="View Vault Rules">
+<span class="material-symbols-outlined text-[20px]">lock_reset</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Upcoming Milestones Header -->
+<div class="px-margin pt-4 pb-2 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Upcoming Milestones</h3>
+<span class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant">2</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary flex items-center gap-0.5 font-medium hover:underline">
+<span>+ New Bond</span>
+</button>
+</div>
+<!-- Milestone Cards Stack -->
+<div class="px-margin flex flex-col gap-3 pb-3">
+<!-- Milestone 1: Anniversary -->
+<div class="w-full p-4 rounded-DEFAULT bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer">
+<div class="flex items-center gap-3.5 min-w-0 flex-1">
+<div class="w-12 h-12 rounded-DEFAULT bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[24px]">celebration</span>
+</div>
+<div class="min-w-0 flex-1 pr-2">
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-headline-sm text-ink-primary truncate">Anniversary Dinner</h4>
+<span class="w-1.5 h-1.5 rounded-full bg-pending-amber shrink-0"></span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">500 BOT · 32% contributed</p>
+<!-- Mini track -->
+<div class="w-36 h-1.5 rounded-full bg-surface-container mt-2 overflow-hidden">
+<div class="h-full bg-rose-gold rounded-full" style="width: 32%;"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-label-sm text-label-sm text-ink-secondary font-medium">160 BOT</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-[20px]">chevron_right</span>
+</div>
+</div>
+<!-- Milestone 2: Future Home -->
+<div class="w-full p-4 rounded-DEFAULT bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer">
+<div class="flex items-center gap-3.5 min-w-0 flex-1">
+<div class="w-12 h-12 rounded-DEFAULT bg-tertiary-container/15 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sage-deep text-[24px]">cottage</span>
+</div>
+<div class="min-w-0 flex-1 pr-2">
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-headline-sm text-ink-primary truncate">Future Home Fund</h4>
+<span class="w-1.5 h-1.5 rounded-full bg-sage-deep shrink-0"></span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">5,000 BOT · 12% contributed</p>
+<!-- Mini track -->
+<div class="w-36 h-1.5 rounded-full bg-surface-container mt-2 overflow-hidden">
+<div class="h-full bg-sage-deep rounded-full" style="width: 12%;"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-label-sm text-label-sm text-ink-secondary font-medium">600 BOT</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-[20px]">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Shared Vault State Card & Consensus Status -->
+<div class="px-margin py-2">
+<div class="p-4 rounded-DEFAULT bg-surface-container-low shadow-xs">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sage-deep text-[18px]">verified</span>
+<span class="font-label-sm text-label-sm text-ink-primary font-semibold uppercase tracking-wider">Multi-Sig State</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Threshold: 2 of 2</span>
+</div>
+<!-- State Stepper Representation -->
+<div class="flex items-center justify-between relative px-2 py-1">
+<!-- Connecting Line Behind -->
+<div class="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-[2px] bg-confirmed-green"></div>
+<!-- Node 1: Created -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-3.5 h-3.5 rounded-full bg-confirmed-green ring-4 ring-surface-container-low"></div>
+<span class="font-label-sm text-label-sm text-ink-primary mt-1 text-[10px]">Created</span>
+</div>
+<!-- Node 2: Locked -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-3.5 h-3.5 rounded-full bg-confirmed-green ring-4 ring-surface-container-low"></div>
+<span class="font-label-sm text-label-sm text-ink-primary mt-1 text-[10px]">Accumulating</span>
+</div>
+<!-- Node 3: Mutual Release -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-3.5 h-3.5 rounded-full bg-pending-amber ring-4 ring-surface-container-low animate-pulse"></div>
+<span class="font-label-sm text-label-sm text-pending-dark mt-1 text-[10px]">Dual Release</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Intimate Cryptographic Disclaimer -->
+<div class="px-margin pt-3 pb-6 text-center">
+<div class="inline-flex items-center justify-center gap-1.5 text-on-surface-variant/80">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<p class="font-body-sm text-body-sm">
+        Encrypted joint dream plans. Sovereign mutual release rules apply.
+      </p>
+</div>
+<div class="mt-1">
+<button class="font-label-sm text-label-sm text-primary/80 hover:text-primary transition-colors underline decoration-dotted underline-offset-2" onclick="showProofSheet()">
+        View smart contract agreement #0x82f...a14
+      </button>
+</div>
+</div>
+<!-- DEPOSIT MODAL SHEET (High Interactive Modal) -->
+<div class="hidden fixed inset-0 z-50 bg-ink-primary/30 backdrop-blur-sm items-end justify-center transition-opacity duration-200 opacity-0 pb-safe" id="depositModal">
+<div class="modal-card w-full max-w-[720px] bg-surface-white rounded-t-lg p-6 pb-8 shadow-[0_4px_12px_rgba(23,23,23,0.04),0_20px_48px_rgba(23,23,23,0.08)] transform translate-y-6 opacity-0 transition-all duration-200">
+<div class="w-12 h-1 bg-surface-variant rounded-full mx-auto mb-4"></div>
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Contribute to Japan Trip</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Shared goal target: 1,000 BOT</p>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-ink-primary" onclick="toggleDepositModal(false)">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Amount Input Container -->
+<div class="p-4 rounded-DEFAULT bg-surface-container-low mb-4">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 font-medium">Deposit Amount (BOT Tokens)</label>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ink-primary">🌸</span>
+<input class="bg-transparent font-headline-lg-mobile text-headline-lg-mobile text-ink-primary w-32 focus:outline-none" id="depositInput" type="number" value="50"/>
+</div>
+<span class="font-label-md text-label-md text-ink-secondary">BOT</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5 flex items-center gap-1">
+<span>Available balance:</span>
+<span class="font-medium text-ink-primary">420 BOT</span>
+</p>
+</div>
+<!-- Quick Amount Selector Chips -->
+<div class="flex gap-2 mb-6">
+<button class="quick-chip flex-1 py-2 rounded-full bg-surface-container text-ink-secondary font-label-sm text-label-sm text-center transition-all hover:bg-blush-tint/30" onclick="selectQuickAmount(25, this)">
+          +25 BOT
+        </button>
+<button class="quick-chip flex-1 py-2 rounded-full bg-ink-primary text-surface-white font-label-sm text-label-sm text-center transition-all" onclick="selectQuickAmount(50, this)">
+          +50 BOT
+        </button>
+<button class="quick-chip flex-1 py-2 rounded-full bg-surface-container text-ink-secondary font-label-sm text-label-sm text-center transition-all hover:bg-blush-tint/30" onclick="selectQuickAmount(100, this)">
+          +100 BOT
+        </button>
+<button class="quick-chip flex-1 py-2 rounded-full bg-surface-container text-ink-secondary font-label-sm text-label-sm text-center transition-all hover:bg-blush-tint/30" onclick="selectQuickAmount(200, this)">
+          Max
+        </button>
+</div>
+<!-- Affirmation Pledge Message -->
+<div class="p-3 rounded-DEFAULT bg-blush-tint/30 mb-6 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-rose-gold text-[18px] shrink-0 mt-0.5">favorite</span>
+<p class="font-body-sm text-body-sm text-ink-secondary italic">
+          "Each token is an immutable step toward Kyoto under the autumn leaves with Sophie."
+        </p>
+</div>
+<!-- Primary Confirm Button -->
+<button class="w-full h-14 rounded-full bg-ink-primary text-surface-white font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all" onclick="toggleDepositModal(false)">
+<span>Sign &amp; Transfer Deposit</span>
+<span class="material-symbols-outlined text-[18px]">east</span>
+</button>
+</div>
+</div>
+<!-- ON-CHAIN PROOF BOTTOM SHEET (Style Guidance Component 2) -->
+<div class="hidden fixed inset-0 z-50 bg-ink-primary/30 backdrop-blur-sm items-end justify-center transition-opacity duration-200 opacity-0 pb-safe" id="proofSheet">
+<div class="sheet-content w-full max-w-[720px] bg-surface-white rounded-t-lg p-6 pb-8 shadow-[0_4px_12px_rgba(23,23,23,0.04),0_20px_48px_rgba(23,23,23,0.08)] transform translate-y-full transition-transform duration-250">
+<div class="w-12 h-1 bg-surface-variant rounded-full mx-auto mb-4"></div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-ink-primary">Bond Vault Proof</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-sage-deep font-label-sm text-label-sm font-semibold">Confirmed</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant" onclick="closeProofSheet()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Network and Multi-Signer Visual -->
+<div class="p-4 rounded-DEFAULT bg-surface-container-low mb-4">
+<div class="flex items-center justify-between pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-rose-gold text-[18px]">hub</span>
+<span class="font-label-sm text-label-sm text-ink-secondary">Consensus Chain (BOT Mainnet)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Block #18,492,024</span>
+</div>
+<div class="flex items-center justify-around pt-2">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-primary font-semibold">Alice</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px]">0x4A...3f2A (Initiator)</span>
+</div>
+<span class="material-symbols-outlined text-rose-gold text-[20px]">link</span>
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-primary font-semibold">Sophie</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px]">0x8E...99B4 (Co-signer)</span>
+</div>
+</div>
+</div>
+<!-- Two-Column Cryptographic Metadata -->
+<div class="grid grid-cols-2 gap-3 mb-6">
+<div class="p-3 rounded-DEFAULT bg-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Vault Type</span>
+<span class="font-label-md text-label-md text-ink-primary font-semibold">Dual-Consensus SBT</span>
+</div>
+<div class="p-3 rounded-DEFAULT bg-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Release Condition</span>
+<span class="font-label-md text-label-md text-ink-primary font-semibold">2 of 2 Mutual Signs</span>
+</div>
+<div class="p-3 rounded-DEFAULT bg-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Contract Hash</span>
+<span class="font-label-md text-label-md text-ink-primary truncate font-mono text-[12px]">0x9b11...fa73</span>
+</div>
+<div class="p-3 rounded-DEFAULT bg-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Pledge Timestamp</span>
+<span class="font-label-md text-label-md text-ink-primary">Oct 7, 2026 UTC</span>
+</div>
+</div>
+<!-- Action: External Explorer Link -->
+<a class="w-full h-12 rounded-full bg-surface-container text-ink-primary font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-blush-tint/40 transition-all" href="#">
+<span>View on Sovereign Explorer</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface-white/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(23,23,23,0.04)]" data-active-classes="text-primary font-semibold [&amp;_.nav-dot]:opacity-100 [&amp;_.nav-dot]:scale-100"><div class="flex justify-around items-center h-16 max-w-[720px] mx-auto px-space-xs"><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="ring" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">favorite</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Ring</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="story" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">auto_stories</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Story</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="vow" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">history_edu</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Vow</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a aria-current="page" class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 transition-all duration-200 text-primary font-semibold [&amp;_.nav-dot]:opacity-100 [&amp;_.nav-dot]:scale-100" data-path="bond" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">savings</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Bond</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="me" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">person_heart</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Me</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a></div></nav></body></html>

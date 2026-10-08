@@ -1,0 +1,342 @@
+<!DOCTYPE html><html class="h-full" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>What do you love? - Preferences</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "pending-amber": "#F2A65A",
+            "tertiary": "#006d41",
+            "inverse-surface": "#323030",
+            "on-secondary": "#ffffff",
+            "rose-accent": "#E98F93",
+            "secondary": "#875041",
+            "sage-muted": "#7B9D86",
+            "surface-container": "#f2ecec",
+            "on-tertiary-fixed": "#002110",
+            "on-primary-container": "#5d262f",
+            "ink-primary": "#171717",
+            "on-primary": "#ffffff",
+            "on-surface": "#1d1b1b",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f8f2f2",
+            "error-container": "#ffdad6",
+            "on-secondary-fixed": "#350f06",
+            "primary-container": "#d98c95",
+            "inverse-on-surface": "#f5efef",
+            "on-primary-fixed-variant": "#70343d",
+            "surface-container-highest": "#e7e1e1",
+            "on-tertiary-fixed-variant": "#005230",
+            "surface-tint": "#8c4b54",
+            "on-error": "#ffffff",
+            "secondary-fixed": "#ffdbd1",
+            "background-cream": "#FFF9F7",
+            "surface-container-high": "#ede7e6",
+            "secondary-container": "#fdb5a3",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#d7c1c3",
+            "on-secondary-container": "#794436",
+            "rose-gold": "#C98877",
+            "tertiary-container": "#30b776",
+            "blush-soft": "#E7B7A8",
+            "primary-fixed": "#ffd9dc",
+            "inverse-primary": "#ffb2ba",
+            "confirmed-green": "#4ECF8B",
+            "on-primary-fixed": "#390914",
+            "surface-white": "#FFFFFF",
+            "destructive-rose": "#C0646A",
+            "secondary-fixed-dim": "#fdb5a3",
+            "error": "#ba1a1a",
+            "background": "#fef8f7",
+            "outline": "#857374",
+            "on-error-container": "#93000a",
+            "surface-dim": "#ded9d8",
+            "sage-deep": "#2E9E63",
+            "blush-tint": "#F4DDE0",
+            "on-background": "#1d1b1b",
+            "surface-bright": "#fef8f7",
+            "tertiary-fixed-dim": "#5ede98",
+            "surface": "#fef8f7",
+            "surface-variant": "#e7e1e1",
+            "primary-fixed-dim": "#ffb2ba",
+            "on-tertiary-container": "#004125",
+            "ink-secondary": "#252323",
+            "on-secondary-fixed-variant": "#6b392c",
+            "on-surface-variant": "#524344",
+            "pending-dark": "#B8732F",
+            "primary": "#8c4b54",
+            "tertiary-fixed": "#7cfbb2"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-lg-mobile": ["Noto Serif", "serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "headline-md": ["Noto Serif", "serif"],
+            "headline-xl-mobile": ["Noto Serif", "serif"],
+            "headline-lg": ["Noto Serif", "serif"],
+            "label-lg": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "headline-sm": ["Noto Serif", "serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "headline-xl": ["Noto Serif", "serif"],
+            "label-md": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    .card-active {
+      box-shadow: 0 0 0 2.5px #8c4b54, 0 10px 25px -5px rgba(217, 140, 149, 0.4);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../../ui/fonts.css">
+
+</head>
+<body class="bg-background text-on-surface antialiased min-h-full flex flex-col justify-between selection:bg-blush-soft selection:text-ink-primary">
+<!-- Main View Container (Focused Onboarding Flow) -->
+<main class="w-full max-w-md mx-auto min-h-screen flex flex-col justify-between px-5 pt-4 pb-8 relative bg-surface">
+<!-- Top Navigation Area -->
+<div>
+<header class="flex items-center justify-between py-3 mb-2"><div class="flex items-center gap-2.5"><button aria-label="Go back" class="flex size-9 items-center justify-center rounded-full bg-surface-container-low hover:bg-surface-container-high active:scale-95 transition-all text-on-surface" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[20px]">arrow_back</span></button><div class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span class="w-4 h-1.5 rounded-full bg-primary"></span><span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span><span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span></div></div><span class="font-label-sm uppercase tracking-wider text-[11px] font-semibold text-outline px-1">STEP 03 OF 05</span></header>
+<!-- Headings -->
+<section class="mt-4 mb-6">
+  <span class="font-label-sm uppercase tracking-widest text-[11px] font-semibold text-primary block mb-1.5">
+    INTERESTS &amp; RHYTHM
+  </span>
+  <h1 class="font-headline-lg-mobile text-ink-primary font-bold text-[30px] leading-tight tracking-tight">
+    What do you love?
+  </h1>
+  <p class="font-body-md text-on-surface-variant mt-1.5">
+    Choose a few things that inspire your everyday rhythm.
+  </p>
+</section>
+<!-- 3x3 Cards Grid -->
+<section class="grid grid-cols-3 gap-2.5 pb-36" id="interests-grid">
+<!-- 1. Music (Selected) -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="A vintage vinyl record spinning smoothly on an elegant analog turntable inside a sunlit Parisian apartment with soft warm lighting. Gentle dust motes float through the amber morning rays, reflecting warm wooden tones, muted rose gold touches, and classic bohemian interior decor with understated luxury." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqhUQTm38iwgRktYQCX2Pp_8nnU1rofSEy2k4K70ta6YVA_aXujXKOCaK30YtqgqHAo9sDzAs5rCEb_ElVoh_PF_ZvQjvEmttfdZMi-p-mq9HLOCQ3IHsvUuPzwDv4v46JvR6RQ-6nNjjfRtIE-4nRyj0O_QSCykuZHKdb86dsbQ7o6IWxukdUbj1geMiEZfBicUOqIm2x-lLb0KabFJnC6mXiG4JLss44YoxrB1M');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm check-indicator">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Music
+            </span>
+</div>
+</button>
+<!-- 2. Travel -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Majestic misty alpine mountain peaks bathed in golden dawn glow with a serene winding green valley and pines. The atmosphere is crisp and tranquil with high key natural morning sunlight casting creamy rose reflections on the peaks, creating an adventurous yet refined outdoor photographic aesthetic." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4WxTV7sD14R4F8QMR6O17KakQ47hqjdzcFo6HvYwqgf-AWI-JgYBsIPJYpQb0zB15vtW38ri3DPAfVSuFU3wzhkv710tvDfsvV4H81BDtix4utFTVzLITldh4eIRnvKlURVpY2CkA_-pPwekJ02y8kFP9nA8iVO7KqdsjUlOalHuMS9BPY2hh0u8HNE7jEOXeXzybEabSV0Ci6aNH3UGTzuuHez5CHtCzNuJ6xB8');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-black/30 backdrop-blur-sm border border-white/40 items-center justify-center text-on-primary check-indicator bg-primary">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Travel
+            </span>
+</div>
+</button>
+<!-- 3. Photography (Selected) -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="An authentic mechanical 35mm rangefinder vintage camera resting softly on an artisanal sandstone linen table cloth. Golden window rim light highlights delicate lens glass reflections, soft shadows, and subtle warm rose and cream accents creating an artful editorial look." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuAaltvBvLSZN-83OGawV-Zjv_d2g1YR3pS4C7yCN41jgdxOXpT9pRPGtRJjCF7u7_FKTEJW6nYnA33MbVWERXxjcB3IBYIhryGgvGiPSHQ2L9ueprL6-8M3wX-qfdwQF9o5jdIzg_EFqQI9hzMHgoRSHo_jgjnakd7kjAqa5RKrTjiqfyn99ilwXiyzF5J3iYlZI9UOrsn7Bc0f2XpAa9FEcH6dzjh5Aw0q5sTIJdo');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm check-indicator">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Photography
+            </span>
+</div>
+</button>
+<!-- 4. Coffee / Food (Selected) -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Intricate swan latte art resting in a handmade speckled ceramic blush pink cup placed beside a flaky golden croissant on a bright rustic cafe table. High key daylight floods the cafe setting, presenting a delicate cream and rose color palette full of warmth and taste." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuBNBRhCGqPfZTvwRyX6QeW5hSHIkp4ZLeiGyR2iGIcoPtPpjSYYn-fSljmTRdFtg-yyX2vu0M_KzS6axb4QoxwbRm9y9BDsOzH4jndLdNC0FJWXlCZA5BKm3b9wr6fCz48coB0lOksimeJfmg9_l4ZYNlnIvdBKV9l94iPbvgdeWvbj6AfPkQoAmQZha7w4zOPNxLnzet5fwEiJyVqyBOCPCpoHINya34iffyxffgs');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm check-indicator">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Coffee &amp; Food
+            </span>
+</div>
+</button>
+<!-- 5. Reading -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="An open hardcover book with creamy deckled pages lying casually next to dried pressed eucalyptus leaves and a minimal stone paperweight. Soft diffuse window illumination creates subtle textural shadows, providing an intellectual, calm, aesthetic mood with neutral tones." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuX4mzuxSqrecXsAEQfI1xQWdpGFO25Cedqx8ojJuoNStYu42A9W7-g-TgzABxrI9FHz2iGCB0bFNU_WSIzwZ97u2npwcpQZIv4U-3__2m2XQiJJAgsNLnukB0vusrnyKlcSqIO4HQtgK6pS3lSI0iqQxOnmcSrziNpgGnCwHkQs_e57bQ3uqtn3R4QA8nJSo0D0dE8cs-vdnTP5vkH7Q7OWudepuA3T90sc3dVnQ');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-black/30 backdrop-blur-sm border border-white/40 items-center justify-center text-on-primary check-indicator bg-primary">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Reading
+            </span>
+</div>
+</button>
+<!-- 6. Movies -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98]" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Vintage 35mm film reel canisters and cinema strips catching dramatic cinematic ambient backlight. Subtle atmospheric haze mingles with deep sepia tones and warm rosy highlights, evoking classic auteur film culture and timeless movie aesthetics." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVSE2oRVfEeRSAxfHozP4MTPiVwBuaiJ6AOdvx9uYkr6VzbqNKW11Gio81h3nWZ8kEmARctK-RspWVC08OSPPYkhQ1LHh5kTFgJGLKkarojtY7ZJxACYP1vp4NDDIyP2pmhwNYFVpdyfxfWxDDyl-E-De5_D3YnASkfwD3HFA0QiCY59DmP0rCuSNAiJ-q3tbAOHCHdr9hqRcacfvzmpx_yaHqNzPSZ4s7Z6WP-Us');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-black/30 backdrop-blur-sm border border-white/40 items-center justify-center text-on-primary check-indicator hidden">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Movies
+            </span>
+</div>
+</button>
+<!-- 7. Art -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="A modern classical marble sculpture softly spotlit inside a spacious contemporary art museum gallery with clean limestone walls. Soft overhead skylight casts delicate natural contours and shadows across the smooth stone, harmonizing with warm muted blush interior accents." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuARHExkG4RFrzrlT6Q-jzGdY9ZPxcAsBHz0KfrXbgbt5HZOWGXOVh0dhin1xQZqASnFYTuwq8q-CJ31xw7KKBJM84b6kV-VHQ8E0fTYm9rff2q_5Cz2JuXBLNfei-0PL9-poVnqHcU0tZPF8dcoSHajEJVJj6wTDwcmn0TddIAXKc8aCX772Swf7ze-__TEjBdBEUuMtWyT02yUW_yop00-4z4_gFFPiP_y_2j1r2k');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-black/30 backdrop-blur-sm border border-white/40 items-center justify-center text-on-primary check-indicator bg-primary">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Art
+            </span>
+</div>
+</button>
+<!-- 8. Pets (Selected) -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="An adorable golden retriever puppy resting its chin contentedly on a soft blush knitted blanket beside an airy sunny window. Natural high-key ambient light creates shimmering golden fur textures with warm comforting cream tones and gentle joyful atmosphere." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuDwMG7DD86HKOu4tTwbrdE97qw3TWPGbPG731m9ww0XBuY38fhreWjjVqnDH5CNipDPB6EaGpb0QqTS29QvrL_gn8lG2hzOonWr_7lr-COkwiKgaHo89UqkKZcJeANZK5dxRTAK1Cq_RoXD053OnHjiYA03iX28z13X3emUeTqb-CERqM17HXK9RcMcT2s50nbi-a1UW0lTJXzo5R1Rt8VAj3BSAaHQ0lAlcax8jaA');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm check-indicator">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Pets
+            </span>
+</div>
+</button>
+<!-- 9. Sports & Outdoors -->
+<button class="group relative h-[108px] rounded-xl overflow-hidden text-left transition-all duration-200 active:scale-[0.98] card-active ring-2 ring-primary" onclick="toggleCard(this)" type="button">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="An energetic trail runner navigating a scenic coastal ridge overlooking turquoise waters under golden late afternoon light. Crisp dynamic motion blur, vibrant sage and coastal scenery, soft blush sunset sky tones depicting an empowering active lifestyle." style="background-image: linear-gradient(180deg, rgba(23,16,17,0.1) 0%, rgba(23,16,17,0.75) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJXmdzDaPPc5GjM8ukSQe2JtBWUP6LXbJyW5viRcsb2hRJ3WF3VYc5mUNS-b9owYCHPFIH0-KXXkAWKvyDxkBFKeGswzHDSxvB_KNGWpJH3CtzgEfeLHVDS2fifb4vxKxyGg9lDN8V_oZTuhQWbSv6ruKhxKLe4VwXAJiXj7alLNw6Y0grjHelpt52NarMhvjKLaKdcZ0YK8TRMLK5PTvuT3tBINBDOdgnb5zF-2g');">
+</div>
+<div class="absolute top-2 right-2 size-5 rounded-full bg-black/30 backdrop-blur-sm border border-white/40 items-center justify-center text-on-primary check-indicator bg-primary">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="absolute inset-x-2 bottom-2">
+<span class="inline-block text-white font-medium text-[13px] leading-tight drop-shadow-sm font-label-md">
+              Sports
+            </span>
+</div>
+</button>
+</section>
+</div>
+<!-- Floating Bottom Navigation Action Bar -->
+<footer class="fixed bottom-0 inset-x-0 max-w-md mx-auto px-5 pt-3 pb-6 bg-gradient-to-t from-surface via-surface/95 to-transparent flex flex-col items-center z-20 pointer-events-none"><!-- Privacy trust badge -->
+  <div class="pointer-events-auto flex items-center justify-center gap-1.5 text-[11px] text-ink-primary/60 font-body-sm mb-2 text-center w-full">
+    <span class="material-symbols-outlined text-[14px] text-primary">lock</span>
+    <span class="">Your preferences remain encrypted until mutually bonded.</span>
+  </div>
+
+  <!-- Two-way Split Navigation Row -->
+  <div class="pointer-events-auto w-full flex items-center justify-between pt-1">
+    <!-- Bottom-Left: Accessible Previous Button -->
+    <button aria-label="Go to previous step" class="flex items-center gap-1 px-3 py-2 rounded-full text-secondary hover:text-ink-primary font-medium text-[14px] transition-colors active:scale-95" onclick="history.back()" type="button">
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      <span class="">Previous</span>
+    </button>
+
+    <!-- Center: Selection Counter Badge -->
+    <div class="flex items-center gap-1 px-2.5 py-1 bg-surface-container-low rounded-full shadow-sm">
+      <span class="text-[12px] font-semibold text-primary" id="selection-counter">8 selected</span>
+      <span class="text-[11px] text-ink-primary/50">· min 3</span>
+    </div>
+
+    <!-- Bottom-Right: Circular Next Action Button -->
+    <div class="flex flex-col items-center">
+      <button aria-label="Next step: Your Intention" class="flex size-14 items-center justify-center rounded-full bg-primary-container hover:bg-rose-accent active:scale-95 text-ink-primary shadow-lg shadow-primary-container/40 transition-all duration-200" id="next-btn" type="button">
+        <span class="material-symbols-outlined text-[24px]">arrow_forward</span>
+      </button>
+    </div>
+  </div></footer>
+</main>
+<script>
+    function updateCounter() {
+      const activeCards = document.querySelectorAll('#interests-grid button.card-active').length;
+      const counterEl = document.getElementById('selection-counter');
+      const nextBtn = document.getElementById('next-btn');
+      
+      counterEl.textContent = `${activeCards} selected`;
+      if (activeCards < 1) {
+        nextBtn.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        nextBtn.classList.remove('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    function toggleCard(button) {
+      const isSelected = button.classList.contains('card-active');
+      const checkIndicator = button.querySelector('.check-indicator');
+
+      if (isSelected) {
+        button.classList.remove('card-active', 'ring-2', 'ring-primary');
+        checkIndicator.classList.add('hidden');
+        checkIndicator.classList.remove('bg-primary');
+      } else {
+        button.classList.add('card-active', 'ring-2', 'ring-primary');
+        checkIndicator.classList.remove('hidden');
+        checkIndicator.classList.add('bg-primary');
+      }
+      updateCounter();
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCounter);
+  </script>
+
+
+</body></html>

@@ -1,0 +1,119 @@
+:root {
+  --stitch-journey-path: var(--size-220);
+  --stitch-gateway-art: var(--size-280);
+}
+body { background: var(--cream); background-image: none; }
+#app > .page { max-width: var(--stitch-column); margin-inline: auto; padding-top: var(--size-16); }
+.head h1, .journey-intro h1, .gateway h2 { text-wrap: balance; }
+.head p, .identity-quote, .bell-empty-art p { text-wrap: pretty; }
+body[data-shell="app"] .demo-bar {
+  display: grid;
+  grid-template-columns: var(--size-44) minmax(0,1fr) var(--size-44);
+  height: var(--stitch-header);
+  min-height: var(--stitch-header);
+  gap: var(--size-4);
+  padding: 0 max(var(--size-16), calc((100% - var(--stitch-column))/2 + var(--size-16)));
+  background: var(--cream);
+  border: 0;
+  box-shadow: var(--bell-shadow);
+}
+body[data-shell="app"] .bell-brand { justify-content: center; font-size: var(--size-18); }
+body[data-shell="app"] .bell-session { display: none; }
+body[data-shell="app"] :is(.stitch-back,.stitch-account) { display: grid; place-items: center; color: var(--bell-deep-rose); }
+.visitor-note { margin-bottom: var(--size-16); color: var(--muted); font-size: var(--size-11); border-bottom: var(--size-1) solid var(--line); }
+.visitor-note summary { gap: var(--size-8); justify-content: space-between; }
+.visitor-note summary::after { content: '+'; color: var(--bell-deep-rose); font-size: var(--size-18); }
+.visitor-note[open] summary::after { content: '−'; }
+.visitor-note p { padding-bottom: var(--size-12); line-height: 1.7; }
+.chapter-kicker { display: flex; align-items: center; gap: var(--size-8); color: var(--bell-deep-rose); font-size: var(--size-11); letter-spacing: .12em; text-transform: uppercase; }
+.chapter-kicker .bell-icon { width: var(--size-16); height: var(--size-16); }
+.gateway { min-height: calc(100dvh - var(--size-40)); padding-bottom: var(--size-16); justify-content: center; }
+.gateway .bell-gateway-tag { margin-top: var(--size-12); border: 0; background: transparent; }
+.gateway .bell-gateway-title { margin-top: var(--size-8); }
+.gateway .bell-jewelry-stage { height: var(--stitch-gateway-art); margin-block: var(--size-16); }
+.gateway .bell-jewelry-medallion { width: 76%; box-shadow: var(--bell-shadow); }
+.gateway .bell-gateway-promise { margin: 0; }
+.gateway .bell-gateway-promise h2 { margin: var(--size-12) 0; }
+.gateway .bell-gateway-promise > p { font-size: var(--size-12); max-width: var(--size-280); }
+.gateway .actions { margin-top: var(--size-24); gap: var(--size-8); }
+.gateway .actions .btn.light { background: transparent; border-color: transparent; }
+.gateway-whisper { margin-top: var(--size-8); opacity: 1; font-size: var(--size-10); }
+.gateway-login-note { font-size: var(--size-11); color: var(--muted); }
+.journey-intro { padding-top: var(--size-8); text-align: left; }
+.journey-intro .head { margin-block: var(--size-16) var(--size-24); }
+.journey-intro .head h1 { font-size: var(--size-28); line-height: 1.3; }
+.journey-intro .head p { margin-inline: 0; }
+.journey-grid:has(.path-card) { grid-template-columns: minmax(0,1fr); gap: var(--size-24); }
+.journey-grid .path-card { height: var(--stitch-journey-path); border-radius: var(--size-28); padding: var(--size-24); }
+.path-copy { max-width: 78%; }
+.path-copy h2 { font-size: var(--size-22); }
+.path-copy p { margin-top: var(--size-4); font-size: var(--size-12); max-width: var(--size-220); }
+.path-label { font-size: var(--size-11); }
+.journey-footnote { font-size: var(--size-12); color: var(--muted); text-align: center; padding-inline: var(--size-24); margin-block: var(--size-20); }
+.identity-page .journey-stepper { padding-block: var(--size-8) var(--size-16); gap: var(--size-4); }
+.identity-page .journey-stepper span { flex: none; width: var(--size-8); height: var(--size-4); border-radius: var(--size-999); }
+.identity-page .journey-stepper span.done { width: var(--size-24); background: var(--bell-deep-rose); }
+.identity-page .journey-stepper b { margin-left: auto; color: var(--muted); font-size: var(--size-11); }
+.identity-page .head { margin-block: var(--size-12) var(--size-24); }
+.identity-page .identity-portrait { margin-block: var(--size-24); }
+.identity-page .identity-fields { display: grid; gap: var(--size-12); margin-block: var(--size-24); }
+.identity-page .input-row { background: var(--bell-quote-tint); border: 0; border-radius: var(--size-20); padding: var(--size-8) var(--size-16); min-height: var(--size-64); }
+.identity-page .input-row label { width: var(--size-80); color: var(--ink); line-height: 1.5; }
+.identity-page .input-row input { flex: 1; width: 0; border: 0; background: transparent; border-radius: var(--size-8); padding-inline: var(--size-8); text-align: left; font-size: var(--size-14); }
+.identity-page .radio-card { padding: var(--size-20); min-height: var(--size-100); border-color: var(--line); background: var(--surface-white); }
+.identity-page .radio-card:has(input:checked) { background: var(--bell-quote-tint); border-color: var(--bell-rose); }
+.identity-page .radio-card label { font-size: var(--size-16); line-height: 1.5; }
+.identity-page .radio-card p { margin-top: var(--size-8); }
+.identity-page .radio-card input { flex-shrink: 0; padding: 0; width: var(--size-20); height: var(--size-20); }
+.identity-page .identity-quote { text-align: center; background: transparent; border-block: var(--size-1) solid var(--line); border-radius: 0; padding: var(--size-24) var(--size-16); }
+.identity-page .interest-grid .interest { height: var(--size-120); }
+.identity-page .form > .actions .btn { background: var(--bell-deep-rose); color: var(--surface-white); }
+.page > .head h1 { font-size: var(--size-28); }
+.page > .head { margin-block: var(--size-16) var(--size-24); }
+.bell-editorial-toolbar { gap: var(--size-8); }
+.bell-story-search { margin-block: var(--size-16); }
+.journey-filters { gap: var(--size-8); margin-block: var(--size-20); }
+.journey-filters .chip { padding-inline: var(--size-12); }
+.bell-empty-art { background: var(--bell-hero); padding: var(--size-40) var(--size-20); margin-block: var(--size-24); }
+.bell-empty-art h2 { font-size: var(--size-22); text-wrap: balance; }
+.bell-vow-summary { padding-block: var(--size-20); }
+.bell-vow-quote { padding-inline: var(--size-16); }
+.bell-vow-card { gap: var(--size-12); padding: var(--size-20) var(--size-16); }
+.bell-vow-card h2 { font-size: var(--size-18); }
+.bell-vow-number { font-size: var(--size-28); }
+.journey-grid:has(.plan-template) { grid-template-columns: minmax(0,1fr); gap: var(--size-12); }
+.plan-template { display: grid; grid-template-columns: var(--size-100) minmax(0,1fr); grid-template-rows: 1fr 1fr; column-gap: var(--size-16); row-gap: var(--size-4); min-height: var(--size-100); padding: 0; border: 0; }
+.plan-template img { width: var(--size-100); height: 100%; grid-row: 1 / 3; object-fit: cover; }
+.plan-template span { align-self: end; padding: var(--size-8) var(--size-12) 0 0; }
+.plan-template small { padding: 0 var(--size-12) var(--size-8) 0; text-align: left; }
+.bell-bond-summary { margin-block: var(--size-24); }
+.bell-me { flex-direction: column; text-align: center; gap: var(--size-12); padding-top: var(--size-16); }
+.bell-me h1 { font-size: var(--size-28); margin-bottom: var(--size-4); }
+.me-shared-stats { border-block: var(--size-1) solid var(--line); padding-block: var(--size-16); margin-bottom: var(--size-32); }
+.settings-chapter { margin-block: var(--size-24); }
+.settings-chapter > h2 { font: 500 var(--size-11)/1.5 var(--sans); color: var(--bell-deep-rose); text-transform: uppercase; letter-spacing: .12em; margin-bottom: var(--size-8); }
+.settings-chapter .bell-settings-group { margin: 0; }
+.bell-setting-icon { background: var(--bell-quote-tint); }
+.consent-articles { border-block: var(--size-1) solid var(--line); padding-block: var(--size-24); margin-block: var(--size-24); }
+.consent-articles > h2 { font-size: var(--size-22); margin-bottom: var(--size-20); }
+.consent-articles article { display: flex; gap: var(--size-12); margin-top: var(--size-20); }
+.consent-articles article > .bell-icon { color: var(--bell-deep-rose); flex-shrink: 0; margin-top: var(--size-4); }
+.consent-articles h3 { font-size: var(--size-16); }
+.consent-articles p { margin-top: var(--size-4); font-size: var(--size-12); color: var(--muted); }
+.journey-ceremony .head p { margin-inline: auto; }
+.journey-ceremony .quote { font-size: var(--size-18); }
+.page details.card { box-shadow: none; background: transparent; padding: var(--size-12) 0; border: 0; border-top: var(--size-1) solid var(--line); border-radius: 0; }
+.page details.card summary { font-size: var(--size-12); gap: var(--size-8); color: var(--muted); }
+@media (max-width:374px) {
+  #app { padding-inline: var(--size-16); }
+  .identity-page .input-row { padding-inline: var(--size-12); }
+}
+@media (max-height:760px) {
+  .gateway .bell-jewelry-stage { height: var(--size-220); }
+  .gateway .bell-jewelry-orbit { width: 70%; }
+  .gateway .bell-jewelry-orbit.orbit-inner { width: 60%; }
+  .gateway .bell-jewelry-medallion { width: 56%; }
+}
+.identity-page .identity-optional { margin-block:var(--size-16); }
+.identity-page .identity-optional summary { color:var(--bell-deep-rose); font-size:var(--size-12); }
+.identity-page .identity-optional .input-row label { width:var(--size-100); }

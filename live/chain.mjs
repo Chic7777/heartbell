@@ -1,4 +1,4 @@
-import { Contract, JsonRpcProvider, isAddress, ZeroAddress } from 'ethers';
+import { Contract, JsonRpcProvider, FetchRequest, isAddress, ZeroAddress } from 'ethers';
 export const ABI = [
   'function relationOf(address) view returns(uint256,address,address,uint64,uint64,uint8,uint32)',
   'function relations(uint256) view returns(address,address,uint64,uint64,uint8,uint32)',
@@ -26,7 +26,7 @@ export const ABI = [
 ];
 export function createChain(config) {
   const enabled = !!config.rpc && isAddress(config.contract);
-  const provider = enabled ? new JsonRpcProvider(config.rpc) : null;
+  const provider = enabled ? new JsonRpcProvider((()=>{const fr=new FetchRequest(config.rpc);fr.timeout=15000;return fr;})()) : null;
   const bell = enabled ? new Contract(config.contract,ABI,provider) : null;
   async function ready() {
     if (!bell) throw new Error('BOT RPC and deployed contract are not configured');

@@ -1,0 +1,189 @@
+{
+  "designSystems": [
+    {
+      "name": "assets/29daad9d5f2c4e06bf665b69836a25f5",
+      "designSystem": {
+        "displayName": "Consensus Bell",
+        "styleGuidelines": "## Brand & Style\n\n### Personality & Emotional Tenor\nThis design system crafts an intimate sanctuary where personal romance intersects with decentralized permanence. It rejects the cold, sterile tropes of conventional crypto interfaces (dark neon themes, dense metrics, glowing glass cards) in favor of warmth, emotional breathing room, and quiet trust. The experience is contemplative, tender, and editorial—rooted in the philosophy that *emotion precedes action, and cryptographic proof is disclosed only upon request*.\n\nThe visual language evokes the tactility of artisanal stationery, fine jewelry, and mindful reflection tools. It invites couples and seekers into a serene shared space built on intentionality, shared vows, and mutual digital consensus.\n\n### Aesthetic Paradigm\n- **Atmospheric Warm Minimalism:** Soft cream and natural blush tones establish a restful, non-fatiguing baseline. Whitespace acts as an active narrative element, providing significant vertical clearance above heroes and pivotal interactive nodes.\n- **Organic Editorial Elegance:** Classical, proportioned serif typography delivers romantic gravitas to vows and proclamations, while high-legibility geometric sans handles timestamps, state labels, and form controls.\n- **Restrained Material Tactility:** Interactive elements feature generous pill forms, subtle micro-borders, and whispers of soft diffused ambient light rather than harsh structural grids or loud skeuomorphism.\n\n## Layout & Spacing\n\n### Layout Model\n- **Mobile Foundation:** Optimized for high-density touch screens (baseline iPhone viewport: 393 × 852 pt). The layout employs a standard single-column scroll with explicit 24pt (`1.5rem`) horizontal margins.\n- **Max Content Containment:** On wider viewports (tablets and web desktops), the readable area is restricted to a maximum width of 720px (`--web-content-max`) and centered. Specialized visual environments (such as the Resonance Radar stage) are constrained to 440px (`--web-radar-max`) to preserve satellite orbital geometries.\n- **Rhythm Base:** Based on an incremental 4pt spatial grid (4, 8, 12, 16, 20, 24, 32, 40, 48pt).\n- **Navigation Bounds:** The persistent 5-Tab bar remains anchored outside scrolling content with high safety clearance for bottom gestures.\n\n## Elevation & Depth\n\n### Ambient Shadow Strategy\nElevation avoids dark, muddy shadows. Instead, it relies on soft ambient drops with warmth derived from the neutral ink palette:\n\n- **Surface Resting (Cards, Content Containers):**\n  `box-shadow: 0 1px 2px rgba(23, 23, 23, 0.03), 0 8px 24px rgba(23, 23, 23, 0.04);`\n  Provides subtle lift off the cream `#FFF9F7` background.\n- **High Interactive / Sheets (Proof Bottom Sheet, Dialogs):**\n  `box-shadow: 0 4px 12px rgba(23, 23, 23, 0.04), 0 20px 48px rgba(23, 23, 23, 0.08);`\n  Accompanied by a gentle backdrop dim: `background-color: rgba(23, 23, 23, 0.32); backdrop-filter: blur(4px);`.\n- **Glowing Luster (Hero Rings, Resonance Satellites):**\n  Inner radial gradients combined with soft rose-tinted shadows:\n  `box-shadow: 0 12px 32px rgba(217, 140, 149, 0.18);`\n\n## Components\n\n### 1. Buttons\n- **Primary Action (Pill):**\n  - Height: 52–56pt. Full width or auto with horizontal padding of 28pt.\n  - Background: Ink (`#171717`) or Rose (`#D98C95`), text color `#FFFFFF`.\n  - Interaction: Subdued scale transition down to 0.98 on press; 200ms ease-out.\n- **Secondary / Ghost Pill:**\n  - Background: `rgba(244, 221, 224, 0.35)` or transparent with a 1px border of `rgba(23, 23, 23, 0.12)`.\n  - Text: Ink (`#171717`).\n- **Destructive Action:**\n  - Background: Soft tinted rose `rgba(192, 100, 106, 0.08)`.\n  - Text: Rose Red (`#C0646A`).\n\n### 2. Proof Bottom Sheet (On-Chain Disclosure)\n- Triggered by tapping status badges or confirmation receipts.\n- Surface: `#FFFFFF` with 24pt top rounded corners.\n- Contains cryptographic metadata presented humanely:\n  - Network badge: Soft green/cream chip.\n  - Dual Avatar mutual signer display with linking infinity or ring node.\n  - Two-column detail rows: Transaction Hash, Block Height, SBT Identifier, and Timestamp.\n  - Action: \"View on Explorer\" external link pill button.\n\n### 3. Transaction State Stepper\n- Flow: `Preparing` → `Awaiting Signature` → `Submitted` → `Included` → `Confirmed`.\n- Track line: 2px hairline with completed segments in `#4ECF8B` and pending in `#F2A65A`.\n- Nodes: 12px circles with pulsing ambient glow when active.\n\n### 4. Agent Suggestion Card (`AgentSuggestionCard`)\n- Distinct subtle card highlighted by a micro sparkle glyph (✦).\n- Background: Gentle warm gradient from `#FFFFFF` to `#FFF4F2`.\n- Border: 1px hairline in `#F4DDE0`.\n- Text: Editorial prose summarizing a shared pattern, accompanied by dual micro-actions (\"Use This\" in solid pill, \"Edit\" in minimal text).\n\n### 5. Ring Hero (Orbital Relationship Stage)\n- Visual centerpiece for the Ring Home and Direct Bind screens.\n- Concentric hairlines rendered in `rgba(201, 136, 119, 0.24)`.\n- Floating dual rings rendered with realistic lighting gradients (rose-gold reflections), accompanied by mutual memory counts and vow tallies suspended within or directly below the orbit.\n\n### 6. Filter Chips & Interest Image Tiles\n- **Filter Chips:** Pill shape, 36pt height, selected state switches to full `#171717` background with white text; unselected sits on pure white with subtle ink hairline.\n- **Interest Image Tiles:** 108 × 108pt rounded 20pt card with dark overlay and centered title. When selected, framed by a continuous 2.5pt Rose Gold border.\n\n### 7. Bottom Navigation (5-Tab)\n- Items: Ring, Story, Vow, Bond, Me.\n- Height: 64pt + safe area inset.\n- Visual: Frosted white translucent bar (`rgba(255, 255, 255, 0.88)` with `backdrop-filter: blur(20px)`), with an active dot indicator in `#D98C95`.",
+        "theme": {
+          "colorMode": "LIGHT",
+          "font": "NOTO_SERIF",
+          "roundness": "ROUND_FULL",
+          "customColor": "#d98c95",
+          "headlineFont": "NOTO_SERIF",
+          "bodyFont": "INTER",
+          "labelFont": "INTER",
+          "namedColors": {
+            "on_error_container": "#93000a",
+            "on_surface_variant": "#524344",
+            "inverse_on_surface": "#f5efef",
+            "tertiary_fixed": "#7cfbb2",
+            "surface_container_low": "#f8f2f2",
+            "surface_container": "#f2ecec",
+            "surface_dim": "#ded9d8",
+            "primary_container": "#d98c95",
+            "error": "#ba1a1a",
+            "outline_variant": "#d7c1c3",
+            "tertiary_container": "#30b776",
+            "surface_container_lowest": "#ffffff",
+            "on_surface": "#1d1b1b",
+            "confirmed-green": "#4ECF8B",
+            "secondary_container": "#fdb5a3",
+            "on_tertiary_fixed_variant": "#005230",
+            "on_error": "#ffffff",
+            "ink-secondary": "#252323",
+            "on_secondary_fixed_variant": "#6b392c",
+            "on_primary_fixed": "#390914",
+            "on_primary": "#ffffff",
+            "on_background": "#1d1b1b",
+            "sage-muted": "#7B9D86",
+            "background": "#fef8f7",
+            "surface": "#fef8f7",
+            "ink-primary": "#171717",
+            "surface_bright": "#fef8f7",
+            "pending-amber": "#F2A65A",
+            "blush-soft": "#E7B7A8",
+            "pending-dark": "#B8732F",
+            "tertiary": "#006d41",
+            "surface_container_highest": "#e7e1e1",
+            "surface_tint": "#8c4b54",
+            "on_tertiary_container": "#004125",
+            "surface_container_high": "#ede7e6",
+            "secondary": "#875041",
+            "tertiary_fixed_dim": "#5ede98",
+            "blush-tint": "#F4DDE0",
+            "on_secondary": "#ffffff",
+            "destructive-rose": "#C0646A",
+            "background-cream": "#FFF9F7",
+            "secondary_fixed_dim": "#fdb5a3",
+            "on_secondary_fixed": "#350f06",
+            "rose-gold": "#C98877",
+            "primary": "#8c4b54",
+            "on_tertiary_fixed": "#002110",
+            "surface_variant": "#e7e1e1",
+            "inverse_surface": "#323030",
+            "primary_fixed": "#ffd9dc",
+            "inverse_primary": "#ffb2ba",
+            "on_secondary_container": "#794436",
+            "on_primary_fixed_variant": "#70343d",
+            "on_tertiary": "#ffffff",
+            "surface-white": "#FFFFFF",
+            "outline": "#857374",
+            "error_container": "#ffdad6",
+            "primary_fixed_dim": "#ffb2ba",
+            "sage-deep": "#2E9E63",
+            "on_primary_container": "#5d262f",
+            "rose-accent": "#E98F93",
+            "secondary_fixed": "#ffdbd1"
+          },
+          "designMd": "---\nname: Consensus Bell\ncolors:\n  surface: '#fef8f7'\n  surface-dim: '#ded9d8'\n  surface-bright: '#fef8f7'\n  surface-container-lowest: '#ffffff'\n  surface-container-low: '#f8f2f2'\n  surface-container: '#f2ecec'\n  surface-container-high: '#ede7e6'\n  surface-container-highest: '#e7e1e1'\n  on-surface: '#1d1b1b'\n  on-surface-variant: '#524344'\n  inverse-surface: '#323030'\n  inverse-on-surface: '#f5efef'\n  outline: '#857374'\n  outline-variant: '#d7c1c3'\n  surface-tint: '#8c4b54'\n  primary: '#8c4b54'\n  on-primary: '#ffffff'\n  primary-container: '#d98c95'\n  on-primary-container: '#5d262f'\n  inverse-primary: '#ffb2ba'\n  secondary: '#875041'\n  on-secondary: '#ffffff'\n  secondary-container: '#fdb5a3'\n  on-secondary-container: '#794436'\n  tertiary: '#006d41'\n  on-tertiary: '#ffffff'\n  tertiary-container: '#30b776'\n  on-tertiary-container: '#004125'\n  error: '#ba1a1a'\n  on-error: '#ffffff'\n  error-container: '#ffdad6'\n  on-error-container: '#93000a'\n  primary-fixed: '#ffd9dc'\n  primary-fixed-dim: '#ffb2ba'\n  on-primary-fixed: '#390914'\n  on-primary-fixed-variant: '#70343d'\n  secondary-fixed: '#ffdbd1'\n  secondary-fixed-dim: '#fdb5a3'\n  on-secondary-fixed: '#350f06'\n  on-secondary-fixed-variant: '#6b392c'\n  tertiary-fixed: '#7cfbb2'\n  tertiary-fixed-dim: '#5ede98'\n  on-tertiary-fixed: '#002110'\n  on-tertiary-fixed-variant: '#005230'\n  background: '#fef8f7'\n  on-background: '#1d1b1b'\n  surface-variant: '#e7e1e1'\n  background-cream: '#FFF9F7'\n  surface-white: '#FFFFFF'\n  blush-tint: '#F4DDE0'\n  blush-soft: '#E7B7A8'\n  rose-accent: '#E98F93'\n  rose-gold: '#C98877'\n  ink-primary: '#171717'\n  ink-secondary: '#252323'\n  confirmed-green: '#4ECF8B'\n  sage-deep: '#2E9E63'\n  sage-muted: '#7B9D86'\n  pending-amber: '#F2A65A'\n  pending-dark: '#B8732F'\n  destructive-rose: '#C0646A'\ntypography:\n  headline-xl:\n    fontFamily: Noto Serif\n    fontSize: 48px\n    fontWeight: '400'\n    lineHeight: 58px\n    letterSpacing: -0.02em\n  headline-xl-mobile:\n    fontFamily: Noto Serif\n    fontSize: 36px\n    fontWeight: '400'\n    lineHeight: 44px\n    letterSpacing: -0.01em\n  headline-lg:\n    fontFamily: Noto Serif\n    fontSize: 32px\n    fontWeight: '400'\n    lineHeight: 40px\n    letterSpacing: -0.01em\n  headline-lg-mobile:\n    fontFamily: Noto Serif\n    fontSize: 28px\n    fontWeight: '400'\n    lineHeight: 36px\n    letterSpacing: 0em\n  headline-md:\n    fontFamily: Noto Serif\n    fontSize: 22px\n    fontWeight: '500'\n    lineHeight: 30px\n    letterSpacing: 0em\n  headline-sm:\n    fontFamily: Noto Serif\n    fontSize: 18px\n    fontWeight: '500'\n    lineHeight: 26px\n    letterSpacing: 0em\n  body-lg:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: '400'\n    lineHeight: 26px\n    letterSpacing: 0em\n  body-md:\n    fontFamily: Inter\n    fontSize: 14px\n    fontWeight: '400'\n    lineHeight: 22px\n    letterSpacing: 0em\n  body-sm:\n    fontFamily: Inter\n    fontSize: 12px\n    fontWeight: '400'\n    lineHeight: 18px\n    letterSpacing: 0.01em\n  label-lg:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: '600'\n    lineHeight: 20px\n    letterSpacing: 0.01em\n  label-md:\n    fontFamily: Inter\n    fontSize: 14px\n    fontWeight: '500'\n    lineHeight: 18px\n    letterSpacing: 0.01em\n  label-sm:\n    fontFamily: Inter\n    fontSize: 11px\n    fontWeight: '500'\n    lineHeight: 14px\n    letterSpacing: 0.02em\nrounded:\n  sm: 0.5rem\n  DEFAULT: 1rem\n  md: 1.5rem\n  lg: 2rem\n  xl: 3rem\n  full: 9999px\nspacing:\n  gutter: 1rem\n  margin: 1.5rem\n  space-xs: 0.25rem\n  space-sm: 0.5rem\n  space-md: 1rem\n  space-lg: 1.5rem\n  space-xl: 2rem\n---\n\n## Brand & Style\n\n### Personality & Emotional Tenor\nThis design system crafts an intimate sanctuary where personal romance intersects with decentralized permanence. It rejects the cold, sterile tropes of conventional crypto interfaces (dark neon themes, dense metrics, glowing glass cards) in favor of warmth, emotional breathing room, and quiet trust. The experience is contemplative, tender, and editorial—rooted in the philosophy that *emotion precedes action, and cryptographic proof is disclosed only upon request*.\n\nThe visual language evokes the tactility of artisanal stationery, fine jewelry, and mindful reflection tools. It invites couples and seekers into a serene shared space built on intentionality, shared vows, and mutual digital consensus.\n\n### Aesthetic Paradigm\n- **Atmospheric Warm Minimalism:** Soft cream and natural blush tones establish a restful, non-fatiguing baseline. Whitespace acts as an active narrative element, providing significant vertical clearance above heroes and pivotal interactive nodes.\n- **Organic Editorial Elegance:** Classical, proportioned serif typography delivers romantic gravitas to vows and proclamations, while high-legibility geometric sans handles timestamps, state labels, and form controls.\n- **Restrained Material Tactility:** Interactive elements feature generous pill forms, subtle micro-borders, and whispers of soft diffused ambient light rather than harsh structural grids or loud skeuomorphism.\n\n## Colors\n\n### Chromatic Strategy\nThe palette balances organic skin and mineral tones with decisive state colors:\n\n- **Primary (`#D98C95` / `#E98F93`):** The signature Rose. Applied to hero actions, significant commitments, heart icons, and intimate highlights.\n- **Secondary (`#C98877`):** Warm Rose-Gold. Represents durable commitments, ring metallics, witness artifacts, and shared bonds.\n- **Tertiary (`#4ECF8B` / `#2E9E63`):** Confirmed Sage Green. Denotes mutual on-chain consensus, verified SBT proofs, and fulfilled vows with grounded calm rather than assertive alert styling.\n- **Neutral (`#252323` / `#171717`):** Primary Ink. Pure black is avoided. Deep charcoal ink creates soft typographic contrast against cream backdrops.\n\n### Specialized Functional & Tone Roles\n- **Canvas Base (`#FFF9F7`):** Soft cream that eliminates screen glare and mimics fine cotton paper.\n- **Surfaces (`#FFFFFF`):** High-elevation floating cards, bottom sheets, and interactive containers.\n- **Pending / In-Transit (`#F2A65A` / `#B8732F`):** Warm Amber. Signifies states awaiting a partner's reciprocal signature or network validation.\n- **Destructive Actions (`#C0646A`):** Deep Rose Red. Reserved strictly for unbinding relationships, revoking consent, or permanent archival.\n- **Hairlines & Dividers:** `rgba(23, 23, 23, 0.06)` to `rgba(23, 23, 23, 0.12)` ensure gentle sectional parsing without structural rigidity.\n\n## Typography\n\n### Structural Hierarchy\nThe typographic architecture draws a clear emotional line between personal narrative and operational metadata:\n\n- **Editorial Serif (`Noto Serif` / fallback `Georgia`):** Assigned to solemn headlines, vow commitments, ceremony titles, and relationship status queries. Titles use open letter-spacing and uncompressed line heights to maintain a poised, literary cadence.\n- **Utilitarian Sans (`Inter` / fallback `PingFang SC`):** Assigned to transaction states, input fields, navigation anchors, timestamps, and smart wallet proofs.\n\n### Layout Principles\n- Long user-submitted declarations must wrap naturally with a generous `1.65` relative line-height to maintain comfort in small viewports.\n- Monospaced elements (contract hashes, block indices, wallet fragments like `0x8...3f2A`) should use standard sans with tabular figures (`tnum`) for neat balance alongside textual metadata.\n\n## Layout & Spacing\n\n### Layout Model\n- **Mobile Foundation:** Optimized for high-density touch screens (baseline iPhone viewport: 393 × 852 pt). The layout employs a standard single-column scroll with explicit 24pt (`1.5rem`) horizontal margins.\n- **Max Content Containment:** On wider viewports (tablets and web desktops), the readable area is restricted to a maximum width of 720px (`--web-content-max`) and centered. Specialized visual environments (such as the Resonance Radar stage) are constrained to 440px (`--web-radar-max`) to preserve satellite orbital geometries.\n- **Rhythm Base:** Based on an incremental 4pt spatial grid (4, 8, 12, 16, 20, 24, 32, 40, 48pt).\n- **Navigation Bounds:** The persistent 5-Tab bar remains anchored outside scrolling content with high safety clearance for bottom gestures.\n\n## Elevation & Depth\n\n### Ambient Shadow Strategy\nElevation avoids dark, muddy shadows. Instead, it relies on soft ambient drops with warmth derived from the neutral ink palette:\n\n- **Surface Resting (Cards, Content Containers):**\n  `box-shadow: 0 1px 2px rgba(23, 23, 23, 0.03), 0 8px 24px rgba(23, 23, 23, 0.04);`\n  Provides subtle lift off the cream `#FFF9F7` background.\n- **High Interactive / Sheets (Proof Bottom Sheet, Dialogs):**\n  `box-shadow: 0 4px 12px rgba(23, 23, 23, 0.04), 0 20px 48px rgba(23, 23, 23, 0.08);`\n  Accompanied by a gentle backdrop dim: `background-color: rgba(23, 23, 23, 0.32); backdrop-filter: blur(4px);`.\n- **Glowing Luster (Hero Rings, Resonance Satellites):**\n  Inner radial gradients combined with soft rose-tinted shadows:\n  `box-shadow: 0 12px 32px rgba(217, 140, 149, 0.18);`\n\n## Shapes\n\n### Form Geometry\nSoftness and embrace guide the curvature of every surface:\n\n- **Pill Primitives (`border-radius: 9999px`):** Primary action buttons, state tags, filter chips, input pill shells, and tab bars.\n- **Enclosing Containers (`20px – 24px`):** Memory cards, vow detail containers, radar stages, and bottom sheets.\n- **Avatar & Satellite Nodes (`Circle / 50%`):** Profile portraits, mutual presence satellites, and timeline markers.\n\n## Components\n\n### 1. Buttons\n- **Primary Action (Pill):**\n  - Height: 52–56pt. Full width or auto with horizontal padding of 28pt.\n  - Background: Ink (`#171717`) or Rose (`#D98C95`), text color `#FFFFFF`.\n  - Interaction: Subdued scale transition down to 0.98 on press; 200ms ease-out.\n- **Secondary / Ghost Pill:**\n  - Background: `rgba(244, 221, 224, 0.35)` or transparent with a 1px border of `rgba(23, 23, 23, 0.12)`.\n  - Text: Ink (`#171717`).\n- **Destructive Action:**\n  - Background: Soft tinted rose `rgba(192, 100, 106, 0.08)`.\n  - Text: Rose Red (`#C0646A`).\n\n### 2. Proof Bottom Sheet (On-Chain Disclosure)\n- Triggered by tapping status badges or confirmation receipts.\n- Surface: `#FFFFFF` with 24pt top rounded corners.\n- Contains cryptographic metadata presented humanely:\n  - Network badge: Soft green/cream chip.\n  - Dual Avatar mutual signer display with linking infinity or ring node.\n  - Two-column detail rows: Transaction Hash, Block Height, SBT Identifier, and Timestamp.\n  - Action: \"View on Explorer\" external link pill button.\n\n### 3. Transaction State Stepper\n- Flow: `Preparing` → `Awaiting Signature` → `Submitted` → `Included` → `Confirmed`.\n- Track line: 2px hairline with completed segments in `#4ECF8B` and pending in `#F2A65A`.\n- Nodes: 12px circles with pulsing ambient glow when active.\n\n### 4. Agent Suggestion Card (`AgentSuggestionCard`)\n- Distinct subtle card highlighted by a micro sparkle glyph (✦).\n- Background: Gentle warm gradient from `#FFFFFF` to `#FFF4F2`.\n- Border: 1px hairline in `#F4DDE0`.\n- Text: Editorial prose summarizing a shared pattern, accompanied by dual micro-actions (\"Use This\" in solid pill, \"Edit\" in minimal text).\n\n### 5. Ring Hero (Orbital Relationship Stage)\n- Visual centerpiece for the Ring Home and Direct Bind screens.\n- Concentric hairlines rendered in `rgba(201, 136, 119, 0.24)`.\n- Floating dual rings rendered with realistic lighting gradients (rose-gold reflections), accompanied by mutual memory counts and vow tallies suspended within or directly below the orbit.\n\n### 6. Filter Chips & Interest Image Tiles\n- **Filter Chips:** Pill shape, 36pt height, selected state switches to full `#171717` background with white text; unselected sits on pure white with subtle ink hairline.\n- **Interest Image Tiles:** 108 × 108pt rounded 20pt card with dark overlay and centered title. When selected, framed by a continuous 2.5pt Rose Gold border.\n\n### 7. Bottom Navigation (5-Tab)\n- Items: Ring, Story, Vow, Bond, Me.\n- Height: 64pt + safe area inset.\n- Visual: Frosted white translucent bar (`rgba(255, 255, 255, 0.88)` with `backdrop-filter: blur(20px)`), with an active dot indicator in `#D98C95`.",
+          "colorVariant": "FIDELITY",
+          "overridePrimaryColor": "#d98c95",
+          "overrideSecondaryColor": "#c98877",
+          "overrideTertiaryColor": "#4ecf8b",
+          "overrideNeutralColor": "#252323",
+          "spacingScale": 2,
+          "typography": {
+            "headline-md": {
+              "fontFamily": "Noto Serif",
+              "fontSize": "22px",
+              "fontWeight": "500",
+              "lineHeight": "30px",
+              "letterSpacing": "0em"
+            },
+            "headline-lg-mobile": {
+              "fontFamily": "Noto Serif",
+              "fontSize": "28px",
+              "fontWeight": "400",
+              "lineHeight": "36px",
+              "letterSpacing": "0em"
+            },
+            "headline-lg": {
+              "fontFamily": "Noto Serif",
+              "fontSize": "32px",
+              "fontWeight": "400",
+              "lineHeight": "40px",
+              "letterSpacing": "-0.01em"
+            },
+            "body-lg": {
+              "fontFamily": "Inter",
+              "fontSize": "16px",
+              "fontWeight": "400",
+              "lineHeight": "26px",
+              "letterSpacing": "0em"
+            },
+            "label-md": {
+              "fontFamily": "Inter",
+              "fontSize": "14px",
+              "fontWeight": "500",
+              "lineHeight": "18px",
+              "letterSpacing": "0.01em"
+            },
+            "headline-sm": {
+              "fontFamily": "Noto Serif",
+              "fontSize": "18px",
+              "fontWeight": "500",
+              "lineHeight": "26px",
+              "letterSpacing": "0em"
+            },
+            "body-md": {
+              "fontFamily": "Inter",
+              "fontSize": "14px",
+              "fontWeight": "400",
+              "lineHeight": "22px",
+              "letterSpacing": "0em"
+            },
+            "label-sm": {
+              "fontFamily": "Inter",
+              "fontSize": "11px",
+              "fontWeight": "500",
+              "lineHeight": "14px",
+              "letterSpacing": "0.02em"
+            },
+            "headline-xl": {
+              "fontFamily": "Noto Serif",
+              "fontSize": "48px",
+              "fontWeight": "400",
+              "lineHeight": "58px",
+              "letterSpacing": "-0.02em"
+            },
+            "label-lg": {
+              "fontFamily": "Inter",
+              "fontSize": "16px",
+              "fontWeight": "600",
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em"
+            },
+            "headline-xl-mobile": {
+              "fontFamily": "Noto Serif",
+              "fontSize": "36px",
+              "fontWeight": "400",
+              "lineHeight": "44px",
+              "letterSpacing": "-0.01em"
+            },
+            "body-sm": {
+              "fontFamily": "Inter",
+              "fontSize": "12px",
+              "fontWeight": "400",
+              "lineHeight": "18px",
+              "letterSpacing": "0.01em"
+            }
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem"
+          },
+          "headlineFontFamily": "Noto Serif",
+          "bodyFontFamily": "Inter",
+          "labelFontFamily": "Inter"
+        }
+      },
+      "version": "1"
+    }
+  ]
+}

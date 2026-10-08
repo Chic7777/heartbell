@@ -1,0 +1,352 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#FFF9F7;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "error": "#ba1a1a", "error-container": "#ffdad6", "on-tertiary": "#ffffff", "on-error": "#ffffff", "on-surface": "#1d1b1b", "surface-container-highest": "#e7e1e1", "surface": "#fef8f7", "sage-muted": "#7B9D86", "secondary-container": "#fdb5a3", "on-secondary-fixed": "#350f06", "background-cream": "#FFF9F7", "outline-variant": "#d7c1c3", "pending-amber": "#F2A65A", "blush-tint": "#F4DDE0", "primary-container": "#d98c95", "on-background": "#1d1b1b", "on-secondary-fixed-variant": "#6b392c", "background": "#fef8f7", "ink-secondary": "#252323", "primary-fixed": "#ffd9dc", "primary-fixed-dim": "#ffb2ba", "confirmed-green": "#4ECF8B", "tertiary-fixed-dim": "#5ede98", "on-error-container": "#93000a", "surface-dim": "#ded9d8", "on-primary": "#ffffff", "pending-dark": "#B8732F", "on-primary-container": "#5d262f", "inverse-on-surface": "#f5efef", "outline": "#857374", "surface-container": "#f2ecec", "secondary": "#875041", "secondary-fixed-dim": "#fdb5a3", "secondary-fixed": "#ffdbd1", "on-tertiary-fixed": "#002110", "rose-accent": "#E98F93", "on-primary-fixed": "#390914", "surface-container-low": "#f8f2f2", "on-tertiary-fixed-variant": "#005230", "destructive-rose": "#C0646A", "rose-gold": "#C98877", "surface-variant": "#e7e1e1", "primary": "#8c4b54", "surface-tint": "#8c4b54", "sage-deep": "#2E9E63", "inverse-surface": "#323030", "surface-bright": "#fef8f7", "tertiary-container": "#30b776", "on-secondary": "#ffffff", "ink-primary": "#171717", "tertiary": "#006d41", "on-primary-fixed-variant": "#70343d", "inverse-primary": "#ffb2ba", "surface-white": "#FFFFFF", "on-tertiary-container": "#004125", "blush-soft": "#E7B7A8", "tertiary-fixed": "#7cfbb2", "surface-container-high": "#ede7e6", "on-surface-variant": "#524344", "on-secondary-container": "#794436", "surface-container-lowest": "#ffffff" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-md": "1rem", "space-xs": "0.25rem", "margin": "1.5rem", "gutter": "1rem", "space-lg": "1.5rem", "space-xl": "2rem" }, "fontFamily": { "headline-lg-mobile": [ "Noto Serif" ], "headline-md": [ "Noto Serif" ], "body-md": [ "Inter" ], "label-sm": [ "Inter" ], "headline-sm": [ "Noto Serif" ], "label-lg": [ "Inter" ], "label-md": [ "Inter" ], "headline-xl-mobile": [ "Noto Serif" ], "headline-lg": [ "Noto Serif" ], "body-sm": [ "Inter" ], "body-lg": [ "Inter" ], "headline-xl": [ "Noto Serif" ] }, "fontSize": { "headline-lg-mobile": [ "28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" } ], "headline-md": [ "22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" } ], "body-md": [ "14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "headline-sm": [ "18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500" } ], "label-lg": [ "16px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" } ], "label-md": [ "14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" } ], "headline-xl-mobile": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "body-sm": [ "12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" } ], "body-lg": [ "16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" } ], "headline-xl": [ "48px", { "lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400" } ] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+    @keyframes radarScan {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes rippleExpand {
+      0% { transform: scale(0.3); opacity: 0.85; }
+      50% { opacity: 0.45; }
+      100% { transform: scale(2.8); opacity: 0; }
+    }
+    @keyframes avatarFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes bellChimeShake {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      20% { transform: rotate(-14deg) scale(1.12); }
+      40% { transform: rotate(12deg) scale(1.12); }
+      60% { transform: rotate(-8deg) scale(1.08); }
+      80% { transform: rotate(4deg) scale(1.04); }
+    }
+    @keyframes shockwavePulse {
+      0% { transform: scale(0.4); opacity: 0.9; box-shadow: 0 0 0 2px rgba(217,140,149,0.9); }
+      100% { transform: scale(3.2); opacity: 0; box-shadow: 0 0 35px 12px rgba(217,140,149,0); }
+    }
+    .radar-sweep-beam {
+      animation: radarScan 4s linear infinite;
+      transform-origin: center center;
+    }
+    .radar-sweep-beam.accelerated {
+      animation-duration: 1.8s;
+    }
+    .ripple-wave-1 {
+      animation: rippleExpand 4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+    }
+    .ripple-wave-2 {
+      animation: rippleExpand 4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite 1.4s;
+    }
+    .ripple-wave-3 {
+      animation: rippleExpand 4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite 2.8s;
+    }
+    .avatar-revealed {
+      opacity: 1 !important;
+      transform: scale(1) translateY(0) !important;
+      filter: blur(0px) !important;
+      pointer-events: auto !important;
+    }
+    .avatar-floating {
+      animation: avatarFloat 4.2s ease-in-out infinite;
+    }
+    .avatar-floating-delayed {
+      animation: avatarFloat 4.6s ease-in-out infinite 0.7s;
+    }
+    .bell-ring-active {
+      animation: bellChimeShake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    .shockwave-active {
+      animation: shockwavePulse 0.95s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+    }
+  </style>
+
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../../ui/fonts.css">
+
+</head><body class="bg-background-cream text-on-surface antialiased flex flex-col min-h-screen selection:bg-blush-tint selection:text-primary"><header class="fixed top-0 w-full z-50 pt-safe bg-background-cream/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(23,23,23,0.03)]"><div class="h-14 px-margin flex items-center justify-between max-w-[440px] mx-auto"><button aria-label="Go back" class="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-ink-primary hover:bg-blush-tint/40 active:scale-95 transition-all" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[20px] text-primary">arrow_back_ios_new</span></button><div class="flex items-center gap-2"><svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path><circle cx="12" cy="11" fill="currentColor" r="1.5"></circle></svg><span class="font-headline-sm text-headline-sm text-ink-primary tracking-tight font-serif">Consensus Bell</span></div><div class="flex items-center"><div class="w-9 h-9 rounded-full overflow-hidden border border-blush-soft/50 shadow-sm relative"><img alt="User avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBasO6I-KUaUl-79-ElreONS6admeZYUxqugNXgMkP_OOzVunVEcI0r87lwN2BfKvdWhXJZV4y_sNHtr50k-JJNRg92KdpqiGJD1e7rk_WxEIDJXrzpS_6m1DMsx6uS5zGWgRkiUVqkFehPYibNUT3Tr_l3FfBWimwZxhAA1CSiqQAtvRwColxOZxUaEQphPoNsMf-GyOY4bPQlmGLeBiqqM-yd5LtVHvLcxvuXqU8"><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-confirmed-green border-2 border-surface-white"></span></div></div></div></header><main class="flex flex-col relative w-full pt-16 bg-background-cream pb-safe min-h-screen"><div class="flex flex-col w-full px-margin pb-10 max-w-[440px] mx-auto select-none">
+<!-- Status Chip -->
+<div class="flex items-center justify-center mt-3 mb-3">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded-full bg-surface-white/90 shadow-[0_1px_4px_rgba(23,23,23,0.04)] backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-confirmed-green animate-pulse"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-sage-deep">BOT Consensus Active</span>
+</div>
+</div>
+<!-- Hero Typography -->
+<div class="text-center mb-6">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-ink-primary tracking-tight">
+      Find someone <span class="italic font-headline-lg-mobile text-primary">who resonates.</span>
+</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[280px] mx-auto mt-1.5 leading-relaxed">
+      Harmonic frequencies discovering shared vows &amp; authentic intentions nearby.
+    </p>
+</div>
+<!-- Center Stage: Resonance Radar Graphic -->
+<div class="relative w-full aspect-square max-w-[340px] mx-auto flex items-center justify-center my-2 overflow-visible" id="radarContainer">
+<!-- Ambient Luster Glow Behind Stage -->
+<div class="absolute inset-8 rounded-full bg-gradient-to-tr from-blush-soft/20 via-rose-accent/15 to-transparent blur-2xl pointer-events-none"></div>
+<!-- Outer Concentric Orbit (96%) -->
+<div class="absolute w-[96%] h-[96%] rounded-full bg-transparent shadow-[0_0_0:1px_rgba(201,136,119,0.18)] border border-[rgba(201,136,119,0.18)] flex items-center justify-center pointer-events-none"></div>
+<!-- Mid Concentric Orbit (74%) -->
+<div class="absolute w-[74%] h-[74%] rounded-full bg-transparent border border-[rgba(201,136,119,0.22)] flex items-center justify-center pointer-events-none"></div>
+<!-- Inner Concentric Orbit (52%) -->
+<div class="absolute w-[52%] h-[52%] rounded-full bg-transparent border border-[rgba(201,136,119,0.28)] flex items-center justify-center pointer-events-none"></div>
+<!-- Radial Axis Crosshairs (Subtle Precision Aesthetics) -->
+<div class="absolute w-[96%] h-[1px] bg-gradient-to-r from-transparent via-[rgba(201,136,119,0.14)] to-transparent pointer-events-none"></div>
+<div class="absolute h-[96%] w-[1px] bg-gradient-to-b from-transparent via-[rgba(201,136,119,0.14)] to-transparent pointer-events-none"></div>
+<!-- Expanding Pulse Waves Emanating from Central Bell Hub -->
+<div class="absolute w-24 h-24 rounded-full border border-primary-container/40 pointer-events-none ripple-wave-1"></div>
+<div class="absolute w-24 h-24 rounded-full border border-blush-soft/40 pointer-events-none ripple-wave-2"></div>
+<div class="absolute w-24 h-24 rounded-full border border-rose-gold/30 pointer-events-none ripple-wave-3"></div>
+<!-- Shockwave Element for Active Bell Trigger -->
+<div class="absolute w-24 h-24 rounded-full bg-rose-accent/10 pointer-events-none opacity-0" id="resonanceShockwave"></div>
+<!-- Rotating Radar Sweep Beam with Conic Gradient & Crisp Leading Scanline Ray -->
+<div class="absolute inset-0 rounded-full overflow-hidden pointer-events-none z-10">
+<div class="absolute inset-0 radar-sweep-beam rounded-full" id="radarSweepElement" style="background: conic-gradient(from 0deg, rgba(217, 140, 149, 0.28) 0deg, rgba(217, 140, 149, 0.16) 24deg, rgba(217, 140, 149, 0.04) 48deg, transparent 70deg, transparent 360deg);">
+<!-- Crisp Leading Scanline Ray Edge -->
+<div class="absolute top-0 left-1/2 w-[1.5px] h-1/2 -translate-x-1/2 bg-gradient-to-b from-primary via-rose-accent/90 to-transparent shadow-[0_0_8px_rgba(217,140,149,0.9)]"></div>
+</div>
+</div>
+<!-- Orbit Node: Sophie (Top Right, Close Orbit) -->
+<div class="absolute top-[16%] right-[14%] z-20 flex flex-col items-center group cursor-pointer transition-all duration-700 ease-out opacity-0 scale-50 blur-[3px] pointer-events-none" id="avatar-sophie" onclick="selectSoul('Sophie', '24 • 2 km', '98% Resonance')">
+<!-- Detection Ripple Halo -->
+<div class="absolute -inset-2.5 rounded-full border border-rose-accent/40 opacity-0 transition-opacity duration-500" id="halo-sophie"></div>
+<!-- Faint Waiting Dot Indicator -->
+<div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-gold/60 animate-ping pointer-events-none" id="ping-sophie"></div>
+<div class="relative w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-primary to-rose-gold shadow-[0_4px_16px_rgba(217,140,149,0.3)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95">
+<img class="w-full h-full rounded-full object-cover" data-alt="Intimate film portrait of Sophie, an Asian woman in her early twenties with gentle smile, wearing a cream cashmere cardigan, warm romantic soft afternoon sunlight, natural glowing skin, cinematic bokeh." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBasO6I-KUaUl-79-ElreONS6admeZYUxqugNXgMkP_OOzVunVEcI0r87lwN2BfKvdWhXJZV4y_sNHtr50k-JJNRg92KdpqiGJD1e7rk_WxEIDJXrzpS_6m1DMsx6uS5zGWgRkiUVqkFehPYibNUT3Tr_l3FfBWimwZxhAA1CSiqQAtvRwColxOZxUaEQphPoNsMf-GyOY4bPQlmGLeBiqqM-yd5LtVHvLcxvuXqU8">
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-confirmed-green rounded-full shadow-[0_0_0_2px_#FFF9F7]"></span>
+</div>
+<div class="mt-1 px-2 py-0.5 rounded-full bg-surface-white/95 shadow-[0_2px_8px_rgba(23,23,23,0.06)] flex items-center gap-1 border border-blush-soft/20">
+<span class="font-label-sm text-[10px] text-ink-primary font-medium">Sophie</span>
+<span class="material-symbols-outlined text-rose-accent text-[11px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<!-- Orbit Node: Claire (Top Left, Mid Orbit) -->
+<div class="absolute top-[28%] left-[8%] z-20 flex flex-col items-center group cursor-pointer transition-all duration-700 ease-out opacity-0 scale-50 blur-[3px] pointer-events-none" id="avatar-claire" onclick="selectSoul('Claire', '26 • 5 km', '94% Resonance')">
+<!-- Detection Ripple Halo -->
+<div class="absolute -inset-2.5 rounded-full border border-pending-amber/40 opacity-0 transition-opacity duration-500" id="halo-claire"></div>
+<!-- Faint Waiting Dot Indicator -->
+<div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-pending-amber/60 animate-ping pointer-events-none" id="ping-claire"></div>
+<div class="relative w-11 h-11 rounded-full p-[2px] bg-gradient-to-tr from-rose-gold to-blush-soft shadow-[0_4px_14px_rgba(23,23,23,0.08)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95">
+<img class="w-full h-full rounded-full object-cover" data-alt="Candid artistic portrait of Claire, youthful Parisian woman with loose chestnut hair, neutral linen shirt, sun-dappled courtyard cafe background, serene romantic expression, soft focus aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGZd14otDrP7ERUvXryXTkhS-hrqBfhFQkq7LlsLQJqyg9prgxACDca5Cr4z5qcSkgvL4Y579MOHZUfJvmj_99HX7wMxnFfY-hr0uhoVfcLmFjyygp3LVpdFM9Cbc3brPP4JMo3MBCsbdqe_YvzqWj0r6kmYStoHKzYHiePi6RMjr_aHLkTQPhoV4zmrdFoVjdxXWPIvTmr_A5vG9O-FIucpdejpbwbr4DVq_aMTw">
+<span class="absolute -top-1 -right-1 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-accent opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-rose-accent"></span>
+</span>
+</div>
+<div class="mt-1 px-2 py-0.5 rounded-full bg-surface-white/90 shadow-[0_2px_8px_rgba(23,23,23,0.04)] flex items-center gap-0.5 border border-blush-soft/20">
+<span class="font-label-sm text-[10px] text-ink-primary">Claire</span>
+<span class="material-symbols-outlined text-pending-amber text-[10px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+</div>
+<!-- Orbit Node: Linnea (Bottom Right, Outer Orbit) -->
+<div class="absolute bottom-[22%] right-[8%] z-20 flex flex-col items-center group cursor-pointer transition-all duration-700 ease-out opacity-0 scale-50 blur-[3px] pointer-events-none" id="avatar-linnea" onclick="selectSoul('Linnea', '25 • 8 km', '89% Resonance')">
+<!-- Detection Ripple Halo -->
+<div class="absolute -inset-2.5 rounded-full border border-rose-gold/40 opacity-0 transition-opacity duration-500" id="halo-linnea"></div>
+<!-- Faint Waiting Dot Indicator -->
+<div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-gold/60 animate-ping pointer-events-none" id="ping-linnea"></div>
+<div class="relative w-10 h-10 rounded-full p-[1.5px] bg-gradient-to-tr from-outline-variant to-rose-gold shadow-[0_4px_12px_rgba(23,23,23,0.06)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95">
+<img class="w-full h-full rounded-full object-cover" data-alt="Scandinavian portrait of Linnea, soft blonde hair tied in loose bun, minimal warm earth-tone clothing, quiet gallery background with warm sculptural light, elegant thoughtful eyes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd8oRuskWvN6XDia1nfQqJMfCaegSSfv6ieTgR-xKB76fAetpnbzNSu0xw81btUQy9GyyJ8Q0zcvWHqo658EZO-nH6Mjg9a586m242QH0ykEWSeWQM-QihgjAqCua3gP1eIk4NWDnnZ-J6pYmQS1BtrsOmwvOXsOC9H2FZgXHJS3rXEBbm0elc_jInPeeszAvYT3z0ZPkx_2xIKyp_AZTvoU50SZD276ZTBqM4R-w">
+</div>
+<div class="mt-1 px-2 py-0.5 rounded-full bg-surface-white/90 shadow-[0_2px_8px_rgba(23,23,23,0.04)] border border-blush-soft/20 flex items-center gap-0.5">
+<span class="font-label-sm text-[10px] text-ink-primary">Linnea</span>
+<span class="material-symbols-outlined text-rose-gold text-[10px]" style="font-variation-settings: 'FILL' 1;">sparkles</span>
+</div>
+</div>
+<!-- Orbit Node: Aria (Bottom Left, Mid Orbit) -->
+<div class="absolute bottom-[16%] left-[20%] z-20 flex flex-col items-center group cursor-pointer transition-all duration-700 ease-out opacity-0 scale-50 blur-[3px] pointer-events-none" id="avatar-aria" onclick="selectSoul('Aria', '23 • 3 km', '91% Resonance')">
+<!-- Detection Ripple Halo -->
+<div class="absolute -inset-2.5 rounded-full border border-blush-soft/50 opacity-0 transition-opacity duration-500" id="halo-aria"></div>
+<!-- Faint Waiting Dot Indicator -->
+<div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-blush-soft/70 animate-ping pointer-events-none" id="ping-aria"></div>
+<div class="relative w-10 h-10 rounded-full p-[1.5px] bg-gradient-to-tr from-blush-soft to-secondary shadow-[0_4px_12px_rgba(23,23,23,0.06)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95">
+<img class="w-full h-full rounded-full object-cover" data-alt="Gentle portrait of Aria, creative young woman with delicate silver earrings, soft twilight pink and amber ambient illumination, minimalist aesthetic, reflective calm gaze." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF5rP8qgYlgplW5XOqCuscFby9pS8RZrRNBDkel_XlRUXTuHMn0y1qM7-Oga5rOhHNOhUsgEdmSwMJgF97ylxlwEpMhg1o0P8kL8_S6AcoHjKTSY5Qio1WwYxDq7hcCj3uWXcts9aZSMO5-BPdx9Q3QtZldQGArVY_axu-GwcY-3IBMvAOAFZNT9tMrOOJEZ5QBOulsLsfYpsGfZET8FKOiMt4hmwl-_E-ScKZ3no">
+</div>
+<div class="mt-1 px-2 py-0.5 rounded-full bg-surface-white/90 shadow-[0_2px_8px_rgba(23,23,23,0.04)] border border-blush-soft/20 flex items-center gap-0.5">
+<span class="font-label-sm text-[10px] text-ink-primary">Aria</span>
+<span class="material-symbols-outlined text-secondary text-[10px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<!-- Central Halo & Resonant Bell Core -->
+<div class="relative z-30 flex items-center justify-center">
+<!-- Pulsing Aura Rings -->
+<div class="absolute w-24 h-24 rounded-full bg-primary-container/20 animate-ping pointer-events-none"></div>
+<div class="absolute w-20 h-20 rounded-full bg-blush-tint/50 blur-sm pointer-events-none"></div>
+<!-- Sacred Core Button -->
+<button class="relative w-16 h-16 rounded-full bg-gradient-to-br from-surface-white via-surface-container-low to-blush-tint flex items-center justify-center shadow-[0_12px_32px_rgba(217,140,149,0.32)] active:scale-90 transition-transform duration-200" id="bellCoreBtn" onclick="pulseBell()" type="button">
+<span class="material-symbols-outlined text-primary text-[28px] transition-transform" id="bellIcon" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</button>
+</div>
+</div>
+<!-- Filter Bar (Pill Chips) -->
+<div class="flex items-center justify-center gap-space-xs mt-3 mb-5 overflow-x-auto py-1">
+<!-- Location Pill -->
+<button class="h-9 px-3.5 rounded-full bg-surface-white/90 shadow-[0_1px_3px_rgba(23,23,23,0.04)] flex items-center gap-1.5 text-ink-primary active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-rose-gold text-[16px]">location_on</span>
+<span class="font-label-md text-label-md">Shanghai</span>
+<span class="material-symbols-outlined text-outline text-[14px]">expand_more</span>
+</button>
+<!-- Distance Pill -->
+<button class="h-9 px-3.5 rounded-full bg-surface-white/90 shadow-[0_1px_3px_rgba(23,23,23,0.04)] flex items-center gap-1.5 text-ink-primary active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-rose-gold text-[16px]">radar</span>
+<span class="font-label-md text-label-md">10 km</span>
+<span class="material-symbols-outlined text-outline text-[14px]">expand_more</span>
+</button>
+<!-- Intention Pill -->
+<button class="h-9 px-3.5 rounded-full bg-surface-white/90 shadow-[0_1px_3px_rgba(23,23,23,0.04)] flex items-center gap-1.5 text-ink-primary active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-rose-accent text-[16px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-label-md text-label-md">Serious</span>
+<span class="material-symbols-outlined text-outline text-[14px]">expand_more</span>
+</button>
+</div>
+<!-- Agent Suggestion Card -->
+<div class="w-full rounded-2xl bg-surface-white/90 border border-blush-soft/30 p-3.5 shadow-[0_2px_12px_rgba(23,23,23,0.03)] mb-5 flex items-center justify-between gap-3 cursor-pointer hover:bg-surface-white transition-all"><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-full bg-blush-tint/70 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-primary text-[18px]">auto_awesome</span></div><div class="min-w-0"><div class="flex items-center gap-1.5"><span class="font-label-sm text-[11px] uppercase tracking-wider text-primary font-semibold">CONSENSUS AGENT</span></div><p class="font-body-sm text-[13px] text-on-surface leading-snug truncate">High resonance detected with nearby seekers sharing your long-term vows.</p></div></div><span class="material-symbols-outlined text-outline text-[18px] shrink-0">chevron_right</span></div>
+<!-- Primary Action: Ring the Bell -->
+<div class="w-full">
+<button class="w-full h-14 rounded-full bg-gradient-to-r from-ink-primary via-ink-secondary to-[#3D2D31] text-surface-white shadow-[0_8px_24px_rgba(23,23,23,0.18)] flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all" id="ringTheBellBtn" onclick="pulseBell()" type="button">
+<span class="material-symbols-outlined text-[20px] text-blush-soft" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<span class="font-label-lg text-label-lg tracking-wide text-surface-white font-medium">Ring the Bell</span>
+</button>
+<p class="text-center font-body-sm text-[11px] text-outline mt-2.5">
+      Emits a gentle zero-knowledge resonance pulse to mutual seekers
+    </p><div class="w-32 h-1 bg-on-surface/20 rounded-full mx-auto mt-6 pointer-events-none"></div>
+</div>
+<!-- Quick Selection Dialog Toast (Hidden by default) -->
+<div class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[390px] z-50 p-4 rounded-2xl bg-surface-white shadow-[0_12px_40px_rgba(23,23,23,0.14)] border border-blush-soft/30 transition-all duration-300" id="soulModal">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-blush-tint flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-ink-primary" id="modalName">Soul</h3>
+<p class="font-body-sm text-body-sm text-outline" id="modalSub">Details</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-ink-secondary active:scale-95" onclick="closeModal()" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="mt-3 pt-3 flex gap-2">
+<button class="flex-1 h-10 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform" type="button">
+<span>View Echo Vow</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  // Progressive Avatar Radar Reveal Sequence
+  const candidateConfig = [
+    { id: 'claire', time: 800, floatClass: 'avatar-floating' },
+    { id: 'sophie', time: 1800, floatClass: 'avatar-floating-delayed' },
+    { id: 'linnea', time: 2600, floatClass: 'avatar-floating' },
+    { id: 'aria', time: 3400, floatClass: 'avatar-floating-delayed' }
+  ];
+
+  function revealAvatar(item) {
+    const el = document.getElementById('avatar-' + item.id);
+    const halo = document.getElementById('halo-' + item.id);
+    const ping = document.getElementById('ping-' + item.id);
+    if (!el) return;
+
+    el.classList.add('avatar-revealed');
+    if (ping) ping.style.display = 'none';
+
+    // Resonant chime halo pulse
+    if (halo) {
+      halo.classList.remove('opacity-0');
+      halo.classList.add('scale-150');
+      setTimeout(() => {
+        halo.classList.add('opacity-0');
+        halo.classList.remove('scale-150');
+      }, 700);
+    }
+
+    // Attach gentle breathing motion after reveal animation settles
+    setTimeout(() => {
+      el.classList.add(item.floatClass);
+    }, 700);
+  }
+
+  // Trigger sequential reveals on initial load
+  window.addEventListener('DOMContentLoaded', () => {
+    candidateConfig.forEach(item => {
+      setTimeout(() => revealAvatar(item), item.time);
+    });
+  });
+
+  // Bell pulse and interactive rescan wave trigger
+  function pulseBell() {
+    const btn = document.getElementById('bellCoreBtn');
+    const icon = document.getElementById('bellIcon');
+    const sweep = document.getElementById('radarSweepElement');
+    const shockwave = document.getElementById('resonanceShockwave');
+
+    if (btn) {
+      btn.classList.add('scale-125');
+      setTimeout(() => btn.classList.remove('scale-125'), 350);
+    }
+    if (icon) {
+      icon.classList.add('bell-ring-active');
+      setTimeout(() => icon.classList.remove('bell-ring-active'), 650);
+    }
+    const rBtn = document.getElementById('ringTheBellBtn');
+    if (rBtn) {
+      rBtn.classList.add('brightness-125', 'scale-[0.98]');
+      setTimeout(() => rBtn.classList.remove('brightness-125', 'scale-[0.98]'), 300);
+    }
+
+    // Audio-visual resonance shockwave ripple
+    if (shockwave) {
+      shockwave.classList.remove('shockwave-active');
+      void shockwave.offsetWidth; // trigger reflow
+      shockwave.classList.add('shockwave-active');
+    }
+
+    // Temporarily accelerate the radar sweep
+    if (sweep) {
+      sweep.classList.add('accelerated');
+      setTimeout(() => sweep.classList.remove('accelerated'), 3600);
+    }
+
+    // Resonant feedback glow for all avatars
+    candidateConfig.forEach((item, index) => {
+      setTimeout(() => {
+        const el = document.getElementById('avatar-' + item.id);
+        const halo = document.getElementById('halo-' + item.id);
+        if (el) {
+          el.classList.add('scale-110');
+          setTimeout(() => el.classList.remove('scale-110'), 400);
+        }
+        if (halo) {
+          halo.classList.remove('opacity-0');
+          halo.classList.add('scale-150');
+          setTimeout(() => {
+            halo.classList.add('opacity-0');
+            halo.classList.remove('scale-150');
+          }, 600);
+        }
+      }, (index + 1) * 220);
+    });
+  }
+
+  function selectSoul(name, sub, match) {
+    const modal = document.getElementById('soulModal');
+    const modalName = document.getElementById('modalName');
+    const modalSub = document.getElementById('modalSub');
+    if (modal && modalName && modalSub) {
+      modalName.textContent = name;
+      modalSub.textContent = sub + ' • ' + match;
+      modal.classList.remove('hidden');
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('soulModal');
+    if (modal) modal.classList.add('hidden');
+  }
+</script></main></body></html>

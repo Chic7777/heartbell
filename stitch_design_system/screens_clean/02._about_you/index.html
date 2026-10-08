@@ -1,0 +1,216 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-variant": "#e7e1e1", "on-secondary-fixed": "#350f06", "on-error": "#ffffff", "on-primary-fixed": "#390914", "error": "#ba1a1a", "on-primary-fixed-variant": "#70343d", "primary-fixed-dim": "#ffb2ba", "primary-fixed": "#ffd9dc", "surface-container": "#f2ecec", "outline-variant": "#d7c1c3", "on-secondary-container": "#794436", "surface-tint": "#8c4b54", "tertiary-container": "#30b776", "inverse-on-surface": "#f5efef", "on-background": "#1d1b1b", "on-tertiary-fixed-variant": "#005230", "blush-tint": "#F4DDE0", "surface-container-high": "#ede7e6", "on-secondary": "#ffffff", "tertiary": "#006d41", "tertiary-fixed-dim": "#5ede98", "secondary-fixed-dim": "#fdb5a3", "secondary-fixed": "#ffdbd1", "inverse-primary": "#ffb2ba", "on-surface-variant": "#524344", "blush-soft": "#E7B7A8", "error-container": "#ffdad6", "background-cream": "#FFF9F7", "outline": "#857374", "ink-primary": "#171717", "on-secondary-fixed-variant": "#6b392c", "secondary": "#875041", "sage-muted": "#7B9D86", "on-tertiary": "#ffffff", "on-error-container": "#93000a", "tertiary-fixed": "#7cfbb2", "surface-white": "#FFFFFF", "background": "#fef8f7", "surface-container-lowest": "#ffffff", "primary": "#8c4b54", "destructive-rose": "#C0646A", "inverse-surface": "#323030", "surface-container-low": "#f8f2f2", "on-surface": "#1d1b1b", "primary-container": "#d98c95", "on-tertiary-fixed": "#002110", "on-primary-container": "#5d262f", "rose-accent": "#E98F93", "surface-dim": "#ded9d8", "surface": "#fef8f7", "pending-dark": "#B8732F", "secondary-container": "#fdb5a3", "surface-bright": "#fef8f7", "ink-secondary": "#252323", "confirmed-green": "#4ECF8B", "on-tertiary-container": "#004125", "pending-amber": "#F2A65A", "on-primary": "#ffffff", "rose-gold": "#C98877", "surface-container-highest": "#e7e1e1", "sage-deep": "#2E9E63" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "margin": "1.5rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, "fontFamily": { "label-md": ["Inter"], "body-sm": ["Inter"], "body-md": ["Inter"], "headline-lg": ["Noto Serif"], "headline-xl-mobile": ["Noto Serif"], "label-sm": ["Inter"], "label-lg": ["Inter"], "headline-lg-mobile": ["Noto Serif"], "body-lg": ["Inter"], "headline-md": ["Noto Serif"], "headline-sm": ["Noto Serif"], "headline-xl": ["Noto Serif"], "title-serif": ["Noto Serif"] }, "fontSize": { "label-md": ["14px", {"lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500"}], "body-sm": ["12px", {"lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400"}], "body-md": ["14px", {"lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400"}], "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400"}], "headline-xl-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400"}], "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500"}], "label-lg": ["16px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}], "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400"}], "body-lg": ["16px", {"lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400"}], "headline-md": ["22px", {"lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500"}], "headline-sm": ["18px", {"lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500"}], "headline-xl": ["48px", {"lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400"}] } } } }</script><style>@layer base{html,body{width:100vw;min-height:100vh;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../../ui/fonts.css">
+
+</head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen selection:bg-blush-tint"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(23,23,23,0.03)] pt-safe"><div class="h-16 px-space-lg flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><button aria-label="Go back" class="w-11 h-11 -ml-space-xs rounded-full flex items-center justify-center text-on-surface hover:bg-blush-tint/40 transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[20px]">arrow_back</span></button><img alt="Consensus Bell brand mark featuring an interlocking dual rose-gold and blush ring chime emblem with subtle ethereal aura, minimalist luxury design. Brand logo. - Primary color: #d98c95
+- Font: notoSerif
+- Mode: light
+- Roundness: rounded-full
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XIX4pds9axBR7uDD9g5qZYFG70aF5g_eM9bMj_rNUcWytnlhm-JIcuQY6VXDGVHnXPX93DE3On34xuKXUUKs_OsTO9wXk9uQEUNpPqmOlLos8ij1R2sOt9l6drfhoEbos2LfzhdDpod-U4WUhMcX9K37n6M65pR9I1bi4eTZIvrvzGw5iGCyRfiE4I1wn9Qt1Ky-1fWoOS7o7HBFPqYLdcV0OCAeH69I6ZiVk0fLqf"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight hidden xs:inline">Consensus Bell</span></div><div class="flex-1 flex flex-col items-center justify-center max-w-[160px] mx-auto text-center"><h1 class="font-headline-sm text-headline-sm text-on-surface truncate max-w-full">Partner Resonance</h1></div><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_8px_rgba(140,75,84,0.2)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface pb-safe"><div class="flex flex-col w-full px-space-lg pb-space-xl">
+<!-- Progress Header Indicator -->
+<div class="flex items-center justify-between pt-space-sm mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-7 h-1.5 rounded-full bg-primary"></span>
+<span class="w-2 h-1.5 rounded-full bg-blush-tint"></span>
+<span class="w-2 h-1.5 rounded-full bg-blush-tint"></span>
+<span class="w-2 h-1.5 rounded-full bg-blush-tint"></span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Step 02 of 05</span>
+</div>
+<!-- Narrative Header -->
+<div class="flex flex-col items-center text-center mt-space-xs mb-space-lg">
+<span class="font-label-sm text-label-sm text-rose-gold tracking-widest uppercase mb-space-xs">Identity &amp; Resonance</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">Tell us about you</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[280px] mt-space-xs">
+      Craft your presence in the shared sanctuary. These authentic whispers guide your ring’s constellation.
+    </p>
+</div>
+<!-- Intimate Avatar Uploader Component -->
+<div class="flex flex-col items-center justify-center mb-space-xl relative">
+<!-- Ambient Ring Luster Effect -->
+<div class="relative flex items-center justify-center p-2 rounded-full bg-gradient-to-b from-blush-tint/60 via-surface-container to-transparent shadow-[0_12px_32px_rgba(217,140,149,0.18)]">
+<div class="relative w-28 h-28 rounded-full overflow-hidden p-1 bg-surface-white">
+<img alt="Luna's profile portrait" class="w-full h-full object-cover rounded-full" data-alt="An ethereal and artistic soft-focus portrait of a young Asian woman named Luna with soft natural sunlight framing her gentle gaze, warm blush and cream cinematic palette, fine-art editorial photography with serene luxury minimalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCVXlwI-5w_ferWOfzAwFv7meEm81g1Z1kTheZKgdiEZCP7I1r5IGQyiuOm9varzB-jo_INq_lo9u1NbIV-kZcQnEzZQX5d_wPNmlgw8NOTUxmlzicdvldh5saDfTht82Lm8PrRubg8oM5Eq6TYH4CsvPdhoTOXDRQMVWtdjfyLsmsOOcvcfMpjLW3bWbmBsiQe3XyG8-uglWsRxLk8qwvDaVujfGmmelVizfch4Y">
+</div>
+<!-- Quick Edit Floating Badge -->
+<button aria-label="Change portrait photograph" class="absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-ink-primary text-surface-white flex items-center justify-center shadow-[0_4px_12px_rgba(23,23,23,0.16)] active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[17px]">camera_alt</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-primary mt-space-sm flex items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-[13px]">auto_awesome</span>
+      Curate Photo
+    </span>
+</div>
+<!-- Interactive Identity Form Rows -->
+<div class="flex flex-col gap-space-sm w-full mb-space-xl">
+<!-- Row: Nickname -->
+<div class="group flex items-center justify-between px-space-lg py-3.5 rounded-lg bg-surface-container-low transition-all duration-200 focus-within:bg-surface-container focus-within:shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)]">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-full bg-blush-tint/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</div>
+<label class="font-label-md text-label-md text-on-surface-variant select-none" for="input-nickname">Nickname</label>
+</div>
+<div class="flex items-center gap-space-xs text-right">
+<input class="bg-transparent text-right font-headline-sm text-headline-sm text-ink-primary focus:outline-none max-w-[140px] truncate" id="input-nickname" placeholder="Your name" type="text" value="Luna">
+<span class="material-symbols-outlined text-outline-variant text-[18px]">edit</span>
+</div>
+</div>
+<!-- Row: Gender Modal Opener -->
+<button class="w-full flex items-center justify-between px-space-lg py-3.5 rounded-lg bg-surface-container-low text-left active:bg-surface-container transition-all shadow-[0_1px_2px_rgba(23,23,23,0.02)]" id="btn-gender-select" type="button">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-blush-tint/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">wb_twilight</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Gender</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-ink-primary" id="gender-value">Female</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</button>
+<!-- Row: Location Selector -->
+<button class="w-full flex items-center justify-between px-space-lg py-3.5 rounded-lg bg-surface-container-low text-left active:bg-surface-container transition-all shadow-[0_1px_2px_rgba(23,23,23,0.02)]" id="btn-location-select" type="button">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-blush-tint/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Location</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-ink-primary" id="location-value">Shanghai</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</button>
+<!-- Row: Age Cohort Segment -->
+<button class="w-full flex items-center justify-between px-space-lg py-3.5 rounded-lg bg-surface-container-low text-left active:bg-surface-container transition-all shadow-[0_1px_2px_rgba(23,23,23,0.02)]" id="btn-age-select" type="button">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-blush-tint/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">hourglass_top</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Age</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-ink-primary" id="age-value">20–26</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</button>
+</div>
+<!-- Gentle Privacy & Consensus Note -->
+<div class="flex items-center justify-center gap-space-xs text-center px-space-md mb-space-lg">
+<span class="material-symbols-outlined text-[15px] text-sage-muted">verified_user</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Your identity remains encrypted until mutually bonded.</span>
+</div>
+<!-- Bottom Forward Progression Action -->
+<div class="flex flex-col items-center justify-center mt-auto">
+<button aria-label="Continue to your interests" class="group relative flex items-center justify-center w-14 h-14 rounded-full bg-primary-container text-surface-white shadow-[0_12px_28px_rgba(217,140,149,0.36)] active:scale-95 transition-all duration-200" id="next-step-btn" type="button">
+<span class="material-symbols-outlined text-[26px] transition-transform duration-200 group-hover:translate-x-0.5">arrow_forward</span>
+<span class="sr-only">Continue to interests selection</span>
+</button>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-space-xs">Next: Your Interests</span>
+</div>
+<!-- Interactive Subtle Bottom Sheet (Gender Picker Example) -->
+<div class="fixed inset-0 bg-ink-primary/30 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300 flex items-end" id="modal-backdrop">
+<div class="w-full bg-surface-white rounded-t-lg p-space-lg transform translate-y-full transition-transform duration-300 max-w-[480px] mx-auto shadow-[0_4px_12px_rgba(23,23,23,0.04),0_20px_48px_rgba(23,23,23,0.08)]" id="modal-panel">
+<div class="w-10 h-1 bg-surface-variant rounded-full mx-auto mb-space-md"></div>
+<div class="flex items-center justify-between mb-space-md">
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Select Gender</h3>
+<button class="text-on-surface-variant hover:text-ink-primary" id="modal-close" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-xs mb-space-md">
+<button class="gender-option w-full py-3.5 px-space-md text-left rounded-DEFAULT bg-surface-container-low font-label-md text-label-md text-ink-primary flex justify-between items-center active:bg-blush-tint/40" data-val="Female" type="button">
+<span>Female</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check</span>
+</button>
+<button class="gender-option w-full py-3.5 px-space-md text-left rounded-DEFAULT bg-surface font-label-md text-label-md text-on-surface-variant flex justify-between items-center active:bg-blush-tint/40" data-val="Male" type="button">
+<span>Male</span>
+</button>
+<button class="gender-option w-full py-3.5 px-space-md text-left rounded-DEFAULT bg-surface font-label-md text-label-md text-on-surface-variant flex justify-between items-center active:bg-blush-tint/40" data-val="Non-binary" type="button">
+<span>Non-binary</span>
+</button>
+</div>
+<button class="w-full h-12 rounded-full bg-ink-primary text-surface-white font-label-lg text-label-lg active:scale-98 transition-transform" id="modal-confirm" type="button">
+        Confirm
+      </button>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const backdrop = document.getElementById('modal-backdrop');
+    const panel = document.getElementById('modal-panel');
+    const genderBtn = document.getElementById('btn-gender-select');
+    const closeBtn = document.getElementById('modal-close');
+    const confirmBtn = document.getElementById('modal-confirm');
+    const genderValueDisplay = document.getElementById('gender-value');
+    const options = document.querySelectorAll('.gender-option');
+    let selectedGender = "Female";
+
+    function openModal() {
+      backdrop.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        backdrop.classList.remove('opacity-0');
+        panel.classList.remove('translate-y-full');
+      });
+    }
+
+    function closeModal() {
+      backdrop.classList.add('opacity-0');
+      panel.classList.add('translate-y-full');
+      setTimeout(() => {
+        backdrop.classList.add('hidden');
+      }, 300);
+    }
+
+    if(genderBtn) genderBtn.addEventListener('click', openModal);
+    if(closeBtn) closeBtn.addEventListener('click', closeModal);
+    if(backdrop) backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        options.forEach(o => {
+          o.classList.remove('bg-surface-container-low', 'text-ink-primary');
+          o.classList.add('bg-surface', 'text-on-surface-variant');
+          const chk = o.querySelector('.material-symbols-outlined');
+          if (chk) chk.remove();
+        });
+        opt.classList.remove('bg-surface', 'text-on-surface-variant');
+        opt.classList.add('bg-surface-container-low', 'text-ink-primary');
+        const icon = document.createElement('span');
+        icon.className = 'material-symbols-outlined text-primary text-[18px]';
+        icon.innerText = 'check';
+        opt.appendChild(icon);
+        selectedGender = opt.getAttribute('data-val');
+      });
+    });
+
+    if(confirmBtn) {
+      confirmBtn.addEventListener('click', () => {
+        genderValueDisplay.innerText = selectedGender;
+        closeModal();
+      });
+    }
+
+    const nextBtn = document.getElementById('next-step-btn');
+    if(nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        // Visual ripple / tap interaction
+        nextBtn.classList.add('scale-90');
+        setTimeout(() => {
+          nextBtn.classList.remove('scale-90');
+        }, 150);
+      });
+    }
+  })();
+</script></main><div id="st-selection-translation"></div></body></html>

@@ -106,6 +106,21 @@ export async function createApp(options={}) {
           const authProvider=token?db.prepare('SELECT provider FROM session_providers WHERE token=?').get(sessionHash(token))?.provider:'injected';
           return reply(res,200,{address,authProvider:authProvider||'injected',chainAddress:authProvider==='privy'?aa.identity(address):address});
         }
+        if(url.pathname==='/api/avatar'&&method==='POST'){
+          const body=z.object({data:z.string().min(50).max(560000)}).strict().parse(await readBody(req));
+          const m=/^data:(image\/(jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(body.data);
+          if(!m)throw Object.assign(new Error('仅支持 JPEG/PNG/WebP 图片'),{status:400});
+          const bin=Buffer.from(m[3],'base64');
+          if(bin.length>400000)throw Object.assign(new Error('图片请压缩到 400KB 以内'),{status:413});
+          const ok=bin[0]===0xFF&&bin[1]===0xD8||bin[0]===0x89&&bin[1]===0x50||bin.slice(0,4).toString()==='RIFF';
+          if(!ok)throw Object.assign(new Error('图片内容校验失败'),{status:400});
+          const name='avatar-'+address.toLowerCase().replace(/[^a-z0-9]/g,'')+'.'+(m[2]==='jpeg'?'jpg':m[2]);
+          const {writeFile:wf,mkdir:mk}=await import('node:fs/promises');
+          const dir=path.join(root,'..','ui','assets');
+          await mk(dir,{recursive:true});
+          await wf(path.join(dir,name),bin);
+          return reply(res,200,{url:'/assets/'+name});
+        }
         if(url.pathname==='/api/profile'){
           if(method==='GET'){const row=db.prepare('SELECT body FROM profiles WHERE address=?').get(address);return reply(res,200,{address,profile:row?JSON.parse(row.body):null});}
           if(method==='PUT'){const profile=profileSchema.parse(await readBody(req));db.prepare('INSERT INTO profiles VALUES(?,?) ON CONFLICT(address) DO UPDATE SET body=excluded.body').run(address,JSON.stringify(profile));return reply(res,200,{profile});}

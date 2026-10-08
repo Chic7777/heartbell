@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><title>Consensus Bell</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed-variant": "#6b392c", "tertiary-container": "#30b776", "primary-fixed": "#ffd9dc", "on-primary-fixed-variant": "#70343d", "on-primary-fixed": "#390914", "inverse-on-surface": "#f5efef", "secondary-fixed-dim": "#fdb5a3", "inverse-surface": "#323030", "on-surface-variant": "#524344", "sage-deep": "#2E9E63", "secondary-container": "#fdb5a3", "secondary": "#875041", "error": "#ba1a1a", "on-tertiary-fixed-variant": "#005230", "ink-primary": "#171717", "on-error": "#ffffff", "surface-variant": "#e7e1e1", "on-secondary-container": "#794436", "confirmed-green": "#4ECF8B", "blush-soft": "#E7B7A8", "primary-fixed-dim": "#ffb2ba", "tertiary": "#006d41", "tertiary-fixed": "#7cfbb2", "surface-white": "#FFFFFF", "surface": "#fef8f7", "surface-container-highest": "#e7e1e1", "pending-amber": "#F2A65A", "surface-bright": "#fef8f7", "secondary-fixed": "#ffdbd1", "inverse-primary": "#ffb2ba", "sage-muted": "#7B9D86", "on-surface": "#1d1b1b", "primary": "#8c4b54", "surface-container-low": "#f8f2f2", "outline-variant": "#d7c1c3", "tertiary-fixed-dim": "#5ede98", "rose-accent": "#E98F93", "background-cream": "#FFF9F7", "on-background": "#1d1b1b", "ink-secondary": "#252323", "outline": "#857374", "background": "#fef8f7", "surface-container": "#f2ecec", "blush-tint": "#F4DDE0", "on-error-container": "#93000a", "surface-tint": "#8c4b54", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "on-secondary-fixed": "#350f06", "on-tertiary-container": "#004125", "error-container": "#ffdad6", "on-primary-container": "#5d262f", "surface-container-high": "#ede7e6", "on-primary": "#ffffff", "rose-gold": "#C98877", "pending-dark": "#B8732F", "on-tertiary-fixed": "#002110", "on-tertiary": "#ffffff", "primary-container": "#d98c95", "surface-dim": "#ded9d8", "destructive-rose": "#C0646A" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-md": "1rem", "gutter": "1rem", "space-xl": "2rem", "margin": "1.5rem" }, "fontFamily": { "headline-sm": ["Noto Serif"], "body-sm": ["Inter"], "body-md": ["Inter"], "headline-lg-mobile": ["Noto Serif"], "headline-xl-mobile": ["Noto Serif"], "label-lg": ["Inter"], "headline-xl": ["Noto Serif"], "headline-lg": ["Noto Serif"], "label-sm": ["Inter"], "headline-md": ["Noto Serif"], "body-lg": ["Inter"], "label-md": ["Inter"] }, "fontSize": { "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-xl-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-xl": ["48px", { "lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #FFF9F7; } body { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../../ui/fonts.css">
+
+</head><body class="bg-background-cream text-ink-primary font-body-md antialiased min-h-screen flex flex-col"><header class="fixed top-0 inset-x-0 z-50 bg-background-cream/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(23,23,23,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-full flex items-center justify-center bg-blush-tint/40"><span class="material-symbols-outlined text-rose-gold text-[20px]">notifications_active</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-ink-primary tracking-tight leading-none">Consensus Bell</span><span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-confirmed-green inline-block animate-pulse"></span>Our Shared Life</span></div></div><div class="flex items-center gap-space-sm"><div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-white/80 shadow-[0_1px_4px_rgba(23,23,23,0.04)]"><span class="material-symbols-outlined text-sage-deep text-[14px]">verified</span><span class="font-label-sm text-label-sm text-ink-secondary">Synced</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-blush-tint/60" src="https://lh3.googleusercontent.com/aida/AEtjO1WUDvw8Vog_Q11MCAeQca-Jao7qtTktWUl4hpKPqm4hVoQyXkFA0lzVegjfsZScA9aXmyPj_0BJ7-AvvKUJka59kZh7MlTJ8ukkztH8eqKbSTbfeN5IeMV3CI6lNLJ8k9b004fXMS-avx1NamT3jUJMJT4pBdrwNgCK_Kcy971nY75IhC9_XKEumlf6reh9XGyU0EnNrPVQ1KOOqfPHOgUFoBhSI47v13sdAvzmyxsz6KM7dpveE0UsWQ"/></div></div></header><main class="flex-1 flex flex-col w-full max-w-[720px] mx-auto pt-16 pb-24 bg-background-cream"><div class="flex flex-col w-full px-margin pb-10">
+<!-- Interactive Tab State Updater for App Shell -->
+<script>
+    (function() {
+      const navLinks = document.querySelectorAll('nav a[data-path]');
+      navLinks.forEach(link => {
+        const dot = link.querySelector('.nav-dot');
+        if (link.getAttribute('data-path') === 'me') {
+          link.classList.remove('text-on-surface-variant');
+          link.classList.add('text-primary', 'font-semibold');
+          if (dot) {
+            dot.classList.remove('opacity-0', 'scale-50');
+            dot.classList.add('opacity-100', 'scale-100');
+          }
+        } else {
+          link.classList.remove('text-primary', 'font-semibold');
+          link.classList.add('text-on-surface-variant');
+          if (dot) {
+            dot.classList.add('opacity-0', 'scale-50');
+            dot.classList.remove('opacity-100', 'scale-100');
+          }
+        }
+      });
+    })();
+  </script>
+<!-- Profile & Dual Bond Header -->
+<section class="mt-4 mb-6 flex flex-col items-center text-center">
+<!-- Intertwined Orbit Avatars -->
+<div class="relative flex items-center justify-center mb-3">
+<div class="relative z-10 w-20 h-20 rounded-full bg-surface-white p-1 shadow-md">
+<img class="w-full h-full rounded-full object-cover" data-alt="Editorial close-up portrait of Luna, a young woman with soft natural lighting, gentle gaze, styled dark hair, warm cinematic cream aesthetic, studio film photography tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATW3zF3J3SD9kDsBV2ydcsPMdlhvHnt4DgZEHoMu3zDy4Dzqr_gd3AcnrvGO1AwMqE5oJmNyFtNmwsCKROGBTJ2JCJDanrl8a6l_lhA-nwy1A47uDDNVrFJ0_DuZ51h8N77prbwbAF_Wj6h1_moeqVTVin3ybOc9U9SbHTERHeLirD0R13uYdyu6QD3S6aC4eLG6MZGSrlECbqOMKQSFHIW2UW2z_FUA2nEbC1ado"/>
+</div>
+<div class="relative -ml-5 w-16 h-16 rounded-full bg-surface-white p-1 shadow-md z-0 opacity-95">
+<img class="w-full h-full rounded-full object-cover" data-alt="Soft photographic portrait of Sophie, radiant smile, warm ambient daylight, muted peach and cream tones, gentle cinematic intimacy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1KJ4HLJRznD-BhEj2V2dKPpljsc_kw8eNyyjtfxGCx8IkUv6wDpoAh0QgAkw2Fx0paxeMee7thKwscYL3VHndinMo2rshFFSGDTyylaMbdF4ga2Poszc-6E2AWclljKjH1beq5s1k8CmSsscaumSF8pToLCDizX9-ACjkDRVeiLDlCB3weOcTp3HR6sId-_6Zpj-iWpU0KG7JrZ0Ev5YJTra9z3JDLhdGzrgoKug"/>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-surface-white px-2.5 py-0.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-rose-gold text-[13px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-label-sm text-label-sm text-primary font-medium tracking-tight">Day 127</span>
+</div>
+</div>
+<!-- Identity & Connected Partner -->
+<h1 class="font-headline-md text-headline-md text-ink-primary mt-1">Luna</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-center gap-1.5 mt-0.5">
+<span>@luna.bell</span>
+<span class="text-rose-gold/60">•</span>
+<span class="text-ink-secondary font-medium">Bound to Sophie</span>
+</p>
+<!-- Compact Relationship Snapshot Stats -->
+<div class="grid grid-cols-3 gap-2 w-full mt-5 bg-surface-white rounded-lg p-3.5 shadow-sm">
+<div class="flex flex-col items-center text-center">
+<span class="font-headline-sm text-headline-sm text-ink-primary leading-tight">18</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Memories</span>
+</div>
+<div class="flex flex-col items-center text-center relative">
+<span class="font-headline-sm text-headline-sm text-primary leading-tight">7</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Vows Sealed</span>
+</div>
+<div class="flex flex-col items-center text-center">
+<span class="font-headline-sm text-headline-sm text-ink-primary leading-tight">260</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">BOT Bond</span>
+</div>
+</div>
+</section>
+<!-- Section 1: Web3 & Cryptographic Proofs -->
+<section class="mb-5 flex flex-col gap-2">
+<div class="px-1 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Shared Trust &amp; Ledger</span>
+<span class="font-label-sm text-label-sm text-sage-deep flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-confirmed-green"></span>BOT Chain L2
+      </span>
+</div>
+<div class="bg-surface-white rounded-lg p-1.5 shadow-sm flex flex-col gap-1">
+<!-- Wallet & Smart Account Row -->
+<button class="w-full min-h-[52px] px-3.5 py-2.5 rounded flex items-center justify-between hover:bg-surface-container-low transition-colors text-left group" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[20px]">account_balance_wallet</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary group-hover:text-primary transition-colors">Wallet &amp; Smart Account</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Connected · 0x6E8...3F2A</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 shrink-0 ml-2">
+<span class="font-label-sm text-label-sm text-sage-deep px-2 py-0.5 rounded-full bg-tertiary-fixed/30 font-medium">Dual Multi-sig</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+</div>
+</button>
+<!-- View On-chain Proofs Row -->
+<button class="w-full min-h-[52px] px-3.5 py-2.5 rounded flex items-center justify-between hover:bg-surface-container-low transition-colors text-left group" id="open-proof-modal" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[20px]">token</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary group-hover:text-primary transition-colors">View On-chain Proofs</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Romantic SBT #0409 · Minted Oct 7</span>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0 ml-2">
+<span class="font-label-sm text-label-sm text-ink-secondary">View</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Section 2: Ring Experience & Intimacy Hardware -->
+<section class="mb-5 flex flex-col gap-2">
+<div class="px-1 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Sensory &amp; Resonance</span>
+</div>
+<div class="bg-surface-white rounded-lg p-1.5 shadow-sm flex flex-col gap-1">
+<!-- Manage Romantic Ring -->
+<button class="w-full min-h-[52px] px-3.5 py-2.5 rounded flex items-center justify-between hover:bg-surface-container-low transition-colors text-left group" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[20px]">ring_volume</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary group-hover:text-primary transition-colors">Manage Romantic Ring</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Active Cadence · Rose Gold Duo</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 shrink-0 ml-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">Paired</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+</div>
+</button>
+<!-- Bell Vault & Privacy -->
+<button class="w-full min-h-[52px] px-3.5 py-2.5 rounded flex items-center justify-between hover:bg-surface-container-low transition-colors text-left group" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[20px]">enhanced_encryption</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary group-hover:text-primary transition-colors">Bell Vault &amp; Privacy</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Zero-Knowledge Encrypted Memories</span>
+</div>
+</div>
+<div class="flex items-center shrink-0 ml-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+</div>
+</button>
+<!-- Notifications & Haptic Resonance Toggle -->
+<div class="w-full min-h-[52px] px-3.5 py-2.5 rounded flex items-center justify-between">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[20px]">vibration</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary">Haptic Resonance</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Pulse ring when Sophie taps Bell</span>
+</div>
+</div>
+<button class="w-12 h-7 bg-primary rounded-full p-0.5 transition-colors duration-200 relative shrink-0" id="haptic-toggle-btn" type="button">
+<div class="w-6 h-6 rounded-full bg-surface-white shadow-sm translate-x-5 transition-transform duration-200" id="haptic-toggle-knob"></div>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 3: Relationship Governance & Care -->
+<section class="mb-5 flex flex-col gap-2">
+<div class="px-1 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Relationship Governance</span>
+</div>
+<div class="bg-surface-white rounded-lg p-1.5 shadow-sm flex flex-col gap-1">
+<!-- Relationship Settings -->
+<button class="w-full min-h-[52px] px-3.5 py-2.5 rounded flex items-center justify-between hover:bg-surface-container-low transition-colors text-left group" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[20px]">tune</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary group-hover:text-primary transition-colors">Shared Rules &amp; Co-Sign Timers</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Mutual consent required for milestone burns</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] ml-2 shrink-0">chevron_right</span>
+</button>
+<!-- Archival & Memory Export -->
+<button class="w-full min-h-[52px] px-3.5 py-2.5 rounded flex items-center justify-between hover:bg-surface-container-low transition-colors text-left group" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blush-tint/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-rose-gold text-[20px]">auto_stories</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary group-hover:text-primary transition-colors">Export Romantic Archive</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Download signed vows as keepsake PDF/IPFS</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] ml-2 shrink-0">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Destructive Relationship Separation Guard -->
+<section class="mt-2 flex flex-col items-center">
+<button class="w-full min-h-[52px] px-4 py-3 rounded-lg bg-surface-white hover:bg-error-container/30 transition-colors flex items-center justify-between shadow-sm group" id="open-separation-guard" type="button">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-error-container/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-destructive-rose text-[20px]">heart_broken</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-label-md text-label-md text-destructive-rose font-medium">End Relationship</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dissolve consensus &amp; archive vows to ledger</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-destructive-rose text-[18px] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</button>
+<p class="font-body-sm text-body-sm text-on-surface-variant/80 text-center mt-3 max-w-xs">
+      All mutual SBTs require 7 days of cooldown and dual signature consensus to dissolve gracefully.
+    </p>
+</section>
+<!-- Proof Bottom Sheet Component (Hidden by default) -->
+<div class="fixed inset-0 z-50 bg-ink-primary/30 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col justify-end" id="proof-sheet-backdrop">
+<div class="w-full max-w-[720px] mx-auto bg-surface-white rounded-t-lg p-6 shadow-xl translate-y-full transition-transform duration-300 flex flex-col gap-4" id="proof-sheet-panel">
+<div class="w-10 h-1 rounded-full bg-surface-variant mx-auto mb-1"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-confirmed-green text-[22px]">verified</span>
+<h2 class="font-headline-sm text-headline-sm text-ink-primary">Proof of Vow</h2>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-ink-secondary" id="close-proof-sheet" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        This covenant was permanently etched onto BOT Chain by mutual private key signature.
+      </p>
+<!-- Signers Card -->
+<div class="bg-surface-container-low rounded p-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center font-label-sm text-on-primary-fixed">L</div>
+<span class="font-label-md text-label-md text-ink-primary">Luna (Initiator)</span>
+</div>
+<span class="material-symbols-outlined text-rose-gold text-[18px]">all_inclusive</span>
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-ink-primary">Sophie (Signer)</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-label-sm text-on-secondary-container">S</div>
+</div>
+</div>
+<!-- Blockchain Metadata Table -->
+<div class="flex flex-col gap-2.5 font-body-sm text-body-sm">
+<div class="flex justify-between py-1 border-none">
+<span class="text-on-surface-variant">Network</span>
+<span class="text-ink-primary font-medium">BOT Chain Mainnet</span>
+</div>
+<div class="flex justify-between py-1 border-none">
+<span class="text-on-surface-variant">Contract SBT</span>
+<span class="text-ink-primary font-mono text-body-sm">0x9A4b...C81e</span>
+</div>
+<div class="flex justify-between py-1 border-none">
+<span class="text-on-surface-variant">Transaction Hash</span>
+<span class="text-ink-primary font-mono text-body-sm">0x3f2a...88e1</span>
+</div>
+<div class="flex justify-between py-1 border-none">
+<span class="text-on-surface-variant">Block Timestamp</span>
+<span class="text-ink-primary font-medium">Oct 07, 2026 · 10:24 UTC</span>
+</div>
+</div>
+<a class="w-full min-h-[52px] bg-ink-primary text-surface-white rounded-full flex items-center justify-center gap-2 font-label-md text-label-md hover:bg-ink-secondary active:scale-[0.98] transition-transform" href="https://etherscan.io" rel="noopener noreferrer" target="_blank">
+<span>View on BOT Explorer</span>
+<span class="material-symbols-outlined text-[18px]">arrow_outward</span>
+</a>
+</div>
+</div>
+<!-- End Relationship Guard Modal (Hidden by default) -->
+<div class="fixed inset-0 z-50 bg-ink-primary/30 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center px-margin" id="separation-modal-backdrop">
+<div class="w-full max-w-sm bg-surface-white rounded-lg p-6 shadow-xl scale-95 transition-transform duration-300 flex flex-col gap-4 text-center" id="separation-modal-panel">
+<div class="w-12 h-12 rounded-full bg-error-container/50 mx-auto flex items-center justify-center text-destructive-rose">
+<span class="material-symbols-outlined text-[26px]">heart_broken</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Enter Cooldown Period?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Initiating dissolution alerts Sophie and begins a 7-day contemplative pause. Nothing will be permanently archived until day 7 concludes.
+        </p>
+</div>
+<div class="flex flex-col gap-2 mt-2">
+<button class="w-full min-h-[48px] bg-error-container text-destructive-rose rounded-full font-label-md text-label-md hover:bg-error-container/80 transition-colors" id="confirm-cooldown-btn" type="button">
+          Begin 7-Day Cooldown
+        </button>
+<button class="w-full min-h-[48px] bg-surface-container text-ink-primary rounded-full font-label-md text-label-md hover:bg-surface-variant transition-colors" id="cancel-separation-btn" type="button">
+          Keep Our Ring Safe
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Haptic Resonance Toggle Switch
+    const hapticBtn = document.getElementById('haptic-toggle-btn');
+    const hapticKnob = document.getElementById('haptic-toggle-knob');
+    let isHapticOn = true;
+
+    if (hapticBtn && hapticKnob) {
+      hapticBtn.addEventListener('click', () => {
+        isHapticOn = !isHapticOn;
+        if (isHapticOn) {
+          hapticBtn.classList.remove('bg-surface-container-highest');
+          hapticBtn.classList.add('bg-primary');
+          hapticKnob.classList.remove('translate-x-0');
+          hapticKnob.classList.add('translate-x-5');
+        } else {
+          hapticBtn.classList.remove('bg-primary');
+          hapticBtn.classList.add('bg-surface-container-highest');
+          hapticKnob.classList.remove('translate-x-5');
+          hapticKnob.classList.add('translate-x-0');
+        }
+      });
+    }
+
+    // Proof Bottom Sheet Trigger Handlers
+    const proofTrigger = document.getElementById('open-proof-modal');
+    const proofSheet = document.getElementById('proof-sheet-backdrop');
+    const proofPanel = document.getElementById('proof-sheet-panel');
+    const closeProof = document.getElementById('close-proof-sheet');
+
+    function openProof() {
+      if (!proofSheet || !proofPanel) return;
+      proofSheet.classList.remove('opacity-0', 'pointer-events-none');
+      proofSheet.classList.add('opacity-100', 'pointer-events-auto');
+      proofPanel.classList.remove('translate-y-full');
+      proofPanel.classList.add('translate-y-0');
+    }
+
+    function closeProofFn() {
+      if (!proofSheet || !proofPanel) return;
+      proofSheet.classList.remove('opacity-100', 'pointer-events-auto');
+      proofSheet.classList.add('opacity-0', 'pointer-events-none');
+      proofPanel.classList.remove('translate-y-0');
+      proofPanel.classList.add('translate-y-full');
+    }
+
+    if (proofTrigger) proofTrigger.addEventListener('click', openProof);
+    if (closeProof) closeProof.addEventListener('click', closeProofFn);
+    if (proofSheet) {
+      proofSheet.addEventListener('click', (e) => {
+        if (e.target === proofSheet) closeProofFn();
+      });
+    }
+
+    // Separation Modal Trigger Handlers
+    const sepTrigger = document.getElementById('open-separation-guard');
+    const sepModal = document.getElementById('separation-modal-backdrop');
+    const sepPanel = document.getElementById('separation-modal-panel');
+    const cancelSep = document.getElementById('cancel-separation-btn');
+    const confirmSep = document.getElementById('confirm-cooldown-btn');
+
+    function openSep() {
+      if (!sepModal || !sepPanel) return;
+      sepModal.classList.remove('opacity-0', 'pointer-events-none');
+      sepModal.classList.add('opacity-100', 'pointer-events-auto');
+      sepPanel.classList.remove('scale-95');
+      sepPanel.classList.add('scale-100');
+    }
+
+    function closeSep() {
+      if (!sepModal || !sepPanel) return;
+      sepModal.classList.remove('opacity-100', 'pointer-events-auto');
+      sepModal.classList.add('opacity-0', 'pointer-events-none');
+      sepPanel.classList.remove('scale-100');
+      sepPanel.classList.add('scale-95');
+    }
+
+    if (sepTrigger) sepTrigger.addEventListener('click', openSep);
+    if (cancelSep) cancelSep.addEventListener('click', closeSep);
+    if (confirmSep) {
+      confirmSep.addEventListener('click', () => {
+        closeSep();
+      });
+    }
+    if (sepModal) {
+      sepModal.addEventListener('click', (e) => {
+        if (e.target === sepModal) closeSep();
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface-white/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(23,23,23,0.04)]" data-active-classes="text-primary font-semibold [&amp;_.nav-dot]:opacity-100 [&amp;_.nav-dot]:scale-100"><div class="flex justify-around items-center h-16 max-w-[720px] mx-auto px-space-xs"><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="ring" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">favorite</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Ring</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="story" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">auto_stories</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Story</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="vow" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">history_edu</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Vow</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-on-surface-variant hover:text-ink-primary transition-all duration-200" data-path="bond" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">savings</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Bond</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a><a aria-current="page" class="group flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 transition-all duration-200 text-primary font-semibold [&amp;_.nav-dot]:opacity-100 [&amp;_.nav-dot]:scale-100" data-path="me" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-active:scale-90">person_heart</span><span class="font-label-sm text-label-sm mt-0.5 tracking-tight">Me</span><span class="nav-dot w-1 h-1 rounded-full bg-primary mt-0.5 opacity-0 scale-50 transition-all duration-200"></span></a></div></nav></body></html>

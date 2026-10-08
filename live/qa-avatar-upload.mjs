@@ -1,0 +1,23 @@
+import {Wallet} from 'ethers';
+import {readFile} from 'node:fs/promises';
+const base='http://127.0.0.1:52203', origin=base;
+const post=(p,b,ck)=>fetch(base+p,{method:'POST',headers:{'Content-Type':'application/json',Origin:origin,...(ck?{Cookie:ck}:{})},body:JSON.stringify(b)});
+const put=(p,b,ck)=>fetch(base+p,{method:'PUT',headers:{'Content-Type':'application/json',Origin:origin,Cookie:ck},body:JSON.stringify(b)});
+const w=new Wallet('0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d'); // Aria
+const c=await (await post('/api/auth/challenge',{address:w.address})).json();
+const s=await w.signMessage(c.message);
+const v=await post('/api/auth/verify',{id:c.id,signature:s});
+const ck=(v.headers.get('set-cookie')||'').split(';')[0];
+const bin=await readFile(new URL('../ui/assets/avatar-2.jpg',import.meta.url));
+const dataURL='data:image/jpeg;base64,'+bin.toString('base64');
+const up=await (await post('/api/avatar',{data:dataURL},ck)).json();
+console.log('upload:',JSON.stringify(up));
+if(!up.url)process.exit(1);
+const cur=await (await fetch(base+'/api/profile',{headers:{Cookie:ck}})).json();
+const p=cur.profile||{name:'Aria'};
+const r=await put('/api/profile',{...p,avatarUrl:up.url},ck);
+console.log('profile:',r.status);
+const radar=await (await fetch(base+'/api/radar?city=&intention=&radius=0',{headers:{Cookie:ck}})).json();
+const self=radar.candidates?.find(x=>x.address?.toLowerCase()===w.address.toLowerCase());
+console.log('radar candidates:',radar.candidates?.length);
+for(const cand of radar.candidates||[])console.log('-',cand.name,'avatarUrl=',cand.avatarUrl||'(无)');

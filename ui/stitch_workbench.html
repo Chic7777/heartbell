@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consensus Bell · Stitch 原子级设计系统与 UI 优化工作台</title>
+  <!-- Google Fonts: Inter & Noto Serif SC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Stitch CSS Tokens -->
+  <link rel="stylesheet" href="stitch-tokens.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'bell-cream': '#FFF9F7',
+            'bell-surface': '#FEF8F7',
+            'bell-primary': '#8C4B54',
+            'bell-primary-container': '#D98C95',
+            'bell-rose-gold': '#C98877',
+            'bell-blush-soft': '#E7B7A8',
+            'bell-blush-tint': '#F4DDE0',
+            'bell-ink': '#171717',
+            'bell-ink-secondary': '#252323',
+            'bell-confirmed': '#4ECF8B',
+            'bell-sage': '#2E9E63',
+            'bell-pending': '#F2A65A',
+            'bell-pending-dark': '#B8732F',
+            'bell-destructive': '#C0646A'
+          },
+          fontFamily: {
+            serif: ['"Noto Serif SC"', '"Noto Serif"', 'Georgia', 'serif'],
+            sans: ['"Inter"', '-apple-system', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(23,23,23,0.02); }
+    ::-webkit-scrollbar-thumb { background: rgba(201,136,119,0.25); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(201,136,119,0.45); }
+
+    /* Phone Device Frame */
+    .device-mockup {
+      box-shadow: 0 0 0 10px #242223, 0 0 0 12px #3E3839, 0 25px 60px -15px rgba(23,23,23,0.35);
+      border-radius: 46px;
+      overflow: hidden;
+      position: relative;
+      background: #FFF9F7;
+    }
+    .device-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+    }
+
+    /* Clean Container when in tablet/desktop view */
+    .viewport-clean {
+      box-shadow: 0 4px 24px rgba(23,23,23,0.06);
+      border: 1px solid rgba(201,136,119,0.2);
+      border-radius: 24px;
+      overflow: hidden;
+      background: #FFF9F7;
+    }
+  </style>
+</head>
+<body class="bg-[#F8F4F2] text-bell-ink font-sans antialiased min-h-screen flex flex-col selection:bg-bell-primary-container/30 selection:text-bell-ink">
+
+  <!-- TOP APP BAR / BRAND HEADER -->
+  <header class="sticky top-0 z-50 bg-[#FFF9F7]/95 backdrop-blur-xl border-b border-bell-rose-gold/20 px-6 py-3.5 shadow-sm">
+    <div class="max-w-[1720px] mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <!-- Brand SVG Mark -->
+        <div class="size-10 rounded-full bg-bell-blush-tint/80 border border-bell-rose-gold/30 flex items-center justify-center text-bell-primary shadow-sm">
+          <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-serif text-lg font-medium tracking-tight text-bell-ink">Consensus Bell</h1>
+            <span class="px-2 py-0.5 rounded-full bg-bell-blush-tint border border-bell-rose-gold/30 text-bell-primary text-[11px] font-medium">Stitch Atomic Design</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-medium flex items-center gap-1">
+              <span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Project: 9125579042035566424
+            </span>
+          </div>
+          <p class="text-xs text-bell-ink-secondary/70">Google Stitch MCP · 61 Named Colors · 19 屏深度清洗 · 视觉 Diff 对比 · 原子级实验室</p>
+        </div>
+      </div>
+
+      <!-- MAIN TAB SWITCHER -->
+      <nav class="flex items-center bg-white/80 p-1.5 rounded-full border border-bell-rose-gold/25 shadow-sm">
+        <button id="nav-mode-showcase" onclick="switchMode('showcase')" class="px-5 py-2 rounded-full text-xs font-semibold transition-all duration-200 bg-bell-ink text-white shadow-sm flex items-center gap-2">
+          <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          24 屏高保真全景与视觉 Diff
+        </button>
+        <button id="nav-mode-tokens" onclick="switchMode('tokens')" class="px-5 py-2 rounded-full text-xs font-semibold transition-all duration-200 text-bell-ink hover:text-bell-primary hover:bg-bell-blush-tint/40 flex items-center gap-2">
+          <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+          原子 Design Tokens (61色矩阵)
+        </button>
+        <button id="nav-mode-lab" onclick="switchMode('lab')" class="px-5 py-2 rounded-full text-xs font-semibold transition-all duration-200 text-bell-ink hover:text-bell-primary hover:bg-bell-blush-tint/40 flex items-center gap-2">
+          <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          原子组件交互实验室 & 代码导出
+        </button>
+        <button id="nav-mode-flow" onclick="switchMode('flow')" class="px-5 py-2 rounded-full text-xs font-semibold transition-all duration-200 text-bell-ink hover:text-bell-primary hover:bg-bell-blush-tint/40 flex items-center gap-2">
+          <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          沉浸式端到端心流走通
+        </button>
+      </nav>
+
+      <!-- GITHUB / WORKSPACE LINKS -->
+      <div class="flex items-center gap-2.5">
+        <a href="index.html" class="px-4 py-2 rounded-full border border-bell-rose-gold/30 bg-white/80 text-xs font-medium text-bell-ink hover:bg-bell-cream transition-colors">
+          打开运行版 UI (Live)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================== VIEW 1: 24-SCREEN SHOWCASE & VISUAL DIFF ======================== -->
+  <main id="view-showcase" class="flex-1 max-w-[1720px] w-full mx-auto p-6 grid grid-cols-1 xl:grid-cols-12 gap-8">
+    
+    <!-- LEFT PANEL: SCREEN DIRECTORY & CONTROLS (4 Cols) -->
+    <div class="xl:col-span-4 flex flex-col gap-4">
+      <div class="bg-white rounded-2xl p-5 border border-bell-rose-gold/20 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-serif text-base font-medium text-bell-ink flex items-center gap-2">
+            <span>屏幕目录索引</span>
+            <span class="text-xs font-sans px-2 py-0.5 rounded-full bg-bell-blush-tint text-bell-primary">19+ 屏完整复刻</span>
+          </h2>
+          <!-- Device Viewport Toggle -->
+          <div class="flex items-center bg-gray-100 p-1 rounded-lg text-xs">
+            <button onclick="setDeviceView('mobile')" id="btn-device-mobile" class="px-2.5 py-1 rounded-md font-medium transition-colors bg-white text-bell-ink shadow-xs">393px</button>
+            <button onclick="setDeviceView('tablet')" id="btn-device-tablet" class="px-2.5 py-1 rounded-md font-medium transition-colors text-gray-500 hover:text-gray-800">720px</button>
+            <button onclick="setDeviceView('responsive')" id="btn-device-resp" class="px-2.5 py-1 rounded-md font-medium transition-colors text-gray-500 hover:text-gray-800">全屏</button>
+          </div>
+        </div>
+
+        <p class="text-xs text-gray-500 mb-3 leading-relaxed">
+          已全量清除所有浏览器扩展残渣（st-root 剥离），补齐 tokens.css 与本地字体。支持原版 Stitch 截图与优化 DOM 实时比对！
+        </p>
+
+        <!-- Search / Filter input -->
+        <input type="text" id="screen-search" placeholder="快速搜索屏幕名称 (如 雷达 / 誓约 / 仪式)..." oninput="filterScreens(this.value)" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-bell-primary-container/40 mb-3">
+
+        <!-- SCREEN LIST -->
+        <div id="screen-list-container" class="max-h-[580px] overflow-y-auto space-y-2 pr-1">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- ACTIVE SCREEN METADATA CARD -->
+      <div id="screen-meta-card" class="bg-white rounded-2xl p-5 border border-bell-rose-gold/20 shadow-sm space-y-3">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="meta-category" class="text-[11px] font-semibold tracking-wider uppercase text-bell-primary">Phase A</span>
+              <span id="meta-shell" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-mono">mobile_stack</span>
+            </div>
+            <h3 id="meta-title" class="font-serif text-lg font-medium text-bell-ink mt-0.5">01. 起始页 / Forever Gateway</h3>
+          </div>
+          <a id="meta-direct-link" href="#" target="_blank" class="px-2.5 py-1 rounded-full text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors flex items-center gap-1">
+            独立查看
+            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+          </a>
+        </div>
+        <p id="meta-desc" class="text-xs text-gray-600 leading-relaxed">屏幕描述加载中...</p>
+        <div class="pt-2 border-t border-gray-100">
+          <div class="text-[11px] text-gray-400 font-medium mb-1.5">包含的核心原子 / 分子组件：</div>
+          <div id="meta-atoms" class="flex flex-wrap gap-1.5">
+            <!-- Badges -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: INTERACTIVE CANVAS / DEVICE PREVIEW (8 Cols) -->
+    <div class="xl:col-span-8 flex flex-col items-center justify-start bg-white/70 backdrop-blur-md rounded-3xl p-6 border border-bell-rose-gold/20 shadow-sm min-h-[880px]">
+      
+      <!-- PREVIEW TOP BAR & VIEW CONTROLLER -->
+      <div class="w-full flex items-center justify-between pb-4 mb-4 border-b border-gray-200/60 flex-wrap gap-3">
+        <!-- Render Diff Mode Switcher -->
+        <div class="flex items-center bg-gray-100/90 p-1 rounded-full text-xs">
+          <button id="btn-mode-dom" onclick="setDiffMode('dom')" class="px-3.5 py-1.5 rounded-full font-medium transition-all bg-white text-bell-ink shadow-xs flex items-center gap-1.5">
+            <span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>优化 DOM 渲染
+          </button>
+          <button id="btn-mode-png" onclick="setDiffMode('png')" class="px-3.5 py-1.5 rounded-full font-medium transition-all text-gray-600 hover:text-gray-900 flex items-center gap-1.5">
+            <span>📷</span>Stitch 原版截图
+          </button>
+          <button id="btn-mode-split" onclick="setDiffMode('split')" class="px-3.5 py-1.5 rounded-full font-medium transition-all text-gray-600 hover:text-gray-900 flex items-center gap-1.5">
+            <span>⚡</span>左右对比模式 (Split)
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span id="canvas-size-indicator" class="text-[11px] text-gray-400 font-mono">393 × 852 pt (Mobile)</span>
+          <button onclick="reloadIframe()" class="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors" title="重新载入">
+            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CONTAINER: STANDARD DOM / SCREENSHOT VIEW -->
+      <div id="single-view-container" class="w-full flex justify-center">
+        <div id="device-wrapper" class="device-mockup w-[393px] h-[852px] transition-all duration-300">
+          <div class="device-notch">
+            <span class="size-2 rounded-full bg-emerald-500/70"></span>
+            <span class="size-3.5 rounded-full bg-zinc-800"></span>
+          </div>
+          <!-- Cleaned DOM iframe -->
+          <iframe id="screen-iframe" src="../stitch_design_system/screens_clean/01._gateway_editorial_jewelry_edition/index.html" class="w-full h-full border-none pt-2" style="background:#FFF9F7;"></iframe>
+          <!-- Screenshot Image (Hidden by default) -->
+          <div id="screenshot-wrapper" class="hidden w-full h-full overflow-y-auto bg-black">
+            <img id="screen-img" src="../stitch_design_system/screenshots/A_luxury_fine_jewelry_UI_component_asset_for_the_'Consensus_.png" class="w-full h-auto object-contain">
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTAINER: SPLIT DIFF VIEW (Hidden by default) -->
+      <div id="split-view-container" class="hidden w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Left: Stitch Original Reference -->
+        <div class="flex flex-col items-center">
+          <div class="text-xs font-semibold text-gray-500 mb-2 flex items-center gap-1.5">
+            <span>📷 Stitch 官方原型截图 (Ground Truth)</span>
+          </div>
+          <div class="w-[393px] h-[852px] device-mockup overflow-y-auto bg-black">
+            <div class="device-notch"></div>
+            <img id="split-screen-img" src="../stitch_design_system/screenshots/A_luxury_fine_jewelry_UI_component_asset_for_the_'Consensus_.png" class="w-full h-auto object-contain">
+          </div>
+        </div>
+        <!-- Right: Cleaned & Optimized DOM -->
+        <div class="flex flex-col items-center">
+          <div class="text-xs font-semibold text-bell-primary mb-2 flex items-center gap-1.5">
+            <span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>✨ 本地原子级优化 DOM (Cleaned HTML)</span>
+          </div>
+          <div class="w-[393px] h-[852px] device-mockup">
+            <div class="device-notch"></div>
+            <iframe id="split-screen-iframe" src="../stitch_design_system/screens_clean/01._gateway_editorial_jewelry_edition/index.html" class="w-full h-full border-none pt-2" style="background:#FFF9F7;"></iframe>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ======================== VIEW 2: 61-COLOR TOKENS MATRIX ======================== -->
+  <main id="view-tokens" class="hidden flex-1 max-w-[1720px] w-full mx-auto p-6 space-y-10">
+    <div class="bg-white rounded-3xl p-8 border border-bell-rose-gold/25 shadow-sm space-y-6">
+      <div class="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <span class="text-xs font-semibold text-bell-primary tracking-wider uppercase">Design Tokens Engine</span>
+          <h2 class="font-serif text-3xl font-medium text-bell-ink mt-1">Stitch 61 色设计系统全局矩阵</h2>
+          <p class="text-xs text-gray-500 mt-1.5">完整覆盖 Google Stitch 项目的全部 61 个 Named Colors，标注十六进制、CSS 变量及相对底色 (#FFF9F7) 的 WCAG AA 可辨识度评估。</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-200">61/61 全量覆盖</span>
+          <span class="px-3 py-1 rounded-full bg-bell-cream text-bell-primary text-xs font-medium border border-bell-rose-gold/30">点击直接复制</span>
+        </div>
+      </div>
+
+      <!-- DYNAMIC COLOR MATRIX BY CATEGORY -->
+      <div id="tokens-matrix-container" class="space-y-8">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ======================== VIEW 3: COMPONENT LAB & KITCHEN SINK ======================== -->
+  <main id="view-lab" class="hidden flex-1 max-w-[1720px] w-full mx-auto p-6 space-y-10">
+    <div class="bg-white rounded-3xl p-8 border border-bell-rose-gold/25 shadow-sm space-y-6">
+      <div>
+        <span class="text-xs font-semibold text-bell-primary tracking-wider uppercase">Atomic Component Sandbox</span>
+        <h2 class="font-serif text-3xl font-medium text-bell-ink mt-1">原子组件交互式实验室 & 代码导出</h2>
+        <p class="text-xs text-gray-500 mt-1.5">提炼自 Stitch 24 屏的独立组件规范，支持交互状态切换（Default, Hover, Active, Disabled）并可一键复制纯净生产级 HTML 代码。</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- COMPONENT 1: BUTTONS -->
+        <div class="p-6 rounded-2xl bg-bell-cream border border-bell-rose-gold/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif text-base font-medium text-bell-ink">Atoms 01: 胶囊按钮矩阵 (Pill Buttons)</h3>
+            <button onclick="copySnippet('code-buttons')" class="text-xs px-2.5 py-1 rounded-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 transition-colors">复制代码</button>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <button class="btn-pill-primary">Begin Journey</button>
+            <button class="btn-pill-rose">Ring the Bell</button>
+            <button class="btn-pill-secondary">Secondary Ghost</button>
+            <button class="btn-pill-destructive">End Relation</button>
+          </div>
+          <div id="code-buttons" class="hidden font-mono text-[11px] bg-zinc-900 text-zinc-200 p-3 rounded-lg overflow-x-auto">
+&lt;button class="btn-pill-primary"&gt;Begin Journey&lt;/button&gt;
+&lt;button class="btn-pill-rose"&gt;Ring the Bell&lt;/button&gt;
+&lt;button class="btn-pill-secondary"&gt;Secondary Ghost&lt;/button&gt;
+&lt;button class="btn-pill-destructive"&gt;End Relation&lt;/button&gt;
+          </div>
+        </div>
+
+        <!-- COMPONENT 2: STATUS BADGES -->
+        <div class="p-6 rounded-2xl bg-bell-cream border border-bell-rose-gold/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif text-base font-medium text-bell-ink">Atoms 02: 状态微徽章 (Status Badges)</h3>
+            <button onclick="copySnippet('code-badges')" class="text-xs px-2.5 py-1 rounded-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 transition-colors">复制代码</button>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="badge-confirmed"><span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>双方已双签</span>
+            <span class="badge-pending"><span class="size-1.5 rounded-full bg-amber-500 animate-ping"></span>等待对方签署</span>
+            <span class="badge-sacred"><span>✦</span>神圣契约</span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 text-xs text-gray-600 shadow-xs">
+              <span class="size-1.5 rounded-full bg-emerald-500"></span>BOT Chain #677
+            </span>
+          </div>
+          <div id="code-badges" class="hidden font-mono text-[11px] bg-zinc-900 text-zinc-200 p-3 rounded-lg overflow-x-auto">
+&lt;span class="badge-confirmed"&gt;&lt;span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"&gt;&lt;/span&gt;双方已双签&lt;/span&gt;
+&lt;span class="badge-pending"&gt;&lt;span class="size-1.5 rounded-full bg-amber-500 animate-ping"&gt;&lt;/span&gt;等待对方签署&lt;/span&gt;
+&lt;span class="badge-sacred"&gt;&lt;span&gt;✦&lt;/span&gt;神圣契约&lt;/span&gt;
+          </div>
+        </div>
+
+        <!-- COMPONENT 3: VOW CARD MOLECULE -->
+        <div class="p-6 rounded-2xl bg-bell-cream border border-bell-rose-gold/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif text-base font-medium text-bell-ink">Molecules 01: 编号誓约卡片 (Vow Card)</h3>
+            <button onclick="copySnippet('code-vow')" class="text-xs px-2.5 py-1 rounded-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 transition-colors">复制代码</button>
+          </div>
+          <!-- Live Interactive Vow Card -->
+          <div class="p-4 rounded-xl bg-white border border-bell-rose-gold/20 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-semibold text-gray-400">VOW #01</span>
+              <span id="vow-status-badge" class="badge-confirmed"><span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>已双签生效</span>
+            </div>
+            <p class="font-serif text-sm text-bell-ink leading-relaxed">
+              “无论遇到任何分歧，我们始终在入睡前坦诚倾听对方，不让心结过夜。”
+            </p>
+            <div class="flex items-center justify-between pt-2 border-t border-gray-100 text-xs text-gray-500">
+              <div class="flex items-center gap-1.5">
+                <span class="size-5 rounded-full bg-bell-blush-soft text-white flex items-center justify-center text-[10px] font-bold">L</span>
+                <span class="size-5 rounded-full bg-bell-rose-gold text-white flex items-center justify-center text-[10px] font-bold">S</span>
+                <span class="text-[11px]">Luna & Sophie</span>
+              </div>
+              <button onclick="toggleVowStatus()" class="text-xs text-bell-primary hover:underline">切换状态 (交互)</button>
+            </div>
+          </div>
+          <div id="code-vow" class="hidden font-mono text-[11px] bg-zinc-900 text-zinc-200 p-3 rounded-lg overflow-x-auto">
+&lt;div class="p-4 rounded-xl bg-white border border-bell-rose-gold/20 shadow-xs"&gt;
+  &lt;div class="flex items-center justify-between"&gt;
+    &lt;span class="text-xs font-mono font-semibold text-gray-400"&gt;VOW #01&lt;/span&gt;
+    &lt;span class="badge-confirmed"&gt;已双签生效&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;p class="font-serif text-sm text-bell-ink"&gt;“誓言正文...”&lt;/p&gt;
+&lt;/div&gt;
+          </div>
+        </div>
+
+        <!-- COMPONENT 4: AGENT SUGGESTION CARD -->
+        <div class="p-6 rounded-2xl bg-bell-cream border border-bell-rose-gold/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif text-base font-medium text-bell-ink">Molecules 02: 灵感建议卡片 (AgentSuggestionCard)</h3>
+            <button onclick="copySnippet('code-agent')" class="text-xs px-2.5 py-1 rounded-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 transition-colors">复制代码</button>
+          </div>
+          <div class="p-4 rounded-xl bg-gradient-to-r from-white to-[#FFF4F2] border border-bell-blush-tint shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-bell-primary font-medium">
+              <span class="flex items-center gap-1.5 font-serif">✦ 建议添加的誓约条款</span>
+              <span class="text-[11px] text-gray-400 font-sans">基于共同记忆提取</span>
+            </div>
+            <p class="font-serif text-sm text-bell-ink italic leading-relaxed">
+              “每年十月的第一个周末，我们一同前往东湖骑行，并在湖畔互赠一封手写信。”
+            </p>
+            <div class="flex items-center justify-end gap-2 pt-1">
+              <button class="text-xs px-3 py-1 rounded-full text-gray-500 hover:text-bell-ink">编辑微调</button>
+              <button class="text-xs px-4 py-1.5 rounded-full bg-bell-ink text-white font-medium hover:bg-black transition-colors">采用并提议</button>
+            </div>
+          </div>
+          <div id="code-agent" class="hidden font-mono text-[11px] bg-zinc-900 text-zinc-200 p-3 rounded-lg overflow-x-auto">
+&lt;div class="p-4 rounded-xl bg-gradient-to-r from-white to-[#FFF4F2] border border-bell-blush-tint shadow-xs"&gt;
+  &lt;span class="font-serif text-xs text-bell-primary"&gt;✦ 建议条款&lt;/span&gt;
+  &lt;p class="font-serif text-sm text-bell-ink italic"&gt;“...”&lt;/p&gt;
+&lt;/div&gt;
+          </div>
+        </div>
+
+        <!-- COMPONENT 5: RADAR MINI STAGE -->
+        <div class="p-6 rounded-2xl bg-bell-cream border border-bell-rose-gold/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif text-base font-medium text-bell-ink">Organisms 01: 共鸣雷达动态天象台 (Radar Stage)</h3>
+            <button onclick="triggerRadarPulse()" class="text-xs px-3 py-1 rounded-full bg-bell-primary text-white hover:bg-bell-primary/90 transition-colors">敲响共鸣钟</button>
+          </div>
+          <div class="relative w-full h-[260px] flex items-center justify-center overflow-hidden rounded-xl bg-[#FEF8F7] border border-bell-rose-gold/15">
+            <!-- Concentric Orbits -->
+            <div class="absolute size-56 rounded-full border border-bell-rose-gold/20"></div>
+            <div class="absolute size-40 rounded-full border border-bell-rose-gold/25"></div>
+            <div class="absolute size-24 rounded-full border border-bell-rose-gold/30"></div>
+            
+            <!-- Radar Sweep Beam -->
+            <div class="absolute size-56 radar-sweep-beam pointer-events-none">
+              <div class="w-1/2 h-1/2 bg-gradient-to-br from-bell-primary-container/25 to-transparent rounded-tl-full origin-bottom-right"></div>
+            </div>
+
+            <!-- Central Bell Hub -->
+            <div id="demo-bell-hub" onclick="triggerRadarPulse()" class="relative z-10 size-12 rounded-full bg-bell-ink text-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-105 active:scale-95 transition-transform">
+              <svg id="demo-bell-icon" class="size-6 text-bell-blush-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+
+            <!-- Satellites -->
+            <div class="absolute top-10 left-16 satellite-floating">
+              <div class="size-9 rounded-full bg-white border border-bell-rose-gold/40 shadow-sm flex items-center justify-center font-serif text-xs font-semibold text-bell-primary">S</div>
+            </div>
+            <div class="absolute bottom-12 right-20 satellite-floating" style="animation-delay: 1.5s;">
+              <div class="size-9 rounded-full bg-white border border-bell-rose-gold/40 shadow-sm flex items-center justify-center font-serif text-xs font-semibold text-bell-primary">L</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPONENT 6: 5-TAB DOCK -->
+        <div class="p-6 rounded-2xl bg-bell-cream border border-bell-rose-gold/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif text-base font-medium text-bell-ink">Organisms 02: 专属 5-Tab 悬浮磨砂底栏 (Dock)</h3>
+            <span class="text-xs text-gray-400">点击任意 Tab 切换</span>
+          </div>
+          <div class="p-4 flex items-center justify-center">
+            <div class="w-full max-w-md bg-white/85 backdrop-blur-xl rounded-full border border-bell-rose-gold/25 shadow-lg px-6 py-2.5 flex items-center justify-between" id="demo-tab-dock">
+              <div onclick="selectDockTab(0)" class="dock-tab flex flex-col items-center gap-1 cursor-pointer text-bell-primary">
+                <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="m12 8 2 4-4 2 2 2"/></svg>
+                <span class="text-[10px] font-semibold">Our Ring</span>
+                <span class="size-1 rounded-full bg-bell-primary-container"></span>
+              </div>
+              <div onclick="selectDockTab(1)" class="dock-tab flex flex-col items-center gap-1 cursor-pointer text-gray-400 hover:text-bell-ink">
+                <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+                <span class="text-[10px] font-medium">Story</span>
+              </div>
+              <div onclick="selectDockTab(2)" class="dock-tab flex flex-col items-center gap-1 cursor-pointer text-gray-400 hover:text-bell-ink">
+                <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span class="text-[10px] font-medium">Vows</span>
+              </div>
+              <div onclick="selectDockTab(3)" class="dock-tab flex flex-col items-center gap-1 cursor-pointer text-gray-400 hover:text-bell-ink">
+                <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                <span class="text-[10px] font-medium">Bond</span>
+              </div>
+              <div onclick="selectDockTab(4)" class="dock-tab flex flex-col items-center gap-1 cursor-pointer text-gray-400 hover:text-bell-ink">
+                <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/></svg>
+                <span class="text-[10px] font-medium">Me</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ======================== VIEW 4: END-TO-END FLOW RUNNER ======================== -->
+  <main id="view-flow" class="hidden flex-1 max-w-[1720px] w-full mx-auto p-6 flex flex-col items-center">
+    <div class="w-full max-w-4xl bg-white rounded-3xl p-8 border border-bell-rose-gold/25 shadow-sm space-y-6 text-center">
+      <span class="text-xs font-semibold text-bell-primary tracking-wider uppercase">Interactive Journey</span>
+      <h2 class="font-serif text-3xl font-medium text-bell-ink">两颗灵魂的共鸣旅程 · 全流程步进</h2>
+      <p class="text-xs text-gray-500 max-w-xl mx-auto">
+        从“起始页”到“身份构建” -> “共鸣雷达” -> “钟鸣匹配” -> “追光对话” -> “双签仪式” -> “永恒空间”，一步步验证原子级交互体验。
+      </p>
+
+      <!-- Stepper Controls -->
+      <div class="flex items-center justify-center gap-3 pt-2">
+        <button onclick="prevStep()" class="btn-pill-secondary text-xs">
+          ← 上一屏
+        </button>
+        <div id="flow-step-label" class="px-5 py-2 rounded-full bg-bell-cream border border-bell-rose-gold/30 text-xs font-semibold text-bell-primary">
+          Step 1/20: 01. 起始页 / Forever Gateway
+        </div>
+        <button onclick="nextStep()" class="btn-pill-primary text-xs">
+          下一屏 →
+        </button>
+      </div>
+
+      <!-- Live Mobile Frame for Flow -->
+      <div class="flex justify-center pt-4">
+        <div class="device-mockup w-[393px] h-[820px]">
+          <div class="device-notch"></div>
+          <iframe id="flow-iframe" src="../stitch_design_system/screens_clean/01._gateway_editorial_jewelry_edition/index.html" class="w-full h-full border-none pt-2" style="background:#FFF9F7;"></iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script>
+    const screens = [{"id": "01", "folder": "01._gateway_editorial_jewelry_edition", "screenshot": "A_luxury_fine_jewelry_UI_component_asset_for_the_'Consensus_.png", "title": "01. 起始页 / Forever Gateway", "category": "Phase A · 探索前奏", "shell": "mobile_stack (440px max)", "desc": "以高级珠宝徽章为核心视觉焦点，双人神圣契约的永恒入口，提供开始旅程与访客预览。", "atoms": ["珠宝微光勋章", "黑曜石胶囊按钮", "微量区块链轻触提示", "大写衬线题标"]}, {"id": "02", "folder": "02._about_you", "screenshot": "02__创建身份___About_You.png", "title": "02. 创建身份 / About You", "category": "Phase A · 身份共鸣", "shell": "mobile_stack (440px max)", "desc": "第一步基本档案创建：头像单字占位符、昵称、年龄、代词、常驻城市与个人告白。", "atoms": ["4 步进度指示器", "柔白圆角输入框", "代词单选芯片", "下一步主按钮"]}, {"id": "03", "folder": "03._your_interests", "screenshot": "03__兴趣偏好___Your_Interests.png", "title": "03. 兴趣偏好 / Your Interests", "category": "Phase A · 身份共鸣", "shell": "mobile_stack (440px max)", "desc": "第二步兴趣图谱：摄影、音乐、旅行、美食、阅读等 8 张高质感图块，支持多选高亮微光。", "atoms": ["108px 兴趣图像卡", "玫瑰金激活环", "纯白打勾微徽章", "多选计数器"]}, {"id": "04", "folder": "04._your_intention", "screenshot": "04__关系意向___Your_Intention.png", "title": "04. 关系意向 / Your Intention", "category": "Phase A · 身份共鸣", "shell": "mobile_stack (440px max)", "desc": "第三步意向选择：灵魂伴侣、慢热恋爱、共鸣对话、终身伴侣等 4 种意向卡片。", "atoms": ["意向语义卡", "单选点阵指示器", "浪漫释义段落"]}, {"id": "05", "folder": "05._choose_path", "screenshot": "05__选择路径___Choose_Path.png", "title": "05. 选择路径 / Choose Path", "category": "Phase A · 路径分流", "shell": "mobile_stack (440px max)", "desc": "分流选择核心路径：共鸣雷达寻觅灵魂伴侣 vs. 直接绑定已知伴侣公钥地址。", "atoms": ["双路径高光卡片", "摄影底图蒙层", "方向指示箭头", "安全验证提示"]}, {"id": "06", "folder": "06._resonance_radar_animated_scan", "screenshot": "06__共鸣雷达___Resonance_Radar_(Animated_Scan).png", "title": "06. 共鸣雷达 / Resonance Radar", "category": "Phase A · 寻觅共鸣", "shell": "mobile_stack (440px max)", "desc": "440px 专属雷达天象台：3 重同心玫瑰金天体轨道环，4 枚顺时针轨道卫星与扫描雷达束。", "atoms": ["4s 旋转雷达波束", "同心天体环", "卫星浮动节点", "敲钟触发枢轴"]}, {"id": "06b", "folder": "06b._resonance_audience_filter", "screenshot": "06b__意向人群筛选___Resonance_Audience_Filter.png", "title": "06b. 意向人群筛选 / Audience Filter", "category": "Phase A · 寻觅共鸣", "shell": "mobile_stack (440px max)", "desc": "多维度筛选抽屉：地理距离滑动条、年龄区间选择、性别与真实身份验证开关。", "atoms": ["玫瑰金滑块条", "双向区间芯片", "抽屉顶部拖拽把手", "保存筛选按钮"]}, {"id": "07", "folder": "07._echo_cards_overlay", "screenshot": "07__角色卡片弹出筛选___Echo_Cards_Overlay.png", "title": "07. 角色卡片筛选 / Echo Cards", "category": "Phase A · 候选推荐", "shell": "mobile_stack (440px max)", "desc": "雷达探测结果浮层：卡片展示候选人契合点、共同兴趣标签及共振百分比提示。", "atoms": ["半透明磨砂卡片", "契合点标签", "保存候选人爱心按钮", "查看详情胶囊"]}, {"id": "08", "folder": "08._resonance_detail_connect", "screenshot": "08__个人详情与共鸣连接___Resonance_Detail_&_Connect.png", "title": "08. 个人详情与共鸣 / Resonance Detail", "category": "Phase A · 深度链接", "shell": "mobile_stack (440px max)", "desc": "候选人深度画像：人生宣言、生活切片相册、共同话题推荐及向 Ta 敲钟发起连接。", "atoms": ["沉浸式画像卡", "生活碎片图格", "灵感话题卡", "向 Ta 敲钟 CTA"]}, {"id": "08b", "folder": "08b._resonance_match_struck", "screenshot": "08b__钟鸣共振匹配___Resonance_Match_Struck.png", "title": "08b. 钟鸣共振匹配 / Match Struck", "category": "Phase A · 触动时刻", "shell": "mobile_stack (440px max)", "desc": "双方互相敲钟后的双向共鸣仪式庆典弹窗：双环共振、星芒闪烁、一键进入追光空间。", "atoms": ["双环旋转微光动效", "庆典星芒粒子", "进入追光空间主按钮", "稍后再聊次级按钮"]}, {"id": "09", "folder": "09._echo_chat", "screenshot": "09__追光空间___Echo_Chat.png", "title": "09. 追光空间 / Echo Chat", "category": "Phase A · 亲密沟通", "shell": "mobile_stack (440px max)", "desc": "端到端加密亲密漫谈空间：气泡对话、时间戳、密码学证明展开与顶部状态条。", "atoms": ["私密聊天气泡", "顶部双人共鸣徽章", "阅后即焚开关", "发送输入条"]}, {"id": "09b", "folder": "09b._ephemeral_echo_room", "screenshot": "09b__阅后即焚漫谈___Ephemeral_Echo_Room.png", "title": "09b. 阅后即焚漫谈 / Ephemeral Room", "category": "Phase A · 亲密沟通", "shell": "mobile_stack (440px max)", "desc": "24 小时倒计时自动焚毁空间：暖琥珀色警告色调、焚毁时钟、永恒契约跃迁引导。", "atoms": ["24h 倒计时芯片", "琥珀告警横幅", "焚毁倒计时气泡", "跃迁永恒契约 CTA"]}, {"id": "10", "folder": "10._direct_bind", "screenshot": "10__直接绑定___Direct_Bind.png", "title": "10. 直接绑定 / Direct Bind", "category": "Phase A · 伴侣绑定", "shell": "mobile_stack (440px max)", "desc": "直接输入已知伴侣钱包地址、ENS 或扫描二维码，核验身份并发送上链邀请函。", "atoms": ["地址输入框与扫码", "最近交互联系人", "发送邀请函按钮", "双方签名安全告示"]}, {"id": "13", "folder": "13._accept_sign", "screenshot": "13__接受邀请与签署誓约___Accept_&_Sign.png", "title": "13. 接受邀请与签署 / Accept & Sign", "category": "Phase B · 双签契约", "shell": "mobile_stack (440px max)", "desc": "审阅伴侣发来的唯一定制邀请函，查验誓约条款，调起签名签署 Romantic Ring。", "atoms": ["邀请信笺封套", "誓约条款清单", "签名签署主按钮", "密码学有效性提示"]}, {"id": "14", "folder": "14._ring_ceremony", "screenshot": "14__关系确立仪式___Ring_Ceremony.png", "title": "14. 关系确立仪式 / Ring Ceremony", "category": "Phase B · 唯美仪式", "shell": "mobile_stack (440px max)", "desc": "双方签名上链确认后的神圣确立仪式：莫比乌斯双环熔铸合体为永恒 Soulbound Ring。", "atoms": ["双环合体仪式动效", "铸造完成金印", "进入共同空间 CTA", "查看链上证明"]}, {"id": "15", "folder": "16._our_story", "screenshot": "Our_Ring_主页与底部角标_(Our_Ring_Home).png", "title": "15. 我们的戒指 / Our Ring Home", "category": "Phase B · 专属空间", "shell": "mobile_tab (720px max)", "desc": "关系成立后的日常仪表盘：天数里程碑、双方呼吸状态、当前誓言与金库摘要。", "atoms": ["天体双环主视觉", "相伴天数计数器", "5-Tab 悬浮底栏", "心意直达卡"]}, {"id": "16", "folder": "16._our_story", "screenshot": "16__共同记忆___Our_Story.png", "title": "16. 共同记忆 / Our Story", "category": "Phase B · 专属空间", "shell": "mobile_tab (720px max)", "desc": "专属双人时间轴时光机：按月份日期聚合照片、文字手账与里程碑事件。", "atoms": ["时间轴月份轴点", "手账照片卡片", "添加记忆浮动按钮", "类别过滤标签"]}, {"id": "17", "folder": "17._our_vows", "screenshot": "17__神圣誓约___Our_Vows.png", "title": "17. 神圣誓约 / Our Vows", "category": "Phase B · 专属空间", "shell": "mobile_tab (720px max)", "desc": "编号誓约清单：双向签名验证状态芯片（已确认 / 对方待签）、提议新誓言。", "atoms": ["编号誓约卡", "双签状态绿色芯片", "新建誓约胶囊", "签名历史抽屉"]}, {"id": "18", "folder": "18._our_bond", "screenshot": "18__愿望金库___Our_Bond.png", "title": "18. 愿望金库 / Our Bond", "category": "Phase B · 专属空间", "shell": "mobile_tab (720px max)", "desc": "双方共同储蓄金库与梦想愿望清单：实时合约余额、愿望进度条、存入共同金。", "atoms": ["金库总额显示牌", "愿望进度平滑动画", "共同存入主按钮", "存取明细记录"]}, {"id": "22", "folder": "22._me_settings", "screenshot": "22__个人中心___Me_Settings.png", "title": "22. 个人中心 / Me Governance", "category": "Phase B · 治理中心", "shell": "mobile_tab (720px max)", "desc": "用户个人档案、隐私可见性开关、链上收据核对、实体纪念物 Witness 定制与关系治理。", "atoms": ["双签凭证详情", "隐私保护开关", "实体戒指定制器", "解除绑定治理区"]}];
+    const namedColors = {"on_error_container": "#93000a", "on_surface_variant": "#524344", "inverse_on_surface": "#f5efef", "tertiary_fixed": "#7cfbb2", "surface_container_low": "#f8f2f2", "surface_container": "#f2ecec", "surface_dim": "#ded9d8", "primary_container": "#d98c95", "error": "#ba1a1a", "outline_variant": "#d7c1c3", "tertiary_container": "#30b776", "surface_container_lowest": "#ffffff", "on_surface": "#1d1b1b", "confirmed-green": "#4ECF8B", "secondary_container": "#fdb5a3", "on_tertiary_fixed_variant": "#005230", "on_error": "#ffffff", "ink-secondary": "#252323", "on_secondary_fixed_variant": "#6b392c", "on_primary_fixed": "#390914", "on_primary": "#ffffff", "on_background": "#1d1b1b", "sage-muted": "#7B9D86", "background": "#fef8f7", "surface": "#fef8f7", "ink-primary": "#171717", "surface_bright": "#fef8f7", "pending-amber": "#F2A65A", "blush-soft": "#E7B7A8", "pending-dark": "#B8732F", "tertiary": "#006d41", "surface_container_highest": "#e7e1e1", "surface_tint": "#8c4b54", "on_tertiary_container": "#004125", "surface_container_high": "#ede7e6", "secondary": "#875041", "tertiary_fixed_dim": "#5ede98", "blush-tint": "#F4DDE0", "on_secondary": "#ffffff", "destructive-rose": "#C0646A", "background-cream": "#FFF9F7", "secondary_fixed_dim": "#fdb5a3", "on_secondary_fixed": "#350f06", "rose-gold": "#C98877", "primary": "#8c4b54", "on_tertiary_fixed": "#002110", "surface_variant": "#e7e1e1", "inverse_surface": "#323030", "primary_fixed": "#ffd9dc", "inverse_primary": "#ffb2ba", "on_secondary_container": "#794436", "on_primary_fixed_variant": "#70343d", "on_tertiary": "#ffffff", "surface-white": "#FFFFFF", "outline": "#857374", "error_container": "#ffdad6", "primary_fixed_dim": "#ffb2ba", "sage-deep": "#2E9E63", "on_primary_container": "#5d262f", "rose-accent": "#E98F93", "secondary_fixed": "#ffdbd1"};
+    const colorCategories = {"Backgrounds & Surfaces": ["background-cream", "background", "surface", "surface_bright", "surface_white", "surface_dim", "surface_variant", "inverse_surface", "inverse_on_surface"], "Material 3 Surface Containers": ["surface_container_lowest", "surface_container_low", "surface_container", "surface_container_high", "surface_container_highest"], "Romantic & Jewelry Accents": ["primary", "primary_container", "surface_tint", "rose_accent", "rose_gold", "blush_soft", "blush_tint", "secondary", "secondary_container"], "Fixed Tones & Highlights": ["primary_fixed", "primary_fixed_dim", "on_primary_fixed", "on_primary_fixed_variant", "secondary_fixed", "secondary_fixed_dim", "on_secondary_fixed", "on_secondary_fixed_variant", "tertiary_fixed", "tertiary_fixed_dim", "on_tertiary_fixed", "on_tertiary_fixed_variant"], "Neutral Ink & Outlines": ["ink_primary", "ink_secondary", "on_background", "on_surface", "on_surface_variant", "on_primary", "on_primary_container", "on_secondary", "on_secondary_container", "on_tertiary", "on_tertiary_container", "outline", "outline_variant"], "Status & Feedback": ["confirmed_green", "sage_deep", "sage_muted", "tertiary", "tertiary_container", "pending_amber", "pending_dark", "destructive_rose", "error", "error_container", "on_error", "on_error_container"]};
+
+    let currentScreenIndex = 0;
+    let currentDiffMode = 'dom'; // 'dom' | 'png' | 'split'
+    let currentDeviceMode = 'mobile'; // 'mobile' | 'tablet' | 'responsive'
+
+    function init() {
+      renderScreenList(screens);
+      renderTokensMatrix();
+      selectScreen(0);
+    }
+
+    function renderScreenList(items) {
+      const container = document.getElementById('screen-list-container');
+      container.innerHTML = '';
+      items.forEach((s, idx) => {
+        const div = document.createElement('div');
+        div.className = `p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between text-xs ${idx === currentScreenIndex ? 'bg-bell-cream border-bell-rose-gold/60 shadow-xs' : 'bg-gray-50/50 border-gray-100 hover:bg-gray-100/60'}`;
+        div.onclick = () => selectScreen(idx);
+        div.innerHTML = `
+          <div class="flex items-center gap-2.5 truncate">
+            <span class="font-mono text-[10px] font-semibold text-gray-400">${s.id}</span>
+            <span class="font-medium text-bell-ink truncate">${s.title}</span>
+          </div>
+          <span class="text-[10px] px-2 py-0.5 rounded-full ${idx === currentScreenIndex ? 'bg-bell-primary text-white font-medium' : 'bg-gray-100 text-gray-500'} shrink-0">${s.category.split(' · ')[1]}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function selectScreen(idx) {
+      currentScreenIndex = idx;
+      const s = screens[idx];
+      
+      // Update DOM iframe & screenshot image
+      document.getElementById('screen-iframe').src = `../stitch_design_system/screens_clean/${s.folder}/index.html`;
+      document.getElementById('split-screen-iframe').src = `../stitch_design_system/screens_clean/${s.folder}/index.html`;
+      document.getElementById('screen-img').src = `../stitch_design_system/screenshots/${s.screenshot}`;
+      document.getElementById('split-screen-img').src = `../stitch_design_system/screenshots/${s.screenshot}`;
+      
+      // Update metadata
+      document.getElementById('meta-category').innerText = s.category;
+      document.getElementById('meta-shell').innerText = s.shell;
+      document.getElementById('meta-title').innerText = s.title;
+      document.getElementById('meta-desc').innerText = s.desc;
+      document.getElementById('meta-direct-link').href = `../stitch_design_system/screens_clean/${s.folder}/index.html`;
+      
+      const atomsContainer = document.getElementById('meta-atoms');
+      atomsContainer.innerHTML = '';
+      s.atoms.forEach(atom => {
+        const badge = document.createElement('span');
+        badge.className = 'px-2 py-0.5 rounded-md bg-bell-cream border border-bell-rose-gold/25 text-bell-ink text-[11px]';
+        badge.innerText = atom;
+        atomsContainer.appendChild(badge);
+      });
+
+      renderScreenList(screens);
+    }
+
+    function setDiffMode(mode) {
+      currentDiffMode = mode;
+      const singleContainer = document.getElementById('single-view-container');
+      const splitContainer = document.getElementById('split-view-container');
+      const domIframe = document.getElementById('screen-iframe');
+      const screenshotWrapper = document.getElementById('screenshot-wrapper');
+
+      const btnDom = document.getElementById('btn-mode-dom');
+      const btnPng = document.getElementById('btn-mode-png');
+      const btnSplit = document.getElementById('btn-mode-split');
+
+      [btnDom, btnPng, btnSplit].forEach(b => {
+        b.className = 'px-3.5 py-1.5 rounded-full font-medium transition-all text-gray-600 hover:text-gray-900 flex items-center gap-1.5';
+      });
+
+      if (mode === 'dom') {
+        singleContainer.classList.remove('hidden');
+        splitContainer.classList.add('hidden');
+        domIframe.classList.remove('hidden');
+        screenshotWrapper.classList.add('hidden');
+        btnDom.className = 'px-3.5 py-1.5 rounded-full font-medium transition-all bg-white text-bell-ink shadow-xs flex items-center gap-1.5';
+      } else if (mode === 'png') {
+        singleContainer.classList.remove('hidden');
+        splitContainer.classList.add('hidden');
+        domIframe.classList.add('hidden');
+        screenshotWrapper.classList.remove('hidden');
+        btnPng.className = 'px-3.5 py-1.5 rounded-full font-medium transition-all bg-white text-bell-ink shadow-xs flex items-center gap-1.5';
+      } else if (mode === 'split') {
+        singleContainer.classList.add('hidden');
+        splitContainer.classList.remove('hidden');
+        btnSplit.className = 'px-3.5 py-1.5 rounded-full font-medium transition-all bg-white text-bell-ink shadow-xs flex items-center gap-1.5';
+      }
+    }
+
+    function setDeviceView(mode) {
+      currentDeviceMode = mode;
+      const wrapper = document.getElementById('device-wrapper');
+      const indicator = document.getElementById('canvas-size-indicator');
+      const btnMob = document.getElementById('btn-device-mobile');
+      const btnTab = document.getElementById('btn-device-tablet');
+      const btnResp = document.getElementById('btn-device-resp');
+
+      [btnMob, btnTab, btnResp].forEach(b => {
+        b.className = 'px-2.5 py-1 rounded-md font-medium transition-colors text-gray-500 hover:text-gray-800';
+      });
+
+      if (mode === 'mobile') {
+        wrapper.className = 'device-mockup w-[393px] h-[852px] transition-all duration-300';
+        indicator.innerText = '393 × 852 pt (Mobile)';
+        btnMob.className = 'px-2.5 py-1 rounded-md font-medium transition-colors bg-white text-bell-ink shadow-xs';
+      } else if (mode === 'tablet') {
+        wrapper.className = 'viewport-clean w-[720px] h-[920px] transition-all duration-300';
+        indicator.innerText = '720 × 920 pt (Max Content Containment)';
+        btnTab.className = 'px-2.5 py-1 rounded-md font-medium transition-colors bg-white text-bell-ink shadow-xs';
+      } else {
+        wrapper.className = 'viewport-clean w-full max-w-[760px] h-[960px] transition-all duration-300';
+        indicator.innerText = '100% 流式自适应居中';
+        btnResp.className = 'px-2.5 py-1 rounded-md font-medium transition-colors bg-white text-bell-ink shadow-xs';
+      }
+    }
+
+    function renderTokensMatrix() {
+      const container = document.getElementById('tokens-matrix-container');
+      container.innerHTML = '';
+
+      for (const [catName, colorKeys] of Object.entries(colorCategories)) {
+        const catSection = document.createElement('div');
+        catSection.className = 'space-y-3';
+        
+        const catHeader = document.createElement('div');
+        catHeader.className = 'flex items-center gap-2 border-b border-gray-100 pb-2';
+        catHeader.innerHTML = `
+          <h3 class="font-serif text-lg font-medium text-bell-ink">${catName}</h3>
+          <span class="text-xs font-mono text-gray-400">(${colorKeys.length} tokens)</span>
+        `;
+        catSection.appendChild(catHeader);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5';
+
+        colorKeys.forEach(k => {
+          const hex = namedColors[k] || namedColors[k.replace('_', '-')] || namedColors[k.replace('-', '_')] || '#FFF9F7';
+          const cssVar = `--bell-${k.replace('_', '-')}`;
+
+          const card = document.createElement('div');
+          card.className = 'p-3 rounded-xl border border-gray-100 bg-white shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between';
+          card.onclick = () => copyText(cssVar);
+
+          // Calculate simple luminance for text readability on swatch
+          const isLight = isColorLight(hex);
+          const textColor = isLight ? '#171717' : '#FFFFFF';
+
+          card.innerHTML = `
+            <div class="h-14 rounded-lg mb-2 shadow-inner border border-black/5 flex items-end justify-between p-2" style="background-color: ${hex}">
+              <span class="text-[10px] font-mono font-semibold" style="color: ${textColor}">${hex}</span>
+            </div>
+            <div>
+              <div class="font-medium text-xs text-bell-ink truncate">${k}</div>
+              <div class="text-[10px] text-gray-400 font-mono truncate">${cssVar}</div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        catSection.appendChild(grid);
+        container.appendChild(catSection);
+      }
+    }
+
+    function isColorLight(hex) {
+      if (hex.startsWith('#')) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        const lum = (0.299 * r + 0.587 * g + 0.114 * b);
+        return lum > 160;
+      }
+      return true;
+    }
+
+    function switchMode(mode) {
+      ['showcase', 'tokens', 'lab', 'flow'].forEach(m => {
+        document.getElementById(`view-${m}`).classList.add('hidden');
+        document.getElementById(`nav-mode-${m}`).className = 'px-5 py-2 rounded-full text-xs font-semibold transition-all duration-200 text-bell-ink hover:text-bell-primary hover:bg-bell-blush-tint/40 flex items-center gap-2';
+      });
+      document.getElementById(`view-${mode}`).classList.remove('hidden');
+      document.getElementById(`nav-mode-${mode}`).className = 'px-5 py-2 rounded-full text-xs font-semibold transition-all duration-200 bg-bell-ink text-white shadow-sm flex items-center gap-2';
+
+      if (mode === 'flow') {
+        updateFlowStep();
+      }
+    }
+
+    let flowIndex = 0;
+    function updateFlowStep() {
+      const s = screens[flowIndex];
+      document.getElementById('flow-step-label').innerText = `Step ${flowIndex + 1}/${screens.length}: ${s.title}`;
+      document.getElementById('flow-iframe').src = `../stitch_design_system/screens_clean/${s.folder}/index.html`;
+    }
+    function nextStep() {
+      flowIndex = (flowIndex + 1) % screens.length;
+      updateFlowStep();
+    }
+    function prevStep() {
+      flowIndex = (flowIndex - 1 + screens.length) % screens.length;
+      updateFlowStep();
+    }
+
+    function reloadIframe() {
+      const iframe = document.getElementById('screen-iframe');
+      iframe.src = iframe.src;
+    }
+
+    function copyText(txt) {
+      navigator.clipboard.writeText(txt);
+      alert(`已复制到剪贴板: ${txt}`);
+    }
+
+    function copySnippet(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.innerText.trim());
+      alert("组件 HTML 代码已成功复制！");
+    }
+
+    function triggerRadarPulse() {
+      const icon = document.getElementById('demo-bell-icon');
+      icon.classList.remove('bell-ring-active');
+      void icon.offsetWidth; // trigger reflow
+      icon.classList.add('bell-ring-active');
+    }
+
+    let vowStateConfirmed = true;
+    function toggleVowStatus() {
+      vowStateConfirmed = !vowStateConfirmed;
+      const b = document.getElementById('vow-status-badge');
+      if (vowStateConfirmed) {
+        b.className = 'badge-confirmed';
+        b.innerHTML = '<span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>已双签生效';
+      } else {
+        b.className = 'badge-pending';
+        b.innerHTML = '<span class="size-1.5 rounded-full bg-amber-500 animate-ping"></span>等待对方签署';
+      }
+    }
+
+    function selectDockTab(idx) {
+      const tabs = document.querySelectorAll('#demo-tab-dock .dock-tab');
+      tabs.forEach((t, i) => {
+        if (i === idx) {
+          t.className = 'dock-tab flex flex-col items-center gap-1 cursor-pointer text-bell-primary';
+          if (!t.querySelector('.size-1')) {
+            const dot = document.createElement('span');
+            dot.className = 'size-1 rounded-full bg-bell-primary-container';
+            t.appendChild(dot);
+          }
+        } else {
+          t.className = 'dock-tab flex flex-col items-center gap-1 cursor-pointer text-gray-400 hover:text-bell-ink';
+          const dot = t.querySelector('.size-1');
+          if (dot) dot.remove();
+        }
+      });
+    }
+
+    function filterScreens(query) {
+      const q = query.toLowerCase();
+      const filtered = screens.filter(s => s.title.toLowerCase().includes(q) || s.category.toLowerCase().includes(q));
+      renderScreenList(filtered);
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

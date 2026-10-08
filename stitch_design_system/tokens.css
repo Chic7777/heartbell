@@ -1,0 +1,413 @@
+/**
+ * Consensus Bell · Complete Stitch Design Tokens (61 Named Colors & Full Scale)
+ * Source: Google Stitch Project 9125579042035566424 (assets/29daad9d5f2c4e06bf665b69836a25f5)
+ */
+
+:root {
+  /* ==================== 1. STITCH 61 NAMED COLORS ==================== */
+  --bell-background: #fef8f7;
+  --color-background: #fef8f7;
+  --bell-background-cream: #FFF9F7;
+  --color-background-cream: #FFF9F7;
+  --bell-blush-soft: #E7B7A8;
+  --color-blush-soft: #E7B7A8;
+  --bell-blush-tint: #F4DDE0;
+  --color-blush-tint: #F4DDE0;
+  --bell-confirmed-green: #4ECF8B;
+  --color-confirmed-green: #4ECF8B;
+  --bell-destructive-rose: #C0646A;
+  --color-destructive-rose: #C0646A;
+  --bell-error: #ba1a1a;
+  --color-error: #ba1a1a;
+  --bell-error-container: #ffdad6;
+  --color-error-container: #ffdad6;
+  --bell-ink-primary: #171717;
+  --color-ink-primary: #171717;
+  --bell-ink-secondary: #252323;
+  --color-ink-secondary: #252323;
+  --bell-inverse-on-surface: #f5efef;
+  --color-inverse-on-surface: #f5efef;
+  --bell-inverse-primary: #ffb2ba;
+  --color-inverse-primary: #ffb2ba;
+  --bell-inverse-surface: #323030;
+  --color-inverse-surface: #323030;
+  --bell-on-background: #1d1b1b;
+  --color-on-background: #1d1b1b;
+  --bell-on-error: #ffffff;
+  --color-on-error: #ffffff;
+  --bell-on-error-container: #93000a;
+  --color-on-error-container: #93000a;
+  --bell-on-primary: #ffffff;
+  --color-on-primary: #ffffff;
+  --bell-on-primary-container: #5d262f;
+  --color-on-primary-container: #5d262f;
+  --bell-on-primary-fixed: #390914;
+  --color-on-primary-fixed: #390914;
+  --bell-on-primary-fixed-variant: #70343d;
+  --color-on-primary-fixed-variant: #70343d;
+  --bell-on-secondary: #ffffff;
+  --color-on-secondary: #ffffff;
+  --bell-on-secondary-container: #794436;
+  --color-on-secondary-container: #794436;
+  --bell-on-secondary-fixed: #350f06;
+  --color-on-secondary-fixed: #350f06;
+  --bell-on-secondary-fixed-variant: #6b392c;
+  --color-on-secondary-fixed-variant: #6b392c;
+  --bell-on-surface: #1d1b1b;
+  --color-on-surface: #1d1b1b;
+  --bell-on-surface-variant: #524344;
+  --color-on-surface-variant: #524344;
+  --bell-on-tertiary: #ffffff;
+  --color-on-tertiary: #ffffff;
+  --bell-on-tertiary-container: #004125;
+  --color-on-tertiary-container: #004125;
+  --bell-on-tertiary-fixed: #002110;
+  --color-on-tertiary-fixed: #002110;
+  --bell-on-tertiary-fixed-variant: #005230;
+  --color-on-tertiary-fixed-variant: #005230;
+  --bell-outline: #857374;
+  --color-outline: #857374;
+  --bell-outline-variant: #d7c1c3;
+  --color-outline-variant: #d7c1c3;
+  --bell-pending-amber: #F2A65A;
+  --color-pending-amber: #F2A65A;
+  --bell-pending-dark: #B8732F;
+  --color-pending-dark: #B8732F;
+  --bell-primary: #8c4b54;
+  --color-primary: #8c4b54;
+  --bell-primary-container: #d98c95;
+  --color-primary-container: #d98c95;
+  --bell-primary-fixed: #ffd9dc;
+  --color-primary-fixed: #ffd9dc;
+  --bell-primary-fixed-dim: #ffb2ba;
+  --color-primary-fixed-dim: #ffb2ba;
+  --bell-rose-accent: #E98F93;
+  --color-rose-accent: #E98F93;
+  --bell-rose-gold: #C98877;
+  --color-rose-gold: #C98877;
+  --bell-sage-deep: #2E9E63;
+  --color-sage-deep: #2E9E63;
+  --bell-sage-muted: #7B9D86;
+  --color-sage-muted: #7B9D86;
+  --bell-secondary: #875041;
+  --color-secondary: #875041;
+  --bell-secondary-container: #fdb5a3;
+  --color-secondary-container: #fdb5a3;
+  --bell-secondary-fixed: #ffdbd1;
+  --color-secondary-fixed: #ffdbd1;
+  --bell-secondary-fixed-dim: #fdb5a3;
+  --color-secondary-fixed-dim: #fdb5a3;
+  --bell-surface: #fef8f7;
+  --color-surface: #fef8f7;
+  --bell-surface-white: #FFFFFF;
+  --color-surface-white: #FFFFFF;
+  --bell-surface-bright: #fef8f7;
+  --color-surface-bright: #fef8f7;
+  --bell-surface-container: #f2ecec;
+  --color-surface-container: #f2ecec;
+  --bell-surface-container-high: #ede7e6;
+  --color-surface-container-high: #ede7e6;
+  --bell-surface-container-highest: #e7e1e1;
+  --color-surface-container-highest: #e7e1e1;
+  --bell-surface-container-low: #f8f2f2;
+  --color-surface-container-low: #f8f2f2;
+  --bell-surface-container-lowest: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --bell-surface-dim: #ded9d8;
+  --color-surface-dim: #ded9d8;
+  --bell-surface-tint: #8c4b54;
+  --color-surface-tint: #8c4b54;
+  --bell-surface-variant: #e7e1e1;
+  --color-surface-variant: #e7e1e1;
+  --bell-tertiary: #006d41;
+  --color-tertiary: #006d41;
+  --bell-tertiary-container: #30b776;
+  --color-tertiary-container: #30b776;
+  --bell-tertiary-fixed: #7cfbb2;
+  --color-tertiary-fixed: #7cfbb2;
+  --bell-tertiary-fixed-dim: #5ede98;
+  --color-tertiary-fixed-dim: #5ede98;
+
+  /* Live App Aliases & Brand Semantics */
+  --cream: var(--bell-background-cream);
+  --rose: var(--bell-rose-accent);
+  --rose-gold: var(--bell-rose-gold);
+  --blush: var(--bell-blush-soft);
+  --ink: var(--bell-ink-primary);
+  --green: var(--bell-confirmed-green);
+  --amber: var(--bell-pending-amber);
+  --hairline: rgba(23, 23, 23, 0.08);
+
+  /* ==================== 2. TYPOGRAPHY TOKENS ==================== */
+  --font-serif: "Noto Serif", "Noto Serif SC", "Georgia", serif;
+  --font-sans: "Inter", -apple-system, "PingFang SC", "Segoe UI", sans-serif;
+  --type-body-lg-size: 16px;
+  --type-body-lg-weight: 400;
+  --type-body-lg-line: 26px;
+  --type-body-lg-spacing: 0em;
+  --type-body-md-size: 14px;
+  --type-body-md-weight: 400;
+  --type-body-md-line: 22px;
+  --type-body-md-spacing: 0em;
+  --type-body-sm-size: 12px;
+  --type-body-sm-weight: 400;
+  --type-body-sm-line: 18px;
+  --type-body-sm-spacing: 0.01em;
+  --type-headline-lg-size: 32px;
+  --type-headline-lg-weight: 400;
+  --type-headline-lg-line: 40px;
+  --type-headline-lg-spacing: -0.01em;
+  --type-headline-lg-mobile-size: 28px;
+  --type-headline-lg-mobile-weight: 400;
+  --type-headline-lg-mobile-line: 36px;
+  --type-headline-lg-mobile-spacing: 0em;
+  --type-headline-md-size: 22px;
+  --type-headline-md-weight: 500;
+  --type-headline-md-line: 30px;
+  --type-headline-md-spacing: 0em;
+  --type-headline-sm-size: 18px;
+  --type-headline-sm-weight: 500;
+  --type-headline-sm-line: 26px;
+  --type-headline-sm-spacing: 0em;
+  --type-headline-xl-size: 48px;
+  --type-headline-xl-weight: 400;
+  --type-headline-xl-line: 58px;
+  --type-headline-xl-spacing: -0.02em;
+  --type-headline-xl-mobile-size: 36px;
+  --type-headline-xl-mobile-weight: 400;
+  --type-headline-xl-mobile-line: 44px;
+  --type-headline-xl-mobile-spacing: -0.01em;
+  --type-label-lg-size: 16px;
+  --type-label-lg-weight: 600;
+  --type-label-lg-line: 20px;
+  --type-label-lg-spacing: 0.01em;
+  --type-label-md-size: 14px;
+  --type-label-md-weight: 500;
+  --type-label-md-line: 18px;
+  --type-label-md-spacing: 0.01em;
+  --type-label-sm-size: 11px;
+  --type-label-sm-weight: 500;
+  --type-label-sm-line: 14px;
+  --type-label-sm-spacing: 0.02em;
+
+  /* ==================== 3. SPATIAL RHYTHM & BOUNDARIES ==================== */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --web-content-max: 720px;
+  --web-radar-max: 440px;
+  --mobile-viewport-width: 393px;
+
+  /* ==================== 4. BORDER RADII ==================== */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+
+  /* ==================== 5. ELEVATIONS & DEPTH ==================== */
+  --shadow-resting: 0 1px 2px rgba(23, 23, 23, 0.03), 0 8px 24px rgba(23, 23, 23, 0.04);
+  --shadow-sheet: 0 4px 12px rgba(23, 23, 23, 0.04), 0 20px 48px rgba(23, 23, 23, 0.08);
+  --shadow-glow: 0 12px 32px rgba(217, 140, 149, 0.22);
+  --shadow-ambient: 0 20px 60px rgba(201, 136, 119, 0.16);
+}
+
+/* ==================== ATOMIC UTILITY CLASSES ==================== */
+.font-serif-bell { font-family: var(--font-serif); }
+.font-sans-bell { font-family: var(--font-sans); }
+
+/* Buttons */
+.btn-pill-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 28px;
+  border-radius: var(--radius-full);
+  background-color: var(--bell-ink-primary);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.18s ease, box-shadow 0.18s ease;
+  user-select: none;
+}
+.btn-pill-primary:hover {
+  background-color: #262626;
+  box-shadow: 0 4px 16px rgba(23, 23, 23, 0.15);
+}
+.btn-pill-primary:active { transform: scale(0.98); }
+.btn-pill-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-pill-rose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 28px;
+  border-radius: var(--radius-full);
+  background-color: var(--bell-primary-container);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.18s ease;
+}
+.btn-pill-rose:hover { background-color: #D27B85; }
+.btn-pill-rose:active { transform: scale(0.98); }
+
+.btn-pill-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: var(--radius-full);
+  background-color: rgba(244, 221, 224, 0.45);
+  color: var(--bell-ink-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.btn-pill-secondary:hover { background-color: rgba(244, 221, 224, 0.7); }
+.btn-pill-secondary:active { transform: scale(0.98); }
+
+.btn-pill-destructive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: var(--radius-full);
+  background-color: var(--bell-error-container);
+  color: var(--bell-destructive-rose);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(192, 100, 106, 0.2);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.btn-pill-destructive:hover { background-color: #FFC9C3; }
+.btn-pill-destructive:active { transform: scale(0.98); }
+
+/* Badges */
+.badge-confirmed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background-color: rgba(78, 207, 139, 0.15);
+  border: 1px solid rgba(46, 158, 99, 0.3);
+  color: var(--bell-sage-deep);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background-color: rgba(242, 166, 90, 0.15);
+  border: 1px solid rgba(184, 115, 47, 0.3);
+  color: var(--bell-pending-dark);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-sacred {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  background-color: var(--bell-blush-tint);
+  border: 1px solid rgba(201, 136, 119, 0.3);
+  color: var(--bell-primary);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Card Surface */
+.bell-card {
+  background-color: var(--bell-surface-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-resting);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.bell-card:hover {
+  box-shadow: 0 4px 16px rgba(23, 23, 23, 0.06), 0 16px 36px rgba(23, 23, 23, 0.04);
+}
+
+/* Animations */
+@keyframes radarSweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.04); }
+}
+
+@keyframes satelliteFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes bellChimeShake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-12deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-6deg); }
+  80% { transform: rotate(4deg); }
+}
+
+.radar-sweep-beam {
+  animation: radarSweep 4s linear infinite;
+  transform-origin: center center;
+}
+
+.radar-pulse-halo {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.satellite-floating {
+  animation: satelliteFloat 4.2s ease-in-out infinite;
+}
+
+.bell-ring-active {
+  animation: bellChimeShake 0.65s ease-in-out;
+}

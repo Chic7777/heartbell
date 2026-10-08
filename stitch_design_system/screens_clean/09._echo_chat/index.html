@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#FFF9F7;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "error": "#ba1a1a", "error-container": "#ffdad6", "on-tertiary": "#ffffff", "on-error": "#ffffff", "on-surface": "#1d1b1b", "surface-container-highest": "#e7e1e1", "surface": "#fef8f7", "sage-muted": "#7B9D86", "secondary-container": "#fdb5a3", "on-secondary-fixed": "#350f06", "background-cream": "#FFF9F7", "outline-variant": "#d7c1c3", "pending-amber": "#F2A65A", "blush-tint": "#F4DDE0", "primary-container": "#d98c95", "on-background": "#1d1b1b", "on-secondary-fixed-variant": "#6b392c", "background": "#fef8f7", "ink-secondary": "#252323", "primary-fixed": "#ffd9dc", "primary-fixed-dim": "#ffb2ba", "confirmed-green": "#4ECF8B", "tertiary-fixed-dim": "#5ede98", "on-error-container": "#93000a", "surface-dim": "#ded9d8", "on-primary": "#ffffff", "pending-dark": "#B8732F", "on-primary-container": "#5d262f", "inverse-on-surface": "#f5efef", "outline": "#857374", "surface-container": "#f2ecec", "secondary": "#875041", "secondary-fixed-dim": "#fdb5a3", "secondary-fixed": "#ffdbd1", "on-tertiary-fixed": "#002110", "rose-accent": "#E98F93", "on-primary-fixed": "#390914", "surface-container-low": "#f8f2f2", "on-tertiary-fixed-variant": "#005230", "destructive-rose": "#C0646A", "rose-gold": "#C98877", "surface-variant": "#e7e1e1", "primary": "#8c4b54", "surface-tint": "#8c4b54", "sage-deep": "#2E9E63", "inverse-surface": "#323030", "surface-bright": "#fef8f7", "tertiary-container": "#30b776", "on-secondary": "#ffffff", "ink-primary": "#171717", "tertiary": "#006d41", "on-primary-fixed-variant": "#70343d", "inverse-primary": "#ffb2ba", "surface-white": "#FFFFFF", "on-tertiary-container": "#004125", "blush-soft": "#E7B7A8", "tertiary-fixed": "#7cfbb2", "surface-container-high": "#ede7e6", "on-surface-variant": "#524344", "on-secondary-container": "#794436", "surface-container-lowest": "#ffffff" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-md": "1rem", "space-xs": "0.25rem", "margin": "1.5rem", "gutter": "1rem", "space-lg": "1.5rem", "space-xl": "2rem" }, "fontFamily": { "headline-lg-mobile": [ "Noto Serif" ], "headline-md": [ "Noto Serif" ], "body-md": [ "Inter" ], "label-sm": [ "Inter" ], "headline-sm": [ "Noto Serif" ], "label-lg": [ "Inter" ], "label-md": [ "Inter" ], "headline-xl-mobile": [ "Noto Serif" ], "headline-lg": [ "Noto Serif" ], "body-sm": [ "Inter" ], "body-lg": [ "Inter" ], "headline-xl": [ "Noto Serif" ] }, "fontSize": { "headline-lg-mobile": [ "28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" } ], "headline-md": [ "22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" } ], "body-md": [ "14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "headline-sm": [ "18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500" } ], "label-lg": [ "16px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" } ], "label-md": [ "14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" } ], "headline-xl-mobile": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "body-sm": [ "12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" } ], "body-lg": [ "16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" } ], "headline-xl": [ "48px", { "lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400" } ] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../../ui/fonts.css">
+
+</head><body class="bg-background-cream text-on-surface antialiased flex flex-col min-h-screen selection:bg-blush-tint selection:text-primary"><header class="fixed top-0 w-full z-50 pt-safe bg-background-cream/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(23,23,23,0.03)]"><div class="h-16 px-margin flex items-center justify-between border-b border-blush-tint/40"><div class="flex items-center gap-2"><button aria-label="Go back" class="w-10 h-10 -ml-space-xs rounded-full flex items-center justify-center text-ink-primary hover:bg-blush-tint/40 active:scale-95 transition-all" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[20px] text-ink-primary">arrow_back_ios_new</span></button><div class="relative w-9 h-9 rounded-full overflow-hidden shadow-sm shrink-0"><img class="w-full h-full object-cover" alt="Sophie profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpZP3XWD8cAKJ9nETeFFf4BFYBnw-ZmbqIfKKilNRA_P51fkZuSTc5xYF1YyjgSxDaHb1Oe7cbXMuGPME6w0lC5e8qeAm-sIAPVujs7XBdnwcYqT5YrR9NgwskIIBsQszVpaoEVj27YucGI5phhrhGUs-ZhXtbsRfDaVR1Qk-1Bt9g3VK4D7LiC6u7w7jRVMWIcgZbhKVPLKGCGV1oHNVaov4ToGg8ZZzo4Sz21oY"><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-confirmed-green"></span></div></div><div class="flex flex-col items-center justify-center text-center"><h1 class="font-headline-sm text-[17px] text-ink-primary tracking-tight font-medium">Sophie</h1><div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-accent"></span><span class="font-label-sm text-[11px] text-on-surface-variant font-medium tracking-wide">432 Hz Resonance Active · 47:58</span></div></div><div class="flex items-center gap-1"><button aria-label="Bell Frequency Status" class="w-9 h-9 rounded-full bg-surface-white flex items-center justify-center text-primary shadow-[0_2px_8px_rgba(140,75,84,0.12)] hover:bg-blush-tint/40 active:scale-95 transition-all" id="proofTriggerBtn" type="button"><span class="material-symbols-outlined text-[18px] text-rose-gold" style="font-variation-settings: 'FILL' 1;">notifications_active</span></button><button aria-label="More options" class="w-9 h-9 rounded-full flex items-center justify-center text-ink-secondary hover:bg-blush-tint/40 active:scale-95 transition-all" type="button"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">more_vert</span></button></div></div></header><main class="flex flex-col relative w-full pt-16 bg-background-cream pb-safe min-h-screen"><div class="flex flex-col w-full pb-6">
+<!-- Top On-Chain Resonance Status Bar -->
+<div class="px-margin pt-2 pb-3"><div class="bg-surface-white/95 backdrop-blur-md rounded-2xl p-3 shadow-[0_2px_12px_rgba(23,23,23,0.03)] flex items-center justify-between border border-blush-tint/50 transition-all"><div class="flex items-center gap-space-sm min-w-0"><div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-blush-tint/50 text-primary shadow-[inset_0_1px_3px_rgba(23,23,23,0.04)]"><span class="material-symbols-outlined text-[17px] text-primary" style="font-variation-settings: 'FILL' 1;">all_inclusive</span><span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-confirmed-green"></span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="font-label-sm text-label-sm text-ink-primary font-semibold tracking-wide">Consensus Struck</span><span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[10px] font-medium bg-sage-muted/20 text-sage-deep font-mono">96% Harmonic</span></div><p class="font-body-sm text-[11px] text-on-surface-variant truncate">EVM BOT Block #19,402,118 · Dual Signed</p></div></div><button class="flex items-center gap-0.5 text-primary text-label-sm font-label-sm font-semibold pl-2.5 pr-1.5 py-1 rounded-full bg-blush-tint/30 hover:bg-blush-tint/60 transition-colors shrink-0" onclick="document.getElementById('proofSheetModal').classList.remove('hidden')" type="button"><span class="">Receipt</span><span class="material-symbols-outlined text-[14px]">north_east</span></button></div></div>
+<!-- Chat History Stream -->
+<div class="flex flex-col px-margin space-y-4 pt-1 pb-24">
+<!-- Timeline Divider -->
+<div class="flex items-center justify-center my-1">
+<span class="px-3 py-1 rounded-full bg-surface-container-low font-body-sm text-[11px] text-on-surface-variant font-medium tracking-wide">
+        Yesterday 21:40
+      </span>
+</div>
+<!-- Incoming Message 1 (Sophie) -->
+<div class="flex items-end gap-2.5 max-w-[85%] self-start">
+<div class="relative w-8 h-8 rounded-full overflow-hidden shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Close up warm portrait of Sophie with soft radiant lighting, wearing an ivory fine cashmere sweater with delicate rose-gold jewelry, warm creamy background, photographic editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpZP3XWD8cAKJ9nETeFFf4BFYBnw-ZmbqIfKKilNRA_P51fkZuSTc5xYF1YyjgSxDaHb1Oe7cbXMuGPME6w0lC5e8qeAm-sIAPVujs7XBdnwcYqT5YrR9NgwskIIBsQszVpaoEVj27YucGI5phhrhGUs-ZhXtbsRfDaVR1Qk-1Bt9g3VK4D7LiC6u7w7jRVMWIcgZbhKVPLKGCGV1oHNVaov4ToGg8ZZzo4Sz21oY">
+<span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-confirmed-green"></span>
+</div>
+<div class="flex flex-col space-y-1">
+<div class="bg-surface-white text-ink-primary px-4 py-3 rounded-2xl rounded-bl-sm shadow-[0_2px_8px_rgba(23,23,23,0.03)] font-body-md text-body-md">
+          Hi! Nice to meet you here ✨
+        </div>
+<span class="font-label-sm text-[10px] text-on-surface-variant pl-1">21:40</span>
+</div>
+</div>
+<!-- Outgoing Message (User - Obsidian Pill) -->
+<div class="flex flex-col items-end max-w-[82%] self-end space-y-1">
+<div class="bg-ink-primary text-surface-white px-4 py-3 rounded-2xl rounded-br-sm shadow-[0_4px_16px_rgba(23,23,23,0.12)] font-body-md text-body-md leading-relaxed">
+        I saw we both love travel. Any favorite destination?
+      </div>
+<div class="flex items-center gap-1 pr-1">
+<span class="font-label-sm text-[10px] text-on-surface-variant">21:42</span>
+<span class="material-symbols-outlined text-[13px] text-rose-gold" style="font-variation-settings: 'FILL' 1;">done_all</span>
+</div>
+</div>
+<!-- Incoming Message 2 (Sophie) -->
+<div class="flex items-end gap-2.5 max-w-[88%] self-start">
+<div class="w-8 h-8 rounded-full overflow-hidden shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Portrait of Sophie smiling gently, natural daylight, warm minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI97tbkTodZEACqLBdO8Z-J2kLyf17DmzBn1C797UAXIAug0E-zKhhjtahHJdmIEen0f_uav4GDC2eQ6lyAIDs50R5JpTPGe8CVq36Pci9vyMlM1DH5qLUa-t1vF3mr0Kdt0mquYeOnpdO7VFDUI6BrRDLRnG9jLxa1DYUqBPbdQSqs0qiSQzf9bjJnuASyzRvH_WhEd7VmjkNIbka9i6cvVHkU8rQ-pLF9BYVbWU">
+</div>
+<div class="flex flex-col space-y-1">
+<div class="bg-surface-white text-ink-primary px-4 py-3 rounded-2xl rounded-bl-sm shadow-[0_2px_8px_rgba(23,23,23,0.03)] font-body-md text-body-md leading-relaxed">
+          Yes! I just came back from Japan. The food was amazing! What about you?
+        </div>
+<span class="font-label-sm text-[10px] text-on-surface-variant pl-1">21:44</span>
+</div>
+</div>
+<!-- Rich Media Card (Sophie's Kyoto Travel Memory) -->
+<div class="flex items-end gap-2.5 max-w-[92%] self-start pt-1">
+<div class="w-8 h-8 opacity-0 shrink-0"></div>
+<div class="bg-surface-white rounded-2xl p-2.5 shadow-[0_8px_24px_rgba(23,23,23,0.06)] w-full max-w-[280px]">
+<div class="relative w-full h-44 rounded-xl overflow-hidden group">
+<img class="w-full h-full object-cover" data-alt="Kyoto Arashiyama in autumn with vibrant crimson maple leaves framing an ancient Japanese wooden temple courtyard, golden hour warm cinematic sunlight, fine art editorial photography, blush and warm earth tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlcNFpx9WOW-uNjTzAWmX-EZq0NwpN8MSON7t8vFpW4YnDusts8g_Ixog1Y7ZG7C2FXbYm45kuz-U92dOc7i9KxU5qBRucXVEeKqTvOi3rkcmk9yaI68MUpsK7wVcKptM6OwlNpea_7W2ye2DlCSi9tj4hNxh958uanltpAFiZDD-uwa-1z6HaTpYBOdq6VYNkpuUAMCo9hGpepmXK9mUdUuaRvgGRBcKe4a_Fwq4">
+<div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-ink-primary/70 backdrop-blur-md text-surface-white flex items-center gap-1 text-[11px] font-medium font-label-sm">
+<span class="material-symbols-outlined text-[12px] text-rose-accent">location_on</span>
+<span class="">Kyoto, Japan</span>
+</div>
+<button aria-label="Bookmark photo" class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-surface-white/80 backdrop-blur-md flex items-center justify-center text-ink-primary active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[15px] text-primary">bookmark</span>
+</button>
+</div>
+<div class="px-1.5 pt-2.5 pb-1 flex items-center justify-between">
+<div class="flex flex-col">
+<p class="font-body-md text-body-sm font-medium text-ink-primary">Autumn in Arashiyama</p>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Photo by Sophie · 35mm film</span>
+</div>
+<div class="w-6 h-6 rounded-full bg-blush-tint/50 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[14px]">favorite</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bell Resonance Agent Suggestion Card -->
+<div class="w-full pt-2"><div class="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-surface-white via-surface-white to-blush-tint/40 shadow-[0_4px_20px_rgba(217,140,149,0.12)] border border-blush-tint/60"><div class="flex items-center justify-between pb-2"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span></div><span class="font-label-sm text-[11px] tracking-wider text-rose-gold font-semibold uppercase">Bell Agent Whisper</span></div><div class="px-2.5 py-0.5 rounded-full bg-blush-tint text-primary font-label-sm text-[11px] font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-confirmed-green"></span>98% Shared Resonance</div></div><div class="pt-1"><h4 class="font-headline-sm text-[15px] font-medium text-ink-primary tracking-tight">Kyoto Autumn &amp; Analog Aesthetics</h4><p class="font-body-md text-body-md text-ink-secondary leading-relaxed pt-1">Both souls share <span class="font-medium text-primary">35mm film photography</span> and <span class="font-medium text-primary">Kyoto temple contemplation</span> in their verified alignment wishlists.</p></div><div class="flex items-center gap-2.5 pt-3.5"><button class="flex-1 h-10 px-4 rounded-full bg-ink-primary text-surface-white font-label-md text-label-md font-medium flex items-center justify-center gap-1.5 shadow-[0_2px_8px_rgba(23,23,23,0.14)] active:scale-98 transition-transform" type="button"><span class="material-symbols-outlined text-[16px] text-rose-gold">favorite</span><span class="">Co-Plan Journey</span></button><button class="h-10 px-3.5 rounded-full bg-surface-white border border-blush-tint text-on-surface-variant hover:bg-blush-tint/30 font-label-md text-label-md font-medium active:scale-95 transition-all" type="button">Dismiss</button></div></div></div>
+<!-- Contextual Suggestion Prompt Chips -->
+<div class="flex items-center gap-2 pt-1 overflow-x-auto pb-1 no-scrollbar"><span class="text-rose-gold text-label-sm font-semibold pl-1 flex items-center shrink-0 tracking-wide">✦ Prompts:</span><button class="shrink-0 px-3.5 py-1.5 rounded-full bg-surface-white border border-blush-tint/60 shadow-[0_1px_4px_rgba(23,23,23,0.03)] font-body-sm text-body-sm text-ink-primary hover:bg-blush-tint/30 active:scale-95 transition-all" onclick="insertPrompt('🍜 What is your favorite ramen spot in Tokyo?')" type="button">🍜 Tokyo ramen spot?</button><button class="shrink-0 px-3.5 py-1.5 rounded-full bg-surface-white border border-blush-tint/60 shadow-[0_1px_4px_rgba(23,23,23,0.03)] font-body-sm text-body-sm text-ink-primary hover:bg-blush-tint/30 active:scale-95 transition-all" onclick="insertPrompt('🍁 Kyoto in autumn is an absolute dream!')" type="button">🍁 Kyoto autumn colors</button><button class="shrink-0 px-3.5 py-1.5 rounded-full bg-surface-white border border-blush-tint/60 shadow-[0_1px_4px_rgba(23,23,23,0.03)] font-body-sm text-body-sm text-ink-primary hover:bg-blush-tint/30 active:scale-95 transition-all" onclick="insertPrompt('📷 Which 35mm film stock did you use?')" type="button">📷 35mm film stock</button></div>
+</div>
+<!-- Fixed-Style Translucent Bottom Message Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-background-cream/90 backdrop-blur-xl pb-safe shadow-[0_-4px_20px_rgba(23,23,23,0.04)]"><div class="px-margin py-2.5 max-w-[720px] mx-auto flex items-center gap-2 border-t border-blush-tint/30"><button aria-label="Attach Photo" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-blush-tint/40 active:scale-95 transition-all" type="button"><span class="material-symbols-outlined text-[21px] text-rose-gold">photo_library</span></button><button aria-label="Voice Memo" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-blush-tint/40 active:scale-95 transition-all" type="button"><span class="material-symbols-outlined text-[21px] text-rose-gold">mic</span></button><div class="flex-1 flex items-center bg-surface-white border border-blush-tint/60 rounded-full px-4 py-1.5 shadow-[inset_0_1px_3px_rgba(23,23,23,0.03)]"><input class="w-full bg-transparent font-body-md text-body-md text-ink-primary placeholder:text-on-surface-variant/60 focus:outline-none py-1" id="chatInput" placeholder="Echo with Sophie..." type="text"><button aria-label="Emoji picker" class="text-on-surface-variant hover:text-ink-primary ml-1 shrink-0" type="button"><span class="material-symbols-outlined text-[20px] text-rose-gold">sentiment_satisfied</span></button></div><button aria-label="Send resonant bell message" class="w-11 h-11 rounded-full bg-ink-primary text-surface-white flex items-center justify-center shadow-[0_4px_14px_rgba(23,23,23,0.18)] active:scale-90 transition-all shrink-0 hover:bg-primary" id="sendBtn" type="button"><span class="material-symbols-outlined text-[20px] text-rose-gold" style="font-variation-settings: 'FILL' 1;">notifications_active</span></button></div></div>
+<!-- Cryptographic Proof Bottom Sheet Modal (Toggled via JavaScript) -->
+<div class="fixed inset-0 z-50 flex flex-col justify-end bg-ink-primary/35 backdrop-blur-sm hidden transition-opacity" id="proofSheetModal">
+<div class="w-full max-w-[720px] mx-auto bg-surface-white rounded-t-3xl p-margin shadow-[0_4px_24px_rgba(23,23,23,0.18)] pb-safe">
+<!-- Drag Handle -->
+<div class="w-10 h-1 rounded-full bg-surface-variant mx-auto mb-4"></div>
+<!-- Header -->
+<div class="flex items-center justify-between pb-3">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-ink-primary">Resonance Consensus Proof</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-sage-muted/20 text-sage-deep">Verified</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant" id="closeProofBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Signers Visual -->
+<div class="flex items-center justify-center gap-6 py-4 bg-background-cream rounded-2xl mb-4">
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-12 rounded-full overflow-hidden shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Portrait of Sophie, radiant smile, fine light, minimalist styling." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwZ48F2coYNxcPjcdTDUMPq7aUc3NguDNmWdwv3P1PUVGTixQZYiz-ZqrRLxgxWKgIhc5EdlAU2ynzkBG3AUTz2_27shsutKnRAGZG8icQ5n9IbhpzHUXzbcn2v9k0RUuuaQJ07hKUcw9BnGgtC_NGGBT0-mCOI4bLx0Cp4upQ7iaNO8LPO_QAqyixgsc-CjogFPvl7zbOlc93Oh4dOLbpfZ33xbBu0nC67Lulv3Y">
+</div>
+<span class="font-label-sm text-label-sm font-medium text-ink-primary">Sophie</span>
+<span class="text-[10px] text-on-surface-variant">0x8a...3F2A</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-blush-tint flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">all_inclusive</span>
+</div>
+<span class="font-label-sm text-[10px] text-sage-deep font-semibold mt-1">2/2 Signatures</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline-sm text-headline-sm shadow-sm">
+            Y
+          </div>
+<span class="font-label-sm text-label-sm font-medium text-ink-primary">You</span>
+<span class="text-[10px] text-on-surface-variant">0x4c...9B10</span>
+</div>
+</div>
+<!-- Proof Details List -->
+<div class="space-y-2.5 font-body-sm text-body-sm text-on-surface-variant pb-5">
+<div class="flex justify-between items-center py-1">
+<span class="">Resonance Bell ID</span>
+<span class="font-mono text-ink-primary font-medium">#RB-2026-8819</span>
+</div>
+<div class="flex justify-between items-center py-1">
+<span class="">Target Network</span>
+<span class="text-ink-primary font-medium">BOT Chain Mainnet</span>
+</div>
+<div class="flex justify-between items-center py-1">
+<span class="">Consensus Timestamp</span>
+<span class="text-ink-primary">Oct 7, 2026 · 21:38:12 UTC</span>
+</div>
+<div class="flex justify-between items-center py-1">
+<span class="">Transaction Hash</span>
+<span class="font-mono text-primary text-xs truncate max-w-[180px]">0x7f4e912bc04...de81a</span>
+</div>
+</div>
+<!-- Explorer Button -->
+<button class="w-full h-12 rounded-full bg-ink-primary text-surface-white font-label-md text-label-md font-semibold flex items-center justify-center gap-1.5 shadow-md active:scale-98 transition-transform" type="button">
+<span class="">View on BOT Explorer</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  // Dynamic prompt insertion
+  function insertPrompt(text) {
+    const input = document.getElementById('chatInput');
+    if (input) {
+      input.value = text;
+      input.focus();
+    }
+  }
+
+  // Cryptographic Proof sheet toggle
+  const proofBtn = document.getElementById('proofTriggerBtn');
+  const proofSheet = document.getElementById('proofSheetModal');
+  const closeProofBtn = document.getElementById('closeProofBtn');
+
+  if (proofBtn && proofSheet) {
+    proofBtn.addEventListener('click', () => {
+      proofSheet.classList.remove('hidden');
+    });
+  }
+
+  if (closeProofBtn && proofSheet) {
+    closeProofBtn.addEventListener('click', () => {
+      proofSheet.classList.add('hidden');
+    });
+  }
+
+  // Dismiss backdrop when tapping background
+  if (proofSheet) {
+    proofSheet.addEventListener('click', (e) => {
+      if (e.target === proofSheet) {
+        proofSheet.classList.add('hidden');
+      }
+    });
+  }
+</script></main>
+
+</body></html>

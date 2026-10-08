@@ -1,0 +1,16 @@
+:root{--stitch-column:440px;--stitch-header:56px;--stitch-gutter:24px;--stitch-border:rgba(201,136,119,.18);--stitch-caption:12px;--stitch-body:14px;--stitch-title:28px}
+.stitch-back,.stitch-account{display:none}
+body:is([data-route="discover"],[data-route="echo-detail"],[data-route="echo-results"],[data-route="echo-chat"]){background:var(--cream);background-image:none}
+body:is([data-route="discover"],[data-route="echo-detail"],[data-route="echo-results"],[data-route="echo-chat"]) .demo-bar{height:var(--stitch-header);min-height:var(--stitch-header);padding:0 max(var(--size-16),calc((100% - var(--stitch-column))/2 + var(--size-16)));display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:var(--size-4);border:0;background:var(--cream);box-shadow:0 1px 8px rgba(23,23,23,.03)}
+body:is([data-route="discover"],[data-route="echo-detail"],[data-route="echo-results"],[data-route="echo-chat"]) .bell-brand{justify-content:center;font-size:var(--size-18);letter-spacing:-.025em;gap:var(--size-8)}
+body:is([data-route="discover"],[data-route="echo-detail"],[data-route="echo-results"],[data-route="echo-chat"]) .bell-brand .bell-mark{width:var(--size-20);height:var(--size-20)}
+body:is([data-route="discover"],[data-route="echo-detail"],[data-route="echo-results"],[data-route="echo-chat"]) .bell-session{display:none}
+body:is([data-route="discover"],[data-route="echo-detail"],[data-route="echo-results"],[data-route="echo-chat"]) :is(.stitch-back,.stitch-account){display:grid;place-items:center;padding:var(--size-4);color:var(--bell-deep-rose)}
+.stitch-account img{width:var(--size-36);height:var(--size-36);object-fit:cover;border-radius:50%;border:1px solid var(--stitch-border)}
+.stitch-account>.bell-icon{padding:var(--size-8);width:var(--size-36);height:var(--size-36);border-radius:50%;background:var(--bell-blush)}
+#app:is([data-route="discover"],[data-route="echo-detail"],[data-route="echo-results"],[data-route="echo-chat"])>.page{max-width:var(--stitch-column);padding-top:var(--size-12);margin-inline:auto}
+.stitch-account-sheet{display:grid;gap:var(--size-16);text-align:center;padding-block:var(--size-16)}.stitch-account-sheet>.bell-avatar{margin:auto}
+.avatar-fallback{display:grid;place-items:center;font-family:var(--serif);color:var(--bell-deep-rose);width:100%;height:100%;border-radius:inherit;background:var(--bell-blush)}
+.echo-persona .bell-profile-hero>.avatar-fallback{width:var(--size-80);height:var(--size-80);border-radius:50%;font-size:var(--size-32);align-self:flex-start;margin-top:var(--size-48)}
+.identity-photo{width:var(--size-100);height:var(--size-100);border-radius:50%;object-fit:cover;border:var(--size-2) solid var(--surface-white);box-shadow:var(--bell-shadow)}
+.identity-fields .input-row label{flex:0 0 var(--size-100);width:var(--size-100)}.identity-fields .input-row input{min-width:0}

@@ -1,0 +1,61 @@
+/* Stitch 08 / 09: editorial persona and intimate conversation primitives. */
+.echo-persona,.stitch-chat{max-width:var(--size-440);margin-inline:auto;overflow-wrap:anywhere}
+.echo-persona .echo-status{margin:0 0 var(--size-16);padding:var(--size-16);border:0;border-radius:var(--size-16);gap:var(--size-12);background:linear-gradient(115deg,var(--surface-white),var(--bell-quote-tint));box-shadow:var(--bell-shadow)}
+.echo-persona .echo-status h2{font-family:var(--sans);font-size:var(--size-14);line-height:1.5;margin:0 0 var(--size-4);color:var(--bell-deep-rose)}
+.echo-persona .echo-status p{font-size:var(--size-11);line-height:1.6;margin:0}
+.echo-persona .echo-status>.bell-icon{width:var(--size-32);height:var(--size-32);padding:var(--size-8)}
+.echo-persona .echo-profile{margin:0;border-radius:var(--size-20)}
+.echo-persona .bell-profile-hero{aspect-ratio:4/4.8;display:flex;align-items:center;justify-content:center;padding:var(--size-24);overflow:hidden}
+.echo-portrait-photo{width:100%;height:100%;object-fit:cover;display:block}
+.echo-persona .bell-profile-hero>.echo-portrait-photo{position:absolute;inset:0}
+.echo-portrait-identity{position:absolute;bottom:0;left:0;right:0;padding:var(--size-24);text-align:left}
+.echo-persona .has-photo .echo-portrait-identity{padding-top:var(--size-80);background:linear-gradient(transparent,var(--image-shade));color:var(--surface-white)}
+.echo-persona .echo-portrait-identity h1{font-family:var(--serif);font-size:var(--size-32);line-height:1.25;margin:var(--size-8) 0}
+.echo-persona .echo-portrait-identity p{font-size:var(--size-12);line-height:1.5;margin:0;color:inherit}
+.echo-persona .bell-profile-label{display:inline-flex;padding:var(--size-4) var(--size-12);border-radius:var(--size-999);background:var(--bell-deep-rose);color:var(--surface-white);font-size:var(--size-11);line-height:1.5}
+.echo-persona .bell-profile-label svg{width:var(--size-14);height:var(--size-14)}
+.echo-persona .bell-profile-body{padding:var(--size-16)}
+.echo-persona .bell-profile-body .chips{gap:var(--size-8);margin:0 0 var(--size-16)}
+.echo-persona .bell-profile-body .pill{font-size:var(--size-11);background:var(--cream);border:0;padding:var(--size-4) var(--size-12)}
+.echo-persona .bell-profile-body>.eyebrow{font-size:var(--size-10);letter-spacing:.12em}
+.echo-persona .bell-introduction{margin:var(--size-8) 0 0;padding:var(--size-16);border:0;border-radius:var(--size-12);background:var(--cream);font-family:var(--serif);font-style:italic;font-size:var(--size-18);line-height:1.65;color:var(--bell-deep-rose)}
+.echo-persona .bell-reasons,.echo-persona .echo-fragments{margin:var(--size-24) 0;padding:0}
+.echo-persona .bell-reasons h2,.echo-persona .echo-fragments h2{font-family:var(--serif);font-size:var(--size-18);line-height:1.4;font-weight:400}
+.echo-persona .bell-reasons .row,.echo-persona .echo-fragments>.row{margin:0 0 var(--size-12);gap:var(--size-8)}
+.echo-persona .bell-reason{padding:var(--size-16);gap:var(--size-12);border-radius:var(--size-12);margin:var(--size-12) 0;box-shadow:var(--bell-shadow)}
+.echo-persona .bell-reason .bell-setting-icon{width:var(--size-40);height:var(--size-40);border-radius:50%}
+.echo-persona .bell-reason h3{font-size:var(--size-14);font-weight:500;line-height:1.5}
+.echo-persona .bell-reason p{font-size:var(--size-12);line-height:1.65;margin-top:var(--size-4)}
+.echo-persona .echo-fragment-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--size-8)}
+.echo-persona .echo-fragment{margin:0;background:none;border:0;overflow:hidden;border-radius:0;box-shadow:none}
+.echo-persona .echo-fragment img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:var(--size-12)}
+.echo-persona .echo-fragment figcaption{padding:var(--size-8) 0 0;text-align:center;font-size:var(--size-12)}
+.echo-persona .echo-fragment small{display:none}
+.echo-persona .echo-whisper{padding:var(--size-16);border:0;border-radius:var(--size-20);background:linear-gradient(130deg,var(--surface-white),var(--cream));box-shadow:var(--bell-shadow);margin:var(--size-24) 0}
+.echo-persona .echo-whisper .eyebrow{font-size:var(--size-10);letter-spacing:.08em;color:var(--bell-deep-rose)}
+.echo-persona .echo-whisper .row{gap:var(--size-8);align-items:center;flex-wrap:wrap}
+.echo-persona .echo-whisper p{font-size:var(--size-12);line-height:1.8;margin:var(--size-8) 0}
+.echo-persona .echo-whisper .btn{background:var(--bell-deep-rose);color:var(--surface-white);font-size:var(--size-12);min-height:var(--size-44)}
+.echo-primary-row{display:flex;gap:var(--size-12);align-items:center;flex-wrap:wrap}
+.echo-primary-row>.btn:first-child{width:var(--size-48);min-width:var(--size-48);height:var(--size-48);padding:var(--size-12);border-radius:50%;flex:0 0 var(--size-48)}
+.echo-primary-row>.echo-primary,.echo-primary-row>.rose{flex:1;min-height:var(--size-48);background:var(--bell-ink,var(--ink));color:var(--surface-white);font-size:var(--size-14)}
+.echo-persona .echo-gateway{gap:var(--size-12);padding:0;margin-top:var(--size-24)}
+.echo-persona .echo-gateway-links{justify-content:center}
+.echo-persona .echo-proof{width:100%;font-size:var(--size-11)}
+.echo-persona .echo-proof summary{justify-content:center;min-height:var(--size-44)}
+.echo-persona .echo-gateway>.btn{background:none;box-shadow:none;border:0;font-size:var(--size-12);color:var(--bell-deep-rose)}
+.bell-portrait{position:relative;overflow:hidden}.bell-portrait>.echo-portrait-photo{position:absolute;inset:0}.bell-portrait-caption{position:relative;z-index:1}
+.stitch-chat .bell-chat-header{gap:var(--size-12);margin:var(--size-16) 0 var(--size-24);padding-bottom:var(--size-16);border-bottom:var(--size-1) solid var(--line)}
+.stitch-chat .bell-chat-header>.echo-portrait-photo{width:var(--size-44);height:var(--size-44);border-radius:50%;flex-shrink:0}
+.stitch-chat .bell-chat-header h2{font-size:var(--size-18)}
+.stitch-chat .bell-chat-header small{font-size:var(--size-11)}
+.stitch-chat .bell-conversation{gap:var(--size-16);align-items:stretch}
+.stitch-chat .bell-chat-bubble{font-size:var(--size-14);line-height:1.7;padding:var(--size-12) var(--size-16);box-shadow:var(--bell-shadow)}
+.stitch-chat .bell-chat-bubble.theirs{align-self:flex-start;background:var(--surface-white);border-bottom-left-radius:var(--size-4)}
+.stitch-chat .bell-chat-bubble.mine{background:var(--bell-blush);border-bottom-right-radius:var(--size-4)}
+.stitch-chat .bell-chat-bubble small{font-size:var(--size-10);display:block;margin-top:var(--size-4)}
+.stitch-chat .bell-composer{position:sticky;bottom:0;z-index:2;box-shadow:var(--bell-shadow);margin-bottom:var(--size-12)}
+.stitch-chat .bell-composer input{font-size:var(--size-14);min-height:var(--size-44)}
+.stitch-chat .echo-chat-privacy{font-size:var(--size-11);color:var(--muted);margin-top:var(--size-12)}
+.stitch-chat .echo-chat-privacy summary{cursor:pointer;min-height:var(--size-44);display:flex;align-items:center;justify-content:center;gap:var(--size-8)}
+.stitch-chat .echo-chat-privacy p{padding:var(--size-12);background:var(--surface-white);border-radius:var(--size-12)}

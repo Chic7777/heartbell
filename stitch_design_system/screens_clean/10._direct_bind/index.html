@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container-highest": "#e7e1e1", "destructive-rose": "#C0646A", "blush-tint": "#F4DDE0", "background-cream": "#FFF9F7", "error": "#ba1a1a", "secondary": "#875041", "background": "#fef8f7", "on-primary-container": "#5d262f", "surface-container-low": "#f8f2f2", "ink-secondary": "#252323", "on-secondary-fixed-variant": "#6b392c", "surface-bright": "#fef8f7", "tertiary-fixed-dim": "#5ede98", "confirmed-green": "#4ECF8B", "surface-container": "#f2ecec", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "surface": "#fef8f7", "pending-amber": "#F2A65A", "surface-tint": "#8c4b54", "ink-primary": "#171717", "sage-muted": "#7B9D86", "on-tertiary": "#ffffff", "on-tertiary-fixed-variant": "#005230", "sage-deep": "#2E9E63", "rose-gold": "#C98877", "secondary-fixed-dim": "#fdb5a3", "surface-white": "#FFFFFF", "outline": "#857374", "primary": "#8c4b54", "secondary-container": "#fdb5a3", "on-error": "#ffffff", "tertiary-fixed": "#7cfbb2", "inverse-on-surface": "#f5efef", "error-container": "#ffdad6", "on-primary-fixed-variant": "#70343d", "on-secondary-container": "#794436", "secondary-fixed": "#ffdbd1", "on-surface": "#1d1b1b", "surface-container-high": "#ede7e6", "on-tertiary-fixed": "#002110", "blush-soft": "#E7B7A8", "primary-container": "#d98c95", "primary-fixed-dim": "#ffb2ba", "on-tertiary-container": "#004125", "inverse-surface": "#323030", "pending-dark": "#B8732F", "tertiary-container": "#30b776", "surface-variant": "#e7e1e1", "on-primary-fixed": "#390914", "on-surface-variant": "#524344", "surface-dim": "#ded9d8", "on-error-container": "#93000a", "on-secondary-fixed": "#350f06", "primary-fixed": "#ffd9dc", "rose-accent": "#E98F93", "inverse-primary": "#ffb2ba", "tertiary": "#006d41", "on-background": "#1d1b1b", "outline-variant": "#d7c1c3", "on-primary": "#ffffff" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "gutter": "1rem", "space-lg": "1.5rem", "space-xl": "2rem", "space-md": "1rem", "margin": "1.5rem", "space-sm": "0.5rem", "space-xs": "0.25rem" }, fontFamily: { "label-lg": ["Inter"], "headline-lg-mobile": ["Noto Serif"], "headline-lg": ["Noto Serif"], "headline-sm": ["Noto Serif"], "body-sm": ["Inter"], "body-md": ["Inter"], "label-md": ["Inter"], "headline-md": ["Noto Serif"], "headline-xl": ["Noto Serif"], "label-sm": ["Inter"], "body-lg": ["Inter"], "headline-xl-mobile": ["Noto Serif"] }, fontSize: { "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" }], "headline-xl": ["48px", { "lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-xl-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" }] } } } }</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../../ui/fonts.css">
+
+</head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen selection:bg-blush-tint selection:text-ink-primary"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl pt-safe shadow-[0_1px_12px_rgba(23,23,23,0.03)]"><div class="h-16 px-margin flex items-center justify-between"><button aria-label="Go back" class="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-ink-primary hover:bg-surface-container-high/60 transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h2 class="font-headline-sm text-headline-sm text-ink-primary tracking-tight font-medium text-center">Direct Bind</h2><button aria-label="Profile" class="w-10 h-10 -mr-2 rounded-full flex items-center justify-center hover:bg-surface-container-high/60 transition-colors" type="button"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></button></div></header><main class="flex flex-col relative w-full pt-16 bg-surface min-h-screen pb-safe"><div class="flex flex-col w-full pb-10">
+<!-- Interactive Modals / Bottom Sheets Containers -->
+<div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-margin bg-ink-primary/30 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300" id="scanner-modal">
+<div class="w-full max-w-sm bg-surface-white rounded-t-lg sm:rounded-lg p-space-lg shadow-2xl flex flex-col items-center transform translate-y-8 transition-transform duration-300">
+<div class="w-10 h-1 bg-surface-container-highest rounded-full mb-space-md sm:hidden"></div>
+<div class="w-14 h-14 rounded-full bg-blush-tint/40 flex items-center justify-center text-primary mb-space-sm">
+<span class="material-symbols-outlined text-[28px]">qr_code_scanner</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-ink-primary tracking-tight text-center">Scan Consensus QR</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center mt-space-xs mb-space-lg">
+        Align your partner's unique QR code to link identity accounts.
+      </p>
+<div class="relative w-48 h-48 rounded-lg bg-surface-container flex items-center justify-center overflow-hidden mb-space-lg">
+<div class="absolute inset-4 rounded-md border-2 border-dashed border-rose-gold/50 animate-pulse"></div>
+<span class="material-symbols-outlined text-[48px] text-primary/40">center_focus_weak</span>
+</div>
+<button class="w-full py-3 rounded-full bg-ink-primary text-on-primary font-label-md text-label-md active:scale-[0.98] transition-transform" onclick="closeScannerModal()" type="button">
+        Done Scanning
+      </button>
+</div>
+</div>
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-ink-primary text-on-primary font-label-sm text-label-sm px-space-md py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-200 flex items-center gap-space-xs" id="share-toast">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">check_circle</span>
+<span class="">Invite link copied to clipboard</span>
+</div>
+<!-- Content Stream -->
+<div class="w-full max-w-[720px] mx-auto px-margin flex flex-col gap-space-lg pt-space-xs">
+<!-- Title & Editorial Prompt -->
+<section class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-rose-gold">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary">Direct Bind 01</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-ink-primary tracking-tight font-normal">
+        Find your person
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Search by username, share a consecrated invite, or connect via dual resonance.
+      </p>
+</section>
+<!-- Search Input Bar -->
+<div class="relative flex items-center w-full">
+<span class="material-symbols-outlined absolute left-4 text-[22px] text-outline pointer-events-none">
+        search
+      </span>
+<input autocomplete="off" class="w-full h-14 pl-12 pr-12 rounded-full bg-surface-white font-body-md text-body-md text-ink-primary placeholder:text-outline shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] focus:outline-none focus:ring-0 focus:shadow-[0_12px_32px_rgba(217,140,149,0.18)] transition-all" id="username-search" oninput="handleSearch(this.value)" placeholder="Enter username, ENS, or 0x..." type="text">
+<button aria-label="Clear search" class="absolute right-4 w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-outline-variant hover:text-ink-primary transition-colors opacity-0 pointer-events-none" id="search-clear-btn" onclick="clearSearch()" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<!-- Quick Action Pair (Tiles) -->
+<section class="grid grid-cols-2 gap-space-md">
+<!-- Scan QR Code Action -->
+<button class="group flex flex-col items-center justify-center p-space-lg rounded-lg bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] hover:shadow-[0_12px_32px_rgba(217,140,149,0.15)] active:scale-[0.98] transition-all text-center gap-space-sm" onclick="openScannerModal()" type="button">
+<div class="w-13 h-13 p-3 rounded-full bg-blush-tint/40 text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[26px]">qr_code_scanner</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-ink-primary font-medium">Scan QR Code</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Camera lookup</span>
+</div>
+</button>
+<!-- Share Link Action -->
+<button class="group flex flex-col items-center justify-center p-space-lg rounded-lg bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] hover:shadow-[0_12px_32px_rgba(217,140,149,0.15)] active:scale-[0.98] transition-all text-center gap-space-sm" onclick="triggerShareInvite()" type="button">
+<div class="w-13 h-13 p-3 rounded-full bg-blush-tint/40 text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[26px]">share</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-ink-primary font-medium">Share Link</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Send direct invite</span>
+</div>
+</button>
+</section>
+<!-- Recent Connections & Echoes Header -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-ink-primary font-medium">
+          Recent Connections
+        </h2>
+<span class="font-label-sm text-label-sm text-rose-gold tracking-tight">Resonance Verified</span>
+</div>
+<!-- Candidate 1: Sophie -->
+<div class="flex items-center justify-between p-space-md rounded-lg bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] hover:shadow-[0_12px_32px_rgba(217,140,149,0.12)] transition-shadow" id="candidate-sophie">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative shrink-0">
+<img class="w-14 h-14 rounded-full object-cover" data-alt="Intimate portrait of Sophie, an elegant Asian woman with soft natural lighting, calm gentle gaze, warm blush undertones, muted sage background, filmic photography with quiet romantic grace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjAzcE0VpioS9TiZHdeSNfsZG2bgl85b54fUpW9LpcU2UBvE8SHXLmUvx2klV4rxlPbSAbCTYsprfFYb7g1VUmNT_xWGLP_VRPREO1SQQz2sDA5R82e3VJer-NIw8o0f7tmaqsBniMSbzneP8HNhkayAMwLFrJ2J2oztJp27jzU_G0-h64eHPagfQkCnQlC_Wyv_Qire5W7lk6z3gu-cid_b4fO_ZJ9OYsXUXuiMI">
+<div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-confirmed-green flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-surface-white text-[10px]">check</span>
+</div>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-ink-primary font-semibold truncate">Sophie</span>
+<span class="font-label-sm text-label-sm text-primary bg-blush-tint/40 px-2 py-0.5 rounded-full">96%</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">@sophie.bell</span>
+<span class="font-label-sm text-label-sm text-secondary-container-variant text-rose-gold truncate mt-0.5">Film Curator · Shanghai</span>
+</div>
+</div>
+<button aria-label="Send invite to Sophie" class="shrink-0 w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-ink-primary hover:bg-primary hover:text-on-primary transition-colors ml-space-sm" onclick="selectCandidate('Sophie', '@sophie.bell')" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+<!-- Candidate 2: Alex -->
+<div class="flex items-center justify-between p-space-md rounded-lg bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] hover:shadow-[0_12px_32px_rgba(217,140,149,0.12)] transition-shadow" id="candidate-alex">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative shrink-0">
+<img class="w-14 h-14 rounded-full object-cover" data-alt="Editorial portrait of Alex, a warm creative architect with thoughtful minimalist aesthetic, warm diffused morning daylight, neutral charcoal accents and subtle warm tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmzpM283nYews3kq1kkVYyQrHvLOOCV6g4EjoQKsvprRl9PyA1zoIoCR4JjsRyqxK1TIf5syKbiMx0YfPoM415-zs-cUJ4UuTKAZJ8XD5xEh_9OOyJJNkaKGSHTadBKGqd7mhUR55iV_cz7xaobU5TPRNPh94cse8V8-2bGA_i6SLYZ3rv6CrvPS0LTNYXqguXnAu_yGu3sk7riRYrMERg_PNJdYffu7JCEAS-Byc">
+<div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-confirmed-green flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-surface-white text-[10px]">check</span>
+</div>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-ink-primary font-semibold truncate">Alex</span>
+<span class="font-label-sm text-label-sm text-primary bg-blush-tint/40 px-2 py-0.5 rounded-full">92%</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">@alex.bell</span>
+<span class="font-label-sm text-label-sm text-rose-gold truncate mt-0.5">Architect · Tokyo</span>
+</div>
+</div>
+<button aria-label="Send invite to Alex" class="shrink-0 w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-ink-primary hover:bg-primary hover:text-on-primary transition-colors ml-space-sm" onclick="selectCandidate('Alex', '@alex.bell')" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+<!-- Candidate 3: Custom Address Option Tile -->
+<div class="flex items-center justify-between p-space-md rounded-lg bg-surface-container-low/70 transition-colors">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-14 h-14 rounded-full bg-surface-white flex items-center justify-center text-rose-gold shrink-0">
+<span class="material-symbols-outlined text-[24px]">alternate_email</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-ink-primary font-medium truncate">Manual Bind Address</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Custom EVM address or decentralized name</span>
+</div>
+</div>
+<button class="px-space-md py-2 rounded-full bg-surface-white text-ink-primary font-label-sm text-label-sm shadow-sm hover:bg-surface-container-high transition-colors" onclick="focusSearchInput()" type="button">
+          Paste
+        </button>
+</div>
+</section>
+<!-- Privacy & Security Consensus Pledge Banner -->
+<div class="p-space-lg rounded-lg bg-surface-white shadow-[0_1px_2px_rgba(23,23,23,0.03),0_8px_24px_rgba(23,23,23,0.04)] flex flex-col gap-space-sm relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-blush-tint/25 pointer-events-none"></div>
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="font-label-sm text-label-sm font-semibold tracking-wide uppercase">Consensus Protocol Guarantee</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+        Direct binding creates an exclusive, verifiable relationship ring. It requires a mutual, two-way cryptographic signature. Neither party can bind or record vows on-chain without the other partner's explicit consent.
+      </p>
+<div class="flex items-center gap-space-md pt-space-xs">
+<div class="flex items-center gap-1.5 text-sage-deep font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">lock_reset</span>
+<span class="">Zero Coercion</span>
+</div>
+<div class="flex items-center gap-1.5 text-sage-deep font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">all_inclusive</span>
+<span class="">Dual Signature SBT</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function handleSearch(query) {
+    const clearBtn = document.getElementById('search-clear-btn');
+    const sophieCard = document.getElementById('candidate-sophie');
+    const alexCard = document.getElementById('candidate-alex');
+    const q = query.trim().toLowerCase();
+
+    if (query.length > 0) {
+      clearBtn.classList.remove('opacity-0', 'pointer-events-none');
+    } else {
+      clearBtn.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    if (q === '') {
+      if (sophieCard) sophieCard.style.display = 'flex';
+      if (alexCard) alexCard.style.display = 'flex';
+      return;
+    }
+
+    if (sophieCard) {
+      const matchSophie = 'sophie'.includes(q) || 'sophie.bell'.includes(q) || 'curator'.includes(q);
+      sophieCard.style.display = matchSophie ? 'flex' : 'none';
+    }
+
+    if (alexCard) {
+      const matchAlex = 'alex'.includes(q) || 'alex.bell'.includes(q) || 'architect'.includes(q);
+      alexCard.style.display = matchAlex ? 'flex' : 'none';
+    }
+  }
+
+  function clearSearch() {
+    const input = document.getElementById('username-search');
+    input.value = '';
+    handleSearch('');
+    input.focus();
+  }
+
+  function focusSearchInput() {
+    const input = document.getElementById('username-search');
+    input.focus();
+    input.placeholder = 'Paste 0x... or name.eth';
+  }
+
+  function openScannerModal() {
+    const modal = document.getElementById('scanner-modal');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    const inner = modal.querySelector('div');
+    if (inner) inner.classList.remove('translate-y-8');
+  }
+
+  function closeScannerModal() {
+    const modal = document.getElementById('scanner-modal');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    const inner = modal.querySelector('div');
+    if (inner) inner.classList.add('translate-y-8');
+  }
+
+  function triggerShareInvite() {
+    const toast = document.getElementById('share-toast');
+    toast.classList.remove('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      toast.classList.add('opacity-0', 'pointer-events-none');
+    }, 2400);
+  }
+
+  function selectCandidate(name, handle) {
+    const input = document.getElementById('username-search');
+    input.value = handle;
+    handleSearch(handle);
+    triggerShareInvite();
+  }
+</script></main>
+
+</body></html>
