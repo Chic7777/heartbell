@@ -27,13 +27,76 @@ export function journeyView(state,h){
   if(state.route==='ceremony'){const born=active?new Date(r.createdAt*1000):null,day=active?Math.max(1,Math.floor((Date.now()/1000-r.createdAt)/86400)+1):null;const sealed=active?`<div class="ceremony-facts">${[['Dual Keys Entangled','双人密钥各自独立签名，缺一不可',glyph('shield')],['Vault Encrypted','记忆与誓言端到端加密，服务器只见密文',glyph('lock')],['Genesis Timestamp','Born '+e(born.toLocaleDateString())+' · Ring #'+e(r.id),glyph('clock')],['Shared Cadence','Day '+day+' · 共同生活的第一天',glyph('heart')]].map(([t,d,g])=>`<div class="bell-reason"><span class="bell-setting-icon">${g}</span><div><h3>${t}</h3><p>${d}</p></div></div>`).join('')}</div><div class="actions">${btn('Enter Our Ring '+glyph('next'),'home','data-action="home"')}</div>`:'';return `<div class="journey-ceremony">${head(active?'✦ Ceremony Complete · Vow Sealed':'Our Ring · 仪式预览',active?'Our Ring is now complete. Two lives, one mutual cadence.':'尚未建立链上关系。这里展示仪式布局，不代表签名成功。')}${ring(active?'ACTIVE':'NONE')}${active?`<p class="center">${e(short(r.a))} × ${e(short(r.b))}</p>`:''}${sealed}<p class="quote">Forever does not begin with a promise.<br>It begins with two people choosing the same thing.</p>${btn(active?'继续浏览我们的故事':'继续浏览我们的故事','story','','light')}</div>`;}
   if(state.route==='home'&&active){
     const days=Math.max(1,Math.floor((Date.now()/1000-r.createdAt)/86400)+1),today=memories.find(isMedia);
-    const peer=r.a?.toLowerCase()===(state.chainAddress||state.user||'').toLowerCase()?r.b:r.a;
-    const pendingVow=(r.vows||[]).find(v=>!v.confirmed&&v.by&&v.by.toLowerCase()!==(state.chainAddress||state.user||'').toLowerCase());
+    const selfAddr=(state.chainAddress||state.user||''),peer=r.a?.toLowerCase()===selfAddr.toLowerCase()?r.b:r.a;
+    const pendingVow=(r.vows||[]).find(v=>!v.confirmed&&v.by&&v.by.toLowerCase()!==selfAddr.toLowerCase());
     const pendingMemory=pendingVow?memories.find(m=>m.body?.hash?.toLowerCase()===pendingVow.hash?.toLowerCase()):null;
-    const statusRow=`<div class="ring-status-row"><span class="pill ok">${glyph('shield')}${state.config?.chainConfigured?'BOT Chain · Synced':'链未配置'}</span><span class="pill">Ring #${e(r.id)} · 双方共同建立</span><span class="pill">${glyph('spark')}共鸣雷达 · ${e(String((state.candidates||[]).length))} 位附近共鸣</span></div>`;
-    const waitingCard=pendingVow?`<aside class="bell-agent"><div class="row"><span class="bell-agent-label">${glyph('spark')} Waiting for You · 等待你的签名</span><span class="small muted">Off-chain draft</span></div><p>${e(pendingMemory?.content?.text||pendingVow.text||'对方提交了一句加密誓言，等待你的核对与确认。')}</p><p class="small muted">链下加密草稿 · 双方签名后才会成为生效誓言</p><div class="row">${btn('Review & Sign · 核对并确认','confirm-vow',`data-index="${e(String(pendingVow.index))}"`,'rose')}${btn('稍后','vows','','light')}</div></aside>`:'';
-    return head('Our Ring','A shared life, owned by both of you.')+statusRow+`<div class="ring-dashboard"><div class="mutual-presence">${initial(state.profile?.name||short(state.user),'你的账户')}${glyph('heart')}${initial(short(peer),'另一位参与者账户')}</div><div class="center"><p class="number">${days}</p><p class="small muted">Days of Shared Consensus</p></div>${ring('ACTIVE')}<div class="stats"><button data-action="story"><strong>${counts.photo+counts.video+counts.note}</strong><span>Memories</span></button><button data-action="vows"><strong>${r.vowCount}</strong><span>Confirmed Vows</span></button><button data-action="bond"><strong>${e(state.balance)}</strong><span>BOT Bond</span></button></div></div>`+waitingCard+`<section class="today-panel"><div class="row"><h2>Today's Moments</h2>${btn('View Story · 查看故事','story','','compact')}</div><div class="today-entry">${glyph('heart')}<div><h3>${e(today?.content?.title||'今天，也值得被记住。')}</h3><p class="small muted">${e(today?.content?.text?.slice(0,100)||'留下一张照片、一句话，或一个想一起实现的愿望。')}</p><p class="small muted">${glyph('lock')} Encrypted in Bell Vault · 仅你们两人可读</p></div></div></section><div class="actions">${btn('把爱变成见证','witness','','light')}${btn('查看真实链上证明','proofs','','light')}</div>`;
+    const dataIndex=pendingVow?'data-index="'+e(String(pendingVow.index))+'"':'';
+    const todayAttrs=today?'data-id="'+e(today.id)+'"':'';
+    const selfFace=state.profile?.avatarUrl&&/^(https:\/\/|\/assets\/)/.test(state.profile.avatarUrl)?'<img class="rhn-face" src="'+e(state.profile.avatarUrl)+'" alt="" referrerpolicy="no-referrer">':'<span class="rhn-face rhn-face-initial">'+e(Array.from(state.profile?.name||'你')[0])+'</span>';
+    const todayImg=/^data:image\/(jpeg|png|webp);base64,/.test(today?.content?.image||'')?'<img class="rhn-thumb-img" src="'+e(today.content.image)+'" alt="">':'<span class="rhn-thumb-img rhn-thumb-vault">'+glyph('lock')+'</span>';
+    return `
+    <div class="rhn-sync"><span class="rhn-sync-dot"></span><span class="rhn-sync-text">${e(state.config?.chainConfigured?'BOT Chain Synced':'链未配置 · 只读')} · Ring #${e(r.id)}</span><button class="rhn-sync-refresh" data-action="refresh" aria-label="刷新链上状态">${glyph('refresh')}</button></div>
+    <section class="rhn-hero">
+      <i class="rhn-glow rhn-glow-a"></i><i class="rhn-glow rhn-glow-b"></i>
+      <div class="rhn-pair">
+        <span class="rhn-avatar">${selfFace}<i class="rhn-online"></i></span>
+        <span class="rhn-knot">${glyph('heart')}</span>
+        <span class="rhn-avatar">${initial(short(peer),'另一位参与者')}<i class="rhn-online"></i></span>
+      </div>
+      <div class="rhn-names"><h2>${e(state.profile?.name||short(selfAddr))} <span>×</span> ${e(short(peer))}</h2>
+      <span class="rhn-eyebrow">RING #${e(r.id)} · MINTED TOGETHER · 双方共同铸造</span></div>
+      <div class="rhn-orbits">
+        <i class="rhn-orbit rhn-orbit-a"></i><i class="rhn-orbit rhn-orbit-b"></i><i class="rhn-orbit rhn-orbit-c"></i>
+        <svg class="rhn-rings" fill="none" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse cx="82" cy="90" opacity="0.95" rx="46" ry="54" stroke="url(#rhnG1)" stroke-width="6.5" transform="rotate(-18 82 90)"></ellipse>
+          <ellipse cx="118" cy="90" opacity="0.95" rx="46" ry="54" stroke="url(#rhnG2)" stroke-width="6.5" transform="rotate(18 118 90)"></ellipse>
+          <circle cx="100" cy="90" fill="#FFF9F7" r="5"></circle><circle cx="100" cy="90" fill="#D98C95" r="2.5"></circle>
+          <defs>
+            <linearGradient gradientUnits="userSpaceOnUse" id="rhnG1" x1="40" x2="130" y1="35" y2="145">
+              <stop stop-color="#E7B7A8"></stop><stop offset="0.45" stop-color="#C98877"></stop><stop offset="0.75" stop-color="#8C4B54"></stop><stop offset="1" stop-color="#F4DDE0"></stop>
+            </linearGradient>
+            <linearGradient gradientUnits="userSpaceOnUse" id="rhnG2" x1="160" x2="70" y1="35" y2="145">
+              <stop stop-color="#F4DDE0"></stop><stop offset="0.3" stop-color="#C98877"></stop><stop offset="0.7" stop-color="#8C4B54"></stop><stop offset="1" stop-color="#E7B7A8"></stop>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="rhn-resonance"><i></i>Resonance Radar Active · ${e(String((state.candidates||[]).length))} Pulses Linked</span>
+      <div class="rhn-days"><span class="rhn-days-number">${days}</span><span class="rhn-days-label">Days of Shared Consensus</span></div>
+    </section>
+    <section class="rhn-triad">
+      <div class="rhn-metric"><span class="rhn-metric-icon rose">${glyph('book')}</span><strong>${counts.photo+counts.video+counts.note}</strong><span>Memories</span></div>
+      <div class="rhn-metric"><span class="rhn-metric-icon amber">${glyph('gift')}</span><strong>${e(String(r.vowCount??0))}</strong><span>Mutual Vows</span></div>
+      <div class="rhn-metric"><span class="rhn-metric-icon sage">${glyph('wallet')}</span><strong>${e(state.balance||'0')}</strong><span>BOT Bond Pool</span></div>
+    </section>
+    ${pendingVow?`<section class="rhn-agent">
+      <div class="rhn-agent-head"><span class="rhn-agent-badge">${glyph('back')} Bell Agent Suggestion</span><span class="rhn-agent-wait"><i></i>Waiting for You</span></div>
+      <h3>${e(pendingMemory?.content?.title?'对方写下了神圣誓言':'对方提交了一句加密誓言')}</h3>
+      <blockquote>${e(pendingMemory?.content?.text||pendingVow.text||'加密正文等待解密核对。')}</blockquote>
+      <span class="rhn-agent-note">Off-chain draft · 双方签名后才会成为链上生效誓言</span>
+      <div class="rhn-signflow"><span class="rhn-sign done">${glyph('shield')} TA Signed</span><span class="rhn-sign-line"></span><span class="rhn-sign turn">${glyph('heart')} Your Turn</span></div>
+      <div class="rhn-agent-actions">${btn('Review & Sign','confirm-vow',dataIndex,'rhn-primary')}${btn('Later','vows','','rhn-ghost')}</div>
+    </section>`:''}
+    <section class="rhn-today">
+      <div class="rhn-today-head"><span class="rhn-today-dot"></span><h3>Today's Moments</h3><button class="rhn-link" data-action="story">View Story ${glyph('next')}</button></div>
+      <button class="rhn-memory" data-action="${today?'memory-detail':'memory'}" ${todayAttrs}>
+        <span class="rhn-thumb">${todayImg}</span>
+        <span class="rhn-memory-body">
+          <span class="rhn-memory-meta"><i></i>${e(today?.owner?(today.owner.toLowerCase()===selfAddr.toLowerCase()?'你添加了一条记忆':'TA 添加了一条记忆'):'添加第一份共同记忆')}</span>
+          <h4>${e(today?.content?.title||'今天，也值得被记住。')}</h4>
+          <p>${e(today?.content?.text?.slice(0,80)||'留下一张照片、一句话，或一个想一起实现的愿望。')}</p>
+          <span class="rhn-memory-lock">${glyph('lock')} Encrypted in Bell Vault</span>
+        </span>
+      </button>
+    </section>
+    <section class="rhn-chime">
+      <span class="rhn-chime-icon">${glyph('bell')}</span>
+      <span class="rhn-chime-body"><b>Ring Their Bell</b><small>去追光空间，给 TA 发一条端到端加密的心跳私语</small></span>
+      ${btn('Chime','echo-chat','','rhn-chime-btn')}
+    </section>
+    <div class="actions">${btn('把爱变成见证','witness','','light')}${btn('查看真实链上证明','proofs','','light')}</div>`;
   }
+
   if(state.route==='story')return editorialStory(state,h,memories,privateHint,guest);
   if(state.route==='vows')return editorialVows(state,h,memories,r,guest);
   if(state.route==='bond'){
