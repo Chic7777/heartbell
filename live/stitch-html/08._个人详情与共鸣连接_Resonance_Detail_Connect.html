@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:wght@400;500&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><style id="select_translate_theme_style">
+    .ztsl-area-hover {
+        box-shadow: 0px 0px 3px 0px #cfcfcf !important;
+    }
+    .ztsl_theme_none {
+        
+    }
+    .ztsl_theme_thin_dashed_underline {
+        border-bottom: 1px dashed #1e90ff !important;
+    }
+    .ztsl_theme_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important;
+    }
+    .ztsl_theme_dotted_underline {
+        text-decoration: none; background-image: linear-gradient(to right, #8694b0 25%, transparent 30%); background-position: 0 100%; background-size: 5px 1px; background-repeat: repeat-x; padding-bottom: 3px;
+    }
+    .ztsl_theme_straight_underline {
+        border-bottom: 1px solid #a5aab5 !important;
+    }
+    .ztsl_theme_highlight {
+        color: #000000 !important;background-color: #FFFF00 !important;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_dashed_border {
+        border: 1px dashed #606266 !important;
+    }
+    .ztsl_theme_orange_underline {
+        text-underline-offset: 3px;text-decoration-line: underline;text-decoration-thickness: from-font;text-decoration-color: #EF8632 !important;color: #EF8632 !important;-webkit-text-fill-color: #EF8632 !important;
+    }
+    .ztsl_theme_underline_tilde {
+        text-decoration: underline wavy #00ced1 !important; -webkit-text-decoration: underline wavy #00ced1 !important;
+    }
+    .ztsl_theme_blur_cover {
+        filter: blur(4px) !important;
+    }
+    .ztsl_theme_blur_cover:hover {
+        filter: none !important;
+    }
+    .ztsl_theme_italic {
+        font-style: italic !important;
+    }
+    .ztsl_theme_bold {
+        font-weight: bold !important;
+    }
+    .ztsl_theme_marker {
+        background: linear-gradient(to right, rgba(250,220,65, 0.2), rgba(250,220,65, 0.8) 3%, rgba(250,220,65, 0.9) 30%, rgba(250,220,65, 0.9) 65%, rgba(250,220,65, 0.8) 96%, rgba(250,220,65, 0.2));-webkit-box-decoration-break: clone;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_background_color {
+        background:color-mix(in srgb, #a9a9a9 30%, transparent) !important; border-radius: 6px !important; padding: 10px !important; display: inline-block !important; box-shadow: unset !important;
+    }
+    .ztsl_theme_transparent_text {
+        --ztsl-transparent-opacity: 0.1; opacity: var(--ztsl-transparent-opacity) !important; transition: opacity 0.2s ease !important;
+    }
+    .ztsl_result_text:hover .ztsl_theme_transparent_text,
+    .ztsl_result_main:hover .ztsl_theme_transparent_text,
+    .ztsl_theme_transparent_text:hover {
+        opacity: 1 !important;
+    }
+    </style><style id="select_translate_term_style">
+    .ztsl_term_translation_style_none {
+        
+    }
+    .ztsl_term_translation_style_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important; display: inline !important;
+    }
+    .ztsl_term_translation_style_highlight {
+        color: #3894ff !important; display: inline !important;
+    }
+    </style><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "ink-primary": "#171717", "tertiary-fixed": "#7cfbb2", "on-secondary-fixed": "#350f06", "blush-soft": "#E7B7A8", "rose-gold": "#C98877", "surface": "#fef8f7", "surface-variant": "#e7e1e1", "destructive-rose": "#C0646A", "primary": "#8c4b54", "outline-variant": "#d7c1c3", "on-primary-fixed-variant": "#70343d", "background-cream": "#FFF9F7", "background": "#fef8f7", "on-background": "#1d1b1b", "error-container": "#ffdad6", "tertiary-fixed-dim": "#5ede98", "on-tertiary-fixed-variant": "#005230", "blush-tint": "F4DDE0", "pending-amber": "#F2A65A", "on-surface-variant": "#524344", "on-surface": "#1d1b1b", "confirmed-green": "#4ECF8B", "surface-tint": "#8c4b54", "on-primary-container": "#5d262f", "inverse-on-surface": "#f5efef", "surface-container-highest": "#e7e1e1", "inverse-primary": "#ffb2ba", "surface-container-high": "#ede7e6", "primary-fixed-dim": "#ffb2ba", "rose-accent": "#E98F93", "error": "#ba1a1a", "surface-white": "#FFFFFF", "secondary-fixed-dim": "#fdb5a3", "on-primary-fixed": "#390914", "on-secondary-fixed-variant": "#6b392c", "surface-container": "#f2ecec", "sage-muted": "#7B9D86", "surface-container-low": "#f8f2f2", "on-error": "#ffffff", "tertiary": "#006d41", "on-tertiary-container": "#004125", "sage-deep": "#2E9E63", "primary-container": "#d98c95", "inverse-surface": "#323030", "on-primary": "#ffffff", "on-error-container": "#93000a", "outline": "#857374", "surface-dim": "#ded9d8", "ink-secondary": "#252323", "on-tertiary-fixed": "#002110", "on-secondary": "#ffffff", "primary-fixed": "#ffd9dc", "secondary-container": "#fdb5a3", "surface-container-lowest": "#ffffff", "secondary": "#875041", "secondary-fixed": "#ffdbd1", "on-tertiary": "#ffffff", "tertiary-container": "#30b776", "on-secondary-container": "#794436", "pending-dark": "#B8732F", "surface-bright": "#fef8f7" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "space-xl": "2rem", "space-md": "1rem", "space-sm": "0.5rem", "margin": "1.5rem", "space-xs": "0.25rem", "gutter": "1rem" }, "fontFamily": { "label-lg": ["Inter"], "body-lg": ["Inter"], "headline-xl-mobile": ["Noto Serif"], "headline-lg-mobile": ["Noto Serif"], "headline-md": ["Noto Serif"], "label-sm": ["Inter"], "headline-lg": ["Noto Serif"], "body-md": ["Inter"], "headline-xl": ["Noto Serif"], "label-md": ["Inter"], "body-sm": ["Inter"], "headline-sm": ["Noto Serif"] }, "fontSize": { "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-xl-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-xl": ["48px", { "lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "label-md": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500" }] } } } }</script></head><body class="bg-background-cream text-ink-primary font-body-md text-body-md antialiased min-h-screen flex flex-col selection:bg-blush-soft/30"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(23,23,23,0.03)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-xs"><button aria-label="Go back" class="w-11 h-11 -ml-2 rounded-full flex items-center justify-center text-ink-primary hover:bg-surface-container/60 transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[22px]">arrow_back_ios_new</span></button><img alt="Consensus Bell luxury light-mode pure vector monoline logo on transparent background. Features delicate 18K rose-gold and blush wireframe line art (#D98C95, #C98877) weaving together the sacred resonant chime bell, interlocking Mobius infinity wedding bands, and radiant diamond clapper starburst, paired with classical tracked Roman serif typography for light background UI." class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U4JsbDoaQjWbRZO3CFU1a4IW2lecWuIBc9pK1gh12knHjVP8NOHdUo8WHfTGn90OWHkokupXX6PHkT58WSeknn2X5NrCacUhsGXnl4gKs_pTNb_Kx34fGzTeQxeR4ucRiGf3hljbAFiv3z2ecRCiH9c5NaYAuaqfZpbrcZXUzLhx_TcZRh_x5ru_2yAvYsN48PLen2RufN0rAVz_nDRPgw__SAz-LN0CRqEzVtraRc"><span class="font-headline-sm text-headline-sm text-ink-primary tracking-tight hidden sm:inline">Consensus Bell</span></div><div class="flex-1 text-center px-space-xs"><h1 class="font-headline-sm text-headline-sm text-ink-primary truncate tracking-tight">Resonance Connected</h1></div><div class="flex items-center justify-end gap-space-xs"><button aria-label="On-chain cryptographic proof badge" class="h-9 px-space-sm rounded-full bg-surface-white/90 shadow-[0_1px_4px_rgba(23,23,23,0.04)] flex items-center gap-1.5 text-secondary hover:bg-surface-white transition-colors" type="button"><span class="material-symbols-outlined text-[16px] text-sage-deep">verified</span><span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Proof</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-background-cream pb-safe"><div class="flex flex-col w-full relative">
+<!-- Interactive Notification Toast: Bell Resonated -->
+<div class="px-margin pt-space-sm pb-space-xs">
+<div class="relative overflow-hidden rounded-lg bg-surface-white p-space-md shadow-[0_8px_24px_rgba(23,23,23,0.04)]">
+<div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-blush-soft/20 pointer-events-none blur-xl"></div>
+<div class="flex items-start gap-space-sm">
+<div class="relative flex-shrink-0 w-10 h-10 rounded-full bg-blush-tint/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<span class="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-confirmed-green opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-confirmed-green"></span>
+</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs">
+<p class="font-headline-sm text-headline-sm text-ink-primary font-medium tracking-tight truncate">Sophie Heard Your Chime</p>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-fixed/30 text-on-tertiary-fixed-variant font-label-sm text-label-sm">Mutual Match</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Zero-knowledge consensus struck. Ephemeral resonance channel is now open.</p>
+<div class="flex items-center gap-space-md mt-2 pt-2 text-on-surface-variant">
+<span class="font-label-sm text-label-sm flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">graphic_eq</span>
+              96% Harmonic Resonance
+            </span>
+<span class="font-label-sm text-label-sm flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px] text-sage-deep">verified</span>
+              Block #19,421
+            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Profile Visual Stage -->
+<div class="px-margin pt-space-xs pb-space-sm">
+<div class="relative w-full rounded-lg overflow-hidden bg-surface-white shadow-[0_8px_32px_rgba(23,23,23,0.06)]">
+<!-- Media Frame with subtle warm gradient overlay -->
+<div class="relative w-full aspect-[4/4.8] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A candid, warm artistic portrait of a serene 24-year-old Asian woman named Sophie, an independent film curator. Bathed in golden hour sunlight through sheer linen curtains in an atelier library. Delicate rose-gold minimalist earrings, natural radiant skin, soft contemplative smile, filmic aesthetic with creamy ivory tones, blush undertones, and medium depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqdMXeixWe29leyM7fyyQTOPLsYUCmujcAkCbIU1krsrOA4ZghJp7Ed9WlY3zZeUIR-2j4Cw8ptE40XHkWTN-u4kQYB_Lxnht1odZAkvfQIwUwQbz_G5gHhwPXr9TS7glDl_tFkFquOqPxqaefJhcBlfgsUZG0j4vwctfYaa2aiLZtCSzEbNsWbfMtYmcoAi65fGo7m9CE5DXI2qVcoDoB26Ffe6g_PHl_HFKZIQo">
+<!-- Ambient Vignette Scrim -->
+<div class="absolute inset-0 bg-gradient-to-t from-ink-primary/80 via-ink-primary/20 to-transparent"></div>
+<!-- Floating Verification Badges -->
+<div class="absolute top-space-md left-space-md right-space-md flex items-center justify-between">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-white/90 backdrop-blur-md shadow-sm">
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="font-label-sm text-label-sm text-ink-primary font-medium tracking-wide">Verified Bell SBT</span>
+</div>
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-ink-primary/60 backdrop-blur-md text-surface-white font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-confirmed-green"></span>
+            Active 10m ago
+          </div>
+</div>
+<!-- Resonance Score Pill Suspended Over Portrait -->
+<div class="absolute bottom-space-lg left-space-md right-space-md text-surface-white">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/85 backdrop-blur-md mb-2 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-surface-white">favorite</span>
+<span class="font-label-sm text-label-sm tracking-wide text-surface-white">96% Mutual Harmonic</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-surface-white tracking-tight drop-shadow-sm">Sophie, 24</h2>
+<p class="font-body-md text-body-md text-surface-variant flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-[16px] text-blush-soft">location_on</span>
+            Film Curator &amp; Writer · Shanghai · 3.2 km
+          </p>
+</div>
+</div>
+<!-- Identity & Language Meta Row -->
+<div class="p-space-md bg-surface-white flex flex-col gap-space-sm">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-3 py-1 rounded-full bg-surface-container text-ink-secondary font-label-sm text-label-sm">Fluent Mandarin &amp; English</span>
+<span class="px-3 py-1 rounded-full bg-surface-container text-ink-secondary font-label-sm text-label-sm">Kyoto Wanderer</span>
+<span class="px-3 py-1 rounded-full bg-surface-container text-ink-secondary font-label-sm text-label-sm">Analog Purist</span>
+</div>
+<!-- Curated Persona Vow / Manifesto Quote -->
+<div class="relative mt-space-xs p-space-md rounded-DEFAULT bg-background-cream">
+<span class="material-symbols-outlined absolute top-2 right-3 text-[28px] text-blush-soft/40 select-none">format_quote</span>
+<p class="font-headline-sm text-headline-sm italic text-secondary leading-relaxed">
+            “I cherish slow journeys, uncurated vinyl, and deep conversations at dusk. Looking for an intentional soul to co-author shared everyday vows.”
+          </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Deep Resonance Nodes: Why The Bell Resonated -->
+<div class="px-margin pt-space-md pb-space-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">interests</span>
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Why You Resonated</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Consensus Proof</span>
+</div>
+<div class="space-y-space-sm">
+<!-- Resonance Card 1 -->
+<div class="p-space-md rounded-DEFAULT bg-surface-white shadow-[0_2px_8px_rgba(23,23,23,0.03)] flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px] text-primary">camera_roll</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-label-lg text-label-lg text-ink-primary truncate">Travel &amp; Analog Film</h4>
+<span class="font-label-sm text-label-sm text-primary font-semibold">98% match</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Shared longing for Kyoto autumn temples, misty mountain tea houses, and 35mm grain.</p>
+</div>
+</div>
+<!-- Resonance Card 2 -->
+<div class="p-space-md rounded-DEFAULT bg-surface-white shadow-[0_2px_8px_rgba(23,23,23,0.03)] flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px] text-secondary">handshake</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-label-lg text-label-lg text-ink-primary truncate">Slow Devotion &amp; Clarity</h4>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">95% match</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Both seek intentional presence, clear emotional boundaries, and slow, transparent consensus before commitment.</p>
+</div>
+</div>
+<!-- Resonance Card 3 -->
+<div class="p-space-md rounded-DEFAULT bg-surface-white shadow-[0_2px_8px_rgba(23,23,23,0.03)] flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed/40 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px] text-tertiary">menu_book</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-label-lg text-label-lg text-ink-primary truncate">Late-Night Inquiry</h4>
+<span class="font-label-sm text-label-sm text-sage-deep font-semibold">92% match</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Mutual delight in existential literature, quiet architectural walks, and reflective midnight prompts.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Shared Journey Wishlist / Curated Visual Moments -->
+<div class="px-margin pt-space-md pb-space-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">photo_library</span>
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Sophie's Aesthetic Fragments</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">3 Wishlist Pinned</span>
+</div>
+<!-- 3-Column Visual Tiles -->
+<div class="grid grid-cols-3 gap-space-xs">
+<div class="flex flex-col gap-1.5">
+<div class="relative w-full aspect-square rounded-DEFAULT overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A poetic view of a Japanese maple courtyard in Kyoto during peak late autumn, scarlet foliage falling gently onto raked moss stone paths, dappled warm sunlight, fine-art editorial photography with blush and rose tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvFMEdkOeOOmtyBpapltUiiNqfSrLNuAQPuL56xYMxEBv39l4QeZgav4frsBKOpF-Zuxeo8xKbzapa-7KWAyUCT1J27SSahb3F1lYDkfTbVU0X6nOz3NlCxMYeqbyCo5NQN0KWwxBfyBRy6hBt_xNhpc0PPmWHaKSNDIcF_UjrBcL7V2WfbvBSwMPhJb-q9VxCgRmNsnSoUlI4acm9hntUgmE2Xyao20lMq0LnpVQ">
+</div>
+<p class="font-body-sm text-body-sm text-ink-secondary text-center truncate">Kyoto Autumn</p>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="relative w-full aspect-square rounded-DEFAULT overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="An intentional coastal cliff walk overlooking mist-veiled azure ocean at sunrise, rugged rocky path with wildflower flora, soft pastel aesthetic with natural ivory and blush highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBG5OUByYvIqhf5kK2fzWOULeG2w7ZJJdu7Lp_-R2_kwUSSIv-yR4F6Ipk6E4etAhmTMrM_ZCfSOtHiLOEXEjSkcT9g4Po3Vg1lP0MUP08s5d92UfS5JQR00UkKqd6WZR3tmxpy9CAXEvvMVemOZLfTEjp_NvBp0-Rfu_b9qth1T6KHXNcWliuKHN5ireWP1KyPNHp4y8SVOWeAZSyUZChN_ITrNmpWzd6TAx1IgLE">
+</div>
+<p class="font-body-sm text-body-sm text-ink-secondary text-center truncate">Coast Trail</p>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="relative w-full aspect-square rounded-DEFAULT overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A minimalist Japanese specialty coffee bar, warm natural timber woodwork, copper kettle pour-over brewing with soft steam rising, cozy intimate morning glow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbUVzjW9N0QV7rpVOOsqfha2vVD27xcU62cTKNvL4CEVZOe3r6sksuWlhmIPQD9UdBV2nDZTIW1Sl6saj4LQ1Wl8RZl7kGvn_F1hjcMcb3ib-KhPN8LaaKt9EtJZHeZ95cLmEg93SuJI87bWMPJWOZEm853Op_GZ6SwZ33Kd4oPpA1s9vA1MFf5eLvDKZWm2rkC-HvDvbvDiDXRB5vb_hqsRR-bpNUSivtbDjxarU">
+</div>
+<p class="font-body-sm text-body-sm text-ink-secondary text-center truncate">Pour-over Bar</p>
+</div>
+</div>
+</div>
+<!-- Agent Suggestion Card: Whisper Prompt -->
+<div class="px-margin pt-space-sm pb-space-md">
+<div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-surface-white to-background-cream p-space-md shadow-[0_8px_24px_rgba(23,23,23,0.04)]">
+<div class="flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center flex-shrink-0 text-primary">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Consensus Whisper</span>
+<span class="w-1 h-1 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Recommended Icebreaker</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-primary mt-1 leading-relaxed">
+            “Sophie recently pinned the Kyoto autumn temple to her soulbound journal. Would you like to invite her with your shared memory of analogue film?”
+          </p>
+<div class="flex items-center gap-space-sm mt-3">
+<button class="px-4 py-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm hover:opacity-95 active:scale-95 transition-all shadow-sm flex items-center gap-1" id="usePromptBtn" type="button">
+<span>Use This Prompt</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container text-ink-secondary font-label-sm text-label-sm hover:bg-surface-variant transition-colors" type="button">
+              Custom Thought
+            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Soulbound Consensus State & Verification Link -->
+<div class="px-margin pt-space-xs pb-space-lg text-center">
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-white text-secondary hover:bg-surface-container transition-colors shadow-sm" id="openProofModal" type="button">
+<span class="material-symbols-outlined text-[16px] text-sage-deep">lock_reset</span>
+<span class="font-label-sm text-label-sm">View Soulbound SBT Mutual Ring Proof</span>
+<span class="material-symbols-outlined text-[14px] text-outline">north_east</span>
+</button>
+</div>
+<!-- Fixed Bottom Sticky Bar for Primary Engagement -->
+<div class="sticky bottom-0 w-full z-40 bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(23,23,23,0.06)] px-margin py-3 pb-safe">
+<div class="flex items-center gap-space-sm max-w-[720px] mx-auto w-full">
+<!-- Secondary Bookmark / Resonance Audio Button -->
+<button aria-label="Replay Chime Tone" class="w-12 h-12 rounded-full bg-surface-white text-ink-primary flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(23,23,23,0.06)] active:scale-95 transition-transform" id="chimeSoundBtn" type="button">
+<span class="material-symbols-outlined text-[22px] text-primary" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</button>
+<!-- Primary Action: Start Echo Chat -->
+<button class="flex-1 h-12 px-space-lg rounded-full bg-ink-primary text-surface-white flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-[0_8px_20px_rgba(23,23,23,0.18)]" id="startChatBtn" type="button">
+<span class="material-symbols-outlined text-[20px] text-blush-soft">forum</span>
+<span class="font-label-lg text-label-lg tracking-wide text-surface-white">Start Echo Chat</span>
+<span class="material-symbols-outlined text-[18px] text-surface-white/70">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Interactive Cryptographic Proof Drawer / Dialog (Hidden by Default) -->
+<div class="fixed inset-0 z-50 bg-ink-primary/40 backdrop-blur-sm hidden items-end justify-center transition-opacity" id="proofDrawer">
+<div class="w-full max-w-[720px] bg-surface-white rounded-t-lg p-space-lg shadow-[0_20px_48px_rgba(23,23,23,0.16)] flex flex-col gap-space-md max-h-[85vh] overflow-y-auto">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[22px] text-sage-deep">verified</span>
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Consensus Ring Proof</h3>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-ink-primary" id="closeProofBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        This dual resonant event was cryptographically verified via zero-knowledge proof. No private identity is disclosed prior to mutual vow ratification.
+      </p>
+<div class="bg-surface-container rounded-DEFAULT p-space-md space-y-2">
+<div class="flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm">
+<span>Contract Protocol</span>
+<span class="font-label-md text-label-md text-ink-primary">ConsensusBell_Core::v2.4</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm">
+<span>Mutual Attestation ID</span>
+<span class="font-label-sm text-label-sm text-ink-primary font-mono truncate max-w-[180px]">0x7F9a...4B2c</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm">
+<span>ZK Verifier Status</span>
+<span class="inline-flex items-center gap-1 text-sage-deep font-label-sm text-label-sm font-medium">
+<span class="w-2 h-2 rounded-full bg-confirmed-green"></span>
+            Consensus Finalized
+          </span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm">
+<span>Block Height</span>
+<span class="font-label-sm text-label-sm text-ink-primary font-mono">#19,421 (L2 Sync)</span>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-primary text-on-primary font-label-lg text-label-lg active:scale-98 transition-transform" id="dismissProofBtn" type="button">
+        Acknowledge &amp; Continue
+      </button>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const proofModal = document.getElementById('proofDrawer');
+    const openBtn = document.getElementById('openProofModal');
+    const closeBtn = document.getElementById('closeProofBtn');
+    const dismissBtn = document.getElementById('dismissProofBtn');
+    const startChatBtn = document.getElementById('startChatBtn');
+    const chimeBtn = document.getElementById('chimeSoundBtn');
+    const usePromptBtn = document.getElementById('usePromptBtn');
+
+    function openModal() {
+      proofModal.classList.remove('hidden');
+      proofModal.classList.add('flex');
+    }
+
+    function closeModal() {
+      proofModal.classList.add('hidden');
+      proofModal.classList.remove('flex');
+    }
+
+    if (openBtn) openBtn.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
+
+    if (chimeBtn) {
+      chimeBtn.addEventListener('click', () => {
+        chimeBtn.classList.add('scale-110');
+        setTimeout(() => chimeBtn.classList.remove('scale-110'), 250);
+      });
+    }
+
+    if (startChatBtn) {
+      startChatBtn.addEventListener('click', () => {
+        startChatBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[20px] animate-spin text-blush-soft">progress_activity</span>
+          <span class="font-label-lg text-label-lg tracking-wide text-surface-white">Opening Channel...</span>
+        `;
+        setTimeout(() => {
+          startChatBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[20px] text-tertiary-fixed">lock_open</span>
+            <span class="font-label-lg text-label-lg tracking-wide text-surface-white">Connected with Sophie</span>
+          `;
+        }, 800);
+      });
+    }
+
+    if (usePromptBtn) {
+      usePromptBtn.addEventListener('click', () => {
+        usePromptBtn.innerText = 'Prompt Staged ✓';
+        if (startChatBtn) {
+          startChatBtn.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+  })();
+</script></main></body><div id="st-root"></div></html>

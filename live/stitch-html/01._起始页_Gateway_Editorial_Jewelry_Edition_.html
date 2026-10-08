@@ -1,0 +1,307 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Consensus Bell</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Noto+Serif:wght@100..900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><style id="select_translate_theme_style">
+    .ztsl-area-hover {
+        box-shadow: 0px 0px 3px 0px #cfcfcf !important;
+    }
+    .ztsl_theme_none {
+        
+    }
+    .ztsl_theme_thin_dashed_underline {
+        border-bottom: 1px dashed #1e90ff !important;
+    }
+    .ztsl_theme_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important;
+    }
+    .ztsl_theme_dotted_underline {
+        text-decoration: none; background-image: linear-gradient(to right, #8694b0 25%, transparent 30%); background-position: 0 100%; background-size: 5px 1px; background-repeat: repeat-x; padding-bottom: 3px;
+    }
+    .ztsl_theme_straight_underline {
+        border-bottom: 1px solid #a5aab5 !important;
+    }
+    .ztsl_theme_highlight {
+        color: #000000 !important;background-color: #FFFF00 !important;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_dashed_border {
+        border: 1px dashed #606266 !important;
+    }
+    .ztsl_theme_orange_underline {
+        text-underline-offset: 3px;text-decoration-line: underline;text-decoration-thickness: from-font;text-decoration-color: #EF8632 !important;color: #EF8632 !important;-webkit-text-fill-color: #EF8632 !important;
+    }
+    .ztsl_theme_underline_tilde {
+        text-decoration: underline wavy #00ced1 !important; -webkit-text-decoration: underline wavy #00ced1 !important;
+    }
+    .ztsl_theme_blur_cover {
+        filter: blur(4px) !important;
+    }
+    .ztsl_theme_blur_cover:hover {
+        filter: none !important;
+    }
+    .ztsl_theme_italic {
+        font-style: italic !important;
+    }
+    .ztsl_theme_bold {
+        font-weight: bold !important;
+    }
+    .ztsl_theme_marker {
+        background: linear-gradient(to right, rgba(250,220,65, 0.2), rgba(250,220,65, 0.8) 3%, rgba(250,220,65, 0.9) 30%, rgba(250,220,65, 0.9) 65%, rgba(250,220,65, 0.8) 96%, rgba(250,220,65, 0.2));-webkit-box-decoration-break: clone;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_background_color {
+        background:color-mix(in srgb, #a9a9a9 30%, transparent) !important; border-radius: 6px !important; padding: 10px !important; display: inline-block !important; box-shadow: unset !important;
+    }
+    .ztsl_theme_transparent_text {
+        --ztsl-transparent-opacity: 0.1; opacity: var(--ztsl-transparent-opacity) !important; transition: opacity 0.2s ease !important;
+    }
+    .ztsl_result_text:hover .ztsl_theme_transparent_text,
+    .ztsl_result_main:hover .ztsl_theme_transparent_text,
+    .ztsl_theme_transparent_text:hover {
+        opacity: 1 !important;
+    }
+    </style><style id="select_translate_term_style">
+    .ztsl_term_translation_style_none {
+        
+    }
+    .ztsl_term_translation_style_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important; display: inline !important;
+    }
+    .ztsl_term_translation_style_highlight {
+        color: #3894ff !important; display: inline !important;
+    }
+    </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "destructive-rose": "#C0646A",
+            "rose-accent": "#E98F93",
+            "surface-tint": "#8c4b54",
+            "on-tertiary-fixed-variant": "#005230",
+            "primary-fixed-dim": "#ffb2ba",
+            "on-tertiary-container": "#004125",
+            "pending-amber": "#F2A65A",
+            "on-tertiary": "#ffffff",
+            "surface-container-low": "#f8f2f2",
+            "on-tertiary-fixed": "#002110",
+            "secondary-fixed": "#ffdbd1",
+            "secondary": "#875041",
+            "sage-deep": "#2E9E63",
+            "surface-container": "#f2ecec",
+            "surface-dim": "#ded9d8",
+            "outline": "#857374",
+            "primary-fixed": "#ffd9dc",
+            "rose-gold": "#C98877",
+            "sage-muted": "#7B9D86",
+            "tertiary-fixed": "#7cfbb2",
+            "surface-bright": "#fef8f7",
+            "on-secondary-container": "#794436",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed-variant": "#6b392c",
+            "on-surface": "#1d1b1b",
+            "primary": "#8c4b54",
+            "background": "#fef8f7",
+            "inverse-surface": "#323030",
+            "inverse-on-surface": "#f5efef",
+            "tertiary": "#006d41",
+            "blush-soft": "#E7B7A8",
+            "surface-white": "#FFFFFF",
+            "background-cream": "#FFF9F7",
+            "surface": "#fef8f7",
+            "on-background": "#1d1b1b",
+            "blush-tint": "#F4DDE0",
+            "tertiary-fixed-dim": "#5ede98",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#fdb5a3",
+            "tertiary-container": "#30b776",
+            "inverse-primary": "#ffb2ba",
+            "on-primary-container": "#5d262f",
+            "surface-variant": "#e7e1e1",
+            "on-error": "#ffffff",
+            "surface-container-high": "#ede7e6",
+            "ink-primary": "#171717",
+            "secondary-container": "#fdb5a3",
+            "pending-dark": "#B8732F",
+            "on-surface-variant": "#524344",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#350f06",
+            "surface-container-lowest": "#ffffff",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#390914",
+            "primary-container": "#d98c95",
+            "outline-variant": "#d7c1c3",
+            "surface-container-highest": "#e7e1e1",
+            "on-primary-fixed-variant": "#70343d",
+            "ink-secondary": "#252323",
+            "confirmed-green": "#4ECF8B",
+            "error": "#ba1a1a"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-xl-mobile": ["Noto Serif"],
+            "body-sm": ["Inter"],
+            "headline-md": ["Noto Serif"],
+            "headline-sm": ["Noto Serif"],
+            "headline-xl": ["Noto Serif"],
+            "headline-lg-mobile": ["Noto Serif"],
+            "headline-lg": ["Noto Serif"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-lg": ["Inter"]
+          }
+        }
+      }
+    }
+  </script>
+<style id="select_translate_def_style">
+  .ztsl_status_loading {
+    display: inline-block !important;
+    width: 12px !important;
+    height: 12px !important;
+    margin-left: 4px !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    border-radius: 50% !important;
+    padding: 2px !important; 
+    background: currentColor !important; 
+    opacity: 0.65 !important; 
+    --ztsl_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--ztsl_m) !important;
+    mask: var(--ztsl_m) !important;
+    -webkit-mask-composite: destination-out !important; /* 兼容旧版 Webkit 内核 */
+    mask-composite: subtract !important;
+    animation: ztsl_spin .6s infinite linear !important;
+  }
+
+  @keyframes ztsl_spin {
+    to { transform: rotate(1turn); }
+  }
+
+  .ztsl_result_main {
+    word-break: break-word;
+    user-select: text;
+  }
+  .ztsl_result_content {
+    padding-bottom: 2px;
+    word-break: break-word;
+    user-select: text;
+  }
+  .ztsl_result_inline {
+    display: inline-block !important;
+  }
+  .ztsl_result_inline_block {
+    display: inline-block !important;
+  }
+  .ztsl_result_block {
+    display: inline-block !important;
+    margin: 6px 0 !important;
+  }
+  .ztsl_result_block_wrapper {
+    display: block !important;
+  }
+  .ztsl_result_text {
+    visibility: unset !important;
+    padding-bottom: 1px;
+  }
+  .ztsl_result_text > svg {
+    display: inline !important;
+    vertical-align: top;
+  }
+  .ztsl_result_text > img {
+    display: inline !important;
+  }
+  .ztsl_theme_background_color a, .ztsl_theme_marker a, .ztsl_theme_highlight a {
+    -webkit-text-fill-color: initial;
+  }
+  .ztsl_loading_status {
+    display: inline-flex !important;
+  }
+  .ztsl_status_fail {
+    // visibility: visible !important;
+    display: flex;
+    margin-left: 4px !important;
+  }
+  .ztsl_status_retry {
+    // visibility: visible !important;
+    display: flex;
+    margin-left: 4px !important;
+  }
+  </style></head>
+<body class="bg-background-cream text-on-surface antialiased min-h-screen selection:bg-rose-accent/30 selection:text-ink-primary font-body-md flex justify-center">
+<!-- Mobile/Tablet Shell Wrapper -->
+<div class="relative flex h-auto min-h-screen w-full max-w-md flex-col bg-background-cream group/design-root overflow-x-hidden shadow-2xl border-x border-outline-variant/30">
+<!-- Top Bar Navigation (Shared Component Header) -->
+<header class="flex items-center bg-background-cream/80 backdrop-blur-md px-5 pt-5 pb-3 justify-between z-20 sticky top-0 border-b border-outline-variant/20">
+<div class="text-ink-primary flex size-11 shrink-0 items-center justify-center rounded-full hover:bg-surface-container transition-colors cursor-pointer" data-icon="FileArrowDown" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-42.34-61.66a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L120,164.69V120a8,8,0,0,1,16,0v44.69l10.34-10.35A8,8,0,0,1,157.66,154.34Z"></path>
+</svg>
+</div>
+<h2 class="text-ink-primary font-['Noto_Serif'] font-medium text-lg tracking-wide flex-1 text-center">Consensus Bell</h2>
+<div class="flex size-11 items-center justify-end">
+<button aria-label="Partner Status" class="flex items-center justify-center rounded-full size-11 bg-transparent hover:bg-surface-container transition-colors text-ink-primary">
+<div class="text-ink-primary" data-icon="StarAndCrescent" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M155.64,199.28a80,80,0,0,1,0-142.56,8,8,0,0,0,0-14.25A94.93,94.93,0,0,0,112,32a96,96,0,0,0,0,192,94.93,94.93,0,0,0,43.64-10.47,8,8,0,0,0,0-14.25ZM112,208A80,80,0,1,1,134.4,51.16a96.08,96.08,0,0,0,0,153.68A79.82,79.82,0,0,1,112,208Zm139.17-87.35-26.5-11.43-2.31-29.84a8,8,0,0,0-14.14-4.47L189.63,97.42l-27.71-6.85a8,8,0,0,0-8.81,11.82L168.18,128l-15.07,25.61a8,8,0,0,0,8.81,11.82l27.71-6.85,18.59,22.51a8,8,0,0,0,14.14-4.47l2.31-29.84,26.5-11.43a8,8,0,0,0,0-14.7ZM213.89,134a8,8,0,0,0-4.8,6.73l-1.15,14.89-9.18-11.11a8,8,0,0,0-6.17-2.91,8.4,8.4,0,0,0-1.92.23l-14.12,3.5,7.81-13.27a8,8,0,0,0,0-8.12l-7.81-13.27,14.12,3.5a8,8,0,0,0,8.09-2.68l9.18-11.11,1.15,14.89a8,8,0,0,0,4.8,6.73l13.92,6Z"></path>
+</svg>
+</div>
+</button>
+</div>
+</header>
+<!-- Main Content Flow -->
+<main class="flex flex-col flex-1 px-4 py-2 justify-between items-center relative">
+<!-- Top Title Group -->
+<div class="text-center pt-2 pb-1 z-10"><span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blush-tint/60 border border-rose-gold/20 text-primary text-[11px] font-medium tracking-widest uppercase mb-2.5 shadow-sm"><span class="size-1.5 rounded-full bg-rose-gold animate-pulse"></span>Sacred Agreement</span><h1 class="text-ink-primary font-['Noto_Serif'] text-3xl sm:text-4xl font-normal tracking-tight leading-tight">Consensus Bell</h1><p class="text-secondary/80 font-['Inter'] text-xs font-normal mt-1.5 uppercase tracking-widest">A shared space for two people</p></div>
+<!-- Center Focal Editorial Showcase with Concentric Golden Orbit Lines -->
+<div class="relative w-full py-4 flex items-center justify-center my-auto">
+<!-- Golden Orbit Rings (Aesthetic Vector Accents) -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<!-- Outermost Orbit Ring -->
+<div class="w-[330px] h-[330px] rounded-full border border-rose-gold/20 animate-[spin_60s_linear_infinite]">
+<div class="w-2 h-2 rounded-full bg-rose-gold/40 -mt-1 ml-28 shadow-sm"></div>
+</div>
+<!-- Intermediate Orbit Ring -->
+<div class="absolute w-[290px] h-[290px] rounded-full border border-dashed border-rose-accent/30 animate-[spin_40s_linear_infinite_reverse]">
+<div class="w-1.5 h-1.5 rounded-full bg-rose-accent/60 -mb-0.5 ml-48"></div>
+</div>
+<!-- Inner Ambient Glow Ring -->
+<div class="absolute w-[250px] h-[250px] rounded-full bg-gradient-to-tr from-blush-tint/40 via-surface-container-low to-secondary-container/20 filter blur-xl"></div>
+</div>
+<!-- Vignette & Luxury Jewelry Image Showcase -->
+<div class="relative z-10 group"><div class="relative p-2 rounded-full bg-gradient-to-b from-surface-white via-surface-container-low to-blush-tint shadow-[0_20px_45px_-12px_rgba(201,136,119,0.35),0_10px_20px_-8px_rgba(140,75,84,0.18)] transition-transform duration-700 ease-out hover:scale-[1.02]"><div class="relative size-60 sm:size-64 rounded-full overflow-hidden border-[3px] border-surface-white ring-1 ring-rose-gold/30 bg-background-cream"><img alt="Consensus Bell Bespoke Interlocking Rose Gold Rings" class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AEtjO1UpDFCzZ5XfnJkqyGNGn6htwQk0IWYS12P0-YRbZdhziTEQWmJpGchRphx7VOAj325ChsaAB4b5e65J49HIh-P4bLF0bxvHUgzRLsf-HFyabZNPQxEnSp0jGhTV7lUUSr_eU5kgvDHmiNxxBgWHWLX7ulkoBdzjCQ0o4k8i805CGRhMgB_-8j-QFvdDgznZhhFNd5ixVtiXzmmHJHOUKYF0MdlseAIOlVgnfG5Qcd9p"></div><div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-surface-white px-3 py-1 rounded-full shadow-md border border-rose-gold/30 flex items-center gap-1.5"><span class="size-2 rounded-full bg-confirmed-green"></span><span class="text-[11px] font-['Inter'] font-medium text-ink-primary tracking-wide">Sync Harmonized</span></div></div></div>
+</div>
+<!-- Bottom Vow & Affirmation Section -->
+<div class="w-full text-center pb-6 pt-2 z-10 flex flex-col items-center"><div class="flex items-center justify-center gap-2.5 px-4 py-1.5 rounded-full bg-surface-white/90 border border-rose-gold/20 shadow-sm backdrop-blur-sm mb-3.5"><div class="flex -space-x-2"><div class="size-7 rounded-full bg-blush-soft border-2 border-surface-white flex items-center justify-center text-primary font-semibold text-xs font-['Inter'] shadow-sm">A</div><div class="size-7 rounded-full bg-rose-gold border-2 border-surface-white flex items-center justify-center text-surface-white font-semibold text-xs font-['Inter'] shadow-sm">M</div></div><p class="text-[11px] font-['Inter'] font-medium text-ink-secondary tracking-wider uppercase">Both presences connected</p></div><h3 class="text-ink-primary font-['Noto_Serif'] text-2xl font-medium leading-tight tracking-tight max-w-xs">Forever begins with <span class="italic font-normal">one mutual yes</span></h3><p class="text-secondary/80 font-['Noto_Serif'] italic text-sm mt-2 max-w-xs leading-relaxed tracking-wide">Every lifelong bond is an enduring chord struck in unison.</p><button class="mt-4 inline-flex items-center justify-center gap-2 px-7 py-2.5 rounded-full bg-primary text-surface-white hover:bg-surface-tint font-['Inter'] text-xs font-medium tracking-wider uppercase shadow-md transition-all duration-200 active:scale-95"><span class="tracking-wide">Ring Bell Together</span><span class="material-symbols-outlined text-[18px]">notifications_active</span></button></div>
+</main>
+</div>
+
+
+
+
+<div id="st-root"></div>
+
+</body></html>

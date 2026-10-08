@@ -1,0 +1,387 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><title>Consensus Bell</title><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif+SC:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><style id="select_translate_theme_style">
+    .ztsl-area-hover {
+        box-shadow: 0px 0px 3px 0px #cfcfcf !important;
+    }
+    .ztsl_theme_none {
+        
+    }
+    .ztsl_theme_thin_dashed_underline {
+        border-bottom: 1px dashed #1e90ff !important;
+    }
+    .ztsl_theme_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important;
+    }
+    .ztsl_theme_dotted_underline {
+        text-decoration: none; background-image: linear-gradient(to right, #8694b0 25%, transparent 30%); background-position: 0 100%; background-size: 5px 1px; background-repeat: repeat-x; padding-bottom: 3px;
+    }
+    .ztsl_theme_straight_underline {
+        border-bottom: 1px solid #a5aab5 !important;
+    }
+    .ztsl_theme_highlight {
+        color: #000000 !important;background-color: #FFFF00 !important;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_dashed_border {
+        border: 1px dashed #606266 !important;
+    }
+    .ztsl_theme_orange_underline {
+        text-underline-offset: 3px;text-decoration-line: underline;text-decoration-thickness: from-font;text-decoration-color: #EF8632 !important;color: #EF8632 !important;-webkit-text-fill-color: #EF8632 !important;
+    }
+    .ztsl_theme_underline_tilde {
+        text-decoration: underline wavy #00ced1 !important; -webkit-text-decoration: underline wavy #00ced1 !important;
+    }
+    .ztsl_theme_blur_cover {
+        filter: blur(4px) !important;
+    }
+    .ztsl_theme_blur_cover:hover {
+        filter: none !important;
+    }
+    .ztsl_theme_italic {
+        font-style: italic !important;
+    }
+    .ztsl_theme_bold {
+        font-weight: bold !important;
+    }
+    .ztsl_theme_marker {
+        background: linear-gradient(to right, rgba(250,220,65, 0.2), rgba(250,220,65, 0.8) 3%, rgba(250,220,65, 0.9) 30%, rgba(250,220,65, 0.9) 65%, rgba(250,220,65, 0.8) 96%, rgba(250,220,65, 0.2));-webkit-box-decoration-break: clone;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_background_color {
+        background:color-mix(in srgb, #a9a9a9 30%, transparent) !important; border-radius: 6px !important; padding: 10px !important; display: inline-block !important; box-shadow: unset !important;
+    }
+    .ztsl_theme_transparent_text {
+        --ztsl-transparent-opacity: 0.1; opacity: var(--ztsl-transparent-opacity) !important; transition: opacity 0.2s ease !important;
+    }
+    .ztsl_result_text:hover .ztsl_theme_transparent_text,
+    .ztsl_result_main:hover .ztsl_theme_transparent_text,
+    .ztsl_theme_transparent_text:hover {
+        opacity: 1 !important;
+    }
+    </style><style id="select_translate_term_style">
+    .ztsl_term_translation_style_none {
+        
+    }
+    .ztsl_term_translation_style_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important; display: inline !important;
+    }
+    .ztsl_term_translation_style_highlight {
+        color: #3894ff !important; display: inline !important;
+    }
+    </style><style id="select_translate_theme_style">
+    .ztsl-area-hover {
+        box-shadow: 0px 0px 3px 0px #cfcfcf !important;
+    }
+    .ztsl_theme_none {
+        
+    }
+    .ztsl_theme_thin_dashed_underline {
+        border-bottom: 1px dashed #1e90ff !important;
+    }
+    .ztsl_theme_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important;
+    }
+    .ztsl_theme_dotted_underline {
+        text-decoration: none; background-image: linear-gradient(to right, #8694b0 25%, transparent 30%); background-position: 0 100%; background-size: 5px 1px; background-repeat: repeat-x; padding-bottom: 3px;
+    }
+    .ztsl_theme_straight_underline {
+        border-bottom: 1px solid #a5aab5 !important;
+    }
+    .ztsl_theme_highlight {
+        color: #000000 !important;background-color: #FFFF00 !important;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_dashed_border {
+        border: 1px dashed #606266 !important;
+    }
+    .ztsl_theme_orange_underline {
+        text-underline-offset: 3px;text-decoration-line: underline;text-decoration-thickness: from-font;text-decoration-color: #EF8632 !important;color: #EF8632 !important;-webkit-text-fill-color: #EF8632 !important;
+    }
+    .ztsl_theme_underline_tilde {
+        text-decoration: underline wavy #00ced1 !important; -webkit-text-decoration: underline wavy #00ced1 !important;
+    }
+    .ztsl_theme_blur_cover {
+        filter: blur(4px) !important;
+    }
+    .ztsl_theme_blur_cover:hover {
+        filter: none !important;
+    }
+    .ztsl_theme_italic {
+        font-style: italic !important;
+    }
+    .ztsl_theme_bold {
+        font-weight: bold !important;
+    }
+    .ztsl_theme_marker {
+        background: linear-gradient(to right, rgba(250,220,65, 0.2), rgba(250,220,65, 0.8) 3%, rgba(250,220,65, 0.9) 30%, rgba(250,220,65, 0.9) 65%, rgba(250,220,65, 0.8) 96%, rgba(250,220,65, 0.2));-webkit-box-decoration-break: clone;-webkit-text-fill-color: #364153;
+    }
+    .ztsl_theme_background_color {
+        background:color-mix(in srgb, #a9a9a9 30%, transparent) !important; border-radius: 6px !important; padding: 10px !important; display: inline-block !important; box-shadow: unset !important;
+    }
+    .ztsl_theme_transparent_text {
+        --ztsl-transparent-opacity: 0.1; opacity: var(--ztsl-transparent-opacity) !important; transition: opacity 0.2s ease !important;
+    }
+    .ztsl_result_text:hover .ztsl_theme_transparent_text,
+    .ztsl_result_main:hover .ztsl_theme_transparent_text,
+    .ztsl_theme_transparent_text:hover {
+        opacity: 1 !important;
+    }
+    </style><style id="select_translate_term_style">
+    .ztsl_term_translation_style_none {
+        
+    }
+    .ztsl_term_translation_style_dashed_underline {
+        border-bottom: 2px dashed #65b1ff !important; display: inline !important;
+    }
+    .ztsl_term_translation_style_highlight {
+        color: #3894ff !important; display: inline !important;
+    }
+    </style><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary-fixed": "#002110", "outline-variant": "#d7c1c3", "inverse-on-surface": "#f5efef", "ink-secondary": "#252323", "error": "#ba1a1a", "inverse-primary": "#ffb2ba", "on-error": "#ffffff", "sage-muted": "#7B9D86", "surface-dim": "#ded9d8", "rose-accent": "#E98F93", "blush-tint": "#F4DDE0", "on-tertiary": "#ffffff", "on-secondary-fixed": "#350f06", "confirmed-green": "#4ECF8B", "surface-container": "#f2ecec", "surface": "#fef8f7", "tertiary-fixed-dim": "#5ede98", "on-background": "#1d1b1b", "primary-fixed": "#ffd9dc", "outline": "#857374", "primary-fixed-dim": "#ffb2ba", "tertiary-container": "#30b776", "background-cream": "#FFF9F7", "surface-container-low": "#f8f2f2", "on-primary-container": "#5d262f", "on-error-container": "#93000a", "on-secondary": "#ffffff", "on-surface-variant": "#524344", "on-surface": "#1d1b1b", "destructive-rose": "#C0646A", "pending-dark": "#B8732F", "on-tertiary-container": "#004125", "on-tertiary-fixed-variant": "#005230", "surface-container-lowest": "#ffffff", "secondary-container": "#fdb5a3", "primary": "#8c4b54", "surface-container-high": "#ede7e6", "on-primary-fixed-variant": "#70343d", "ink-primary": "#171717", "surface-variant": "#e7e1e1", "secondary-fixed-dim": "#fdb5a3", "error-container": "#ffdad6", "sage-deep": "#2E9E63", "pending-amber": "#F2A65A", "secondary-fixed": "#ffdbd1", "secondary": "#875041", "on-primary-fixed": "#390914", "tertiary-fixed": "#7cfbb2", "blush-soft": "#E7B7A8", "surface-container-highest": "#e7e1e1", "surface-bright": "#fef8f7", "rose-gold": "#C98877", "on-primary": "#ffffff", "on-secondary-fixed-variant": "#6b392c", "background": "#fef8f7", "surface-tint": "#8c4b54", "primary-container": "#d98c95", "tertiary": "#006d41", "on-secondary-container": "#794436", "inverse-surface": "#323030", "surface-white": "#FFFFFF" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "margin": "1.5rem", "space-xs": "0.25rem", "space-sm": "0.5rem", "gutter": "1rem", "space-xl": "2rem", "space-md": "1rem" }, "fontFamily": { "headline-xl": ["Noto Serif SC", "Noto Serif", "serif"], "body-md": ["Inter", "sans-serif"], "body-sm": ["Inter", "sans-serif"], "label-md": ["Inter", "sans-serif"], "body-lg": ["Inter", "sans-serif"], "label-sm": ["Inter", "sans-serif"], "headline-sm": ["Noto Serif SC", "Noto Serif", "serif"], "headline-md": ["Noto Serif SC", "Noto Serif", "serif"], "headline-lg": ["Noto Serif SC", "Noto Serif", "serif"], "label-lg": ["Inter", "sans-serif"], "headline-lg-mobile": ["Noto Serif SC", "Noto Serif", "serif"], "headline-xl-mobile": ["Noto Serif SC", "Noto Serif", "serif"] }, "fontSize": { "headline-xl": ["48px", { "lineHeight": "58px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "label-md": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "500" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-xl-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" }] } } } }</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}*{-webkit-tap-highlight-color:transparent;}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-background-cream text-ink-primary font-body-md text-body-md antialiased selection:bg-blush-tint"><header class="fixed top-0 w-full z-50 bg-background-cream/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(23,23,23,0.03)]"><div class="h-16 px-space-lg flex items-center justify-between max-w-[720px] mx-auto"><div class="flex items-center gap-space-sm"><div class="flex items-center gap-space-sm cursor-pointer"><img alt="Consensus Bell Logo" class="h-8 w-8 object-contain rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv1tDAwqgqXGMatWTGYmYLFKtqKEasPSAZwLEMj5GBU2xfxxK3u3UyYtIidcfUE5dVqHRQ53PLdyIdtI7drzq2Rv26MLE8ol1I5AepXxbS87ENLVSSBuotZojmzfN1nmwTHyHdhY1USYJFTAQ8K8ghIWlSGINiwp4x3oQKJETLhi0bIoBm7lUPwgCEtDOBc_z9ME6rrQYbpIGB4TPD0ACN_-N7ADgdHBrvK-qPOkPyPyZW6ikKxiya"><span class="font-headline-sm text-headline-sm text-ink-primary tracking-tight font-medium">Consensus Bell</span></div></div><div class="flex items-center gap-space-sm"><button aria-label="Consensus Status" class="w-11 h-11 rounded-full flex items-center justify-center text-ink-secondary/70 hover:text-ink-primary transition-colors"><span class="material-symbols-outlined text-[20px]">all_inclusive</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_8px_rgba(140,75,84,0.2)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-28 min-h-screen bg-background-cream max-w-[720px] mx-auto"><div class="flex flex-col w-full px-margin pb-6 gap-y-6">
+<!-- Cryptographic Sync Bar -->
+<div class="flex items-center justify-between px-space-md py-space-xs rounded-full bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="w-2 h-2 rounded-full bg-confirmed-green animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">
+        BOT Chain Synced · Block #18,294,011
+      </span>
+</div>
+<button aria-label="Refresh network state" class="flex items-center justify-center text-on-surface-variant hover:text-ink-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+</button>
+</div>
+<!-- Partner Bond Hero Stage -->
+<section class="relative flex flex-col items-center rounded-lg bg-surface-white px-space-lg py-space-xl shadow-sm overflow-hidden">
+<!-- Atmospheric Ambient Glows -->
+<div class="absolute -top-12 -left-12 w-48 h-48 rounded-full bg-blush-tint/40 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-secondary-fixed/30 blur-3xl pointer-events-none"></div>
+<!-- Avatars Linked by Consensus Knot -->
+<div class="relative flex items-center justify-center gap-space-lg mb-space-md">
+<!-- Alice -->
+<div class="relative group">
+<div class="w-14 h-14 rounded-full overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="Intimate soft-focus cinematic portrait of Alice in a minimalist cream cashmere sweater, smiling softly against warm morning sunlight in Kyoto aesthetic, natural film grain, editorial portrait." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdS7jqgS1UMt8eHVsOoKmOfRqLEyjCq2RV1De8qeg6a1DR5XNSAUps19SMRsJH0796rAGi3S90SO2YGyepnnrPofJ3dKWl0qRlmsoxPyaws-Gfku4UGDQ51Boc-qi31MyfuS_R-_5Tv55Mo5f0egWhn5LOnPgweq-NWqS3lvvpL-ZOqQ8iXiwksexkLJGMXpDIQtSLNiHp5DfLK1d_c4rBK2yKp4Q_zpvjvnPY8LE">
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-confirmed-green shadow-sm"></span>
+</div>
+<!-- Rosette / Infinite Heart Badge -->
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-blush-tint text-primary shadow-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<!-- Luna -->
+<div class="relative group">
+<div class="w-14 h-14 rounded-full overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="Radiant artistic portrait of Luna with loose wavy hair, soft rose gold ambient lighting, wearing artisanal silk studio scarf, gentle candid gaze, romantic warm tone palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-hneVr8lt3AAvnEfx9InASKqX7xmLn1LOQljAtl5ui-rWaGjvvBBiLsLs-7vPvWUEV9VhRcNNFXWDI07CFracD0n-jaZSLuAVep-TcZPH2KQ6OLunodofPjRHTPEf-1i15coP23pAUgmlqw2gjfB5K_iVN8SL3-4t1Kn02hhkR9aIGskrrfBVXjXqF-xD54b97OEPoDb82Hs-W2AUTFOwqfLKvswWKhtmFQN7lcs">
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-confirmed-green shadow-sm"></span>
+</div>
+</div>
+<!-- Bond Names & SBT Metadata -->
+<div class="flex flex-col items-center text-center gap-space-xs mb-space-md">
+<h2 class="font-headline-md text-headline-md text-ink-primary tracking-tight">
+        Alice <span class="font-headline-sm text-headline-sm text-primary">×</span> Luna
+      </h2>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-rose-gold">
+        Romantic SBT #0409 · Minted Together
+      </span>
+</div>
+<!-- Orbital Stage / Resonance Ring Graphic -->
+<div class="relative w-full max-w-[280px] h-[190px] flex items-center justify-center my-space-xs">
+<!-- Concentric Harmonic Rings -->
+<div class="absolute w-[260px] h-[170px] rounded-[50%] bg-surface-container-low/40"></div>
+<div class="absolute w-[210px] h-[135px] rounded-[50%] bg-blush-tint/30"></div>
+<div class="absolute w-[160px] h-[100px] rounded-[50%] bg-primary-fixed/40"></div>
+<!-- Ring Hero Vector Art (Stylized intertwined luxury bands) -->
+<svg class="relative z-10 w-44 h-40 drop-shadow-lg" fill="none" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+<!-- Interlocked Ring Left (Alice) -->
+<ellipse cx="82" cy="90" opacity="0.95" rx="46" ry="54" stroke="url(#roseGoldGrad1)" stroke-width="6.5" transform="rotate(-18 82 90)"></ellipse>
+<!-- Interlocked Ring Right (Luna) -->
+<ellipse cx="118" cy="90" opacity="0.95" rx="46" ry="54" stroke="url(#roseGoldGrad2)" stroke-width="6.5" transform="rotate(18 118 90)"></ellipse>
+<!-- Micro Core Shimmer -->
+<circle cx="100" cy="90" fill="#FFF9F7" r="5"></circle>
+<circle cx="100" cy="90" fill="#D98C95" r="2.5"></circle>
+<!-- Gradients -->
+<defs>
+<linearGradient gradientUnits="userSpaceOnUse" id="roseGoldGrad1" x1="40" x2="130" y1="35" y2="145">
+<stop stop-color="#E7B7A8"></stop>
+<stop offset="0.45" stop-color="#C98877"></stop>
+<stop offset="0.75" stop-color="#8C4B54"></stop>
+<stop offset="1" stop-color="#F4DDE0"></stop>
+</linearGradient>
+<linearGradient gradientUnits="userSpaceOnUse" id="roseGoldGrad2" x1="160" x2="70" y1="35" y2="145">
+<stop stop-color="#F4DDE0"></stop>
+<stop offset="0.3" stop-color="#C98877"></stop>
+<stop offset="0.7" stop-color="#8C4B54"></stop>
+<stop offset="1" stop-color="#E7B7A8"></stop>
+</linearGradient>
+</defs>
+</svg>
+</div>
+<!-- Active Resonance Indicator Pill -->
+<div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container mb-space-md shadow-sm">
+<span class="w-2 h-2 rounded-full bg-confirmed-green animate-ping"></span>
+<span class="font-label-sm text-label-sm text-ink-primary">
+        Resonance Radar Active · 2 Pulses Linked
+      </span>
+</div>
+<!-- Consensus Day Counter -->
+<div class="flex flex-col items-center text-center">
+<span class="font-headline-xl-mobile text-headline-xl-mobile text-ink-primary leading-none tracking-tight">
+        127
+      </span>
+<span class="font-label-md text-label-md text-on-surface-variant mt-1">
+        Days of Shared Consensus
+      </span>
+</div>
+</section>
+<!-- Metric Triad -->
+<section class="grid grid-cols-3 gap-space-sm">
+<!-- Memories -->
+<div class="flex flex-col items-center justify-center p-space-md rounded-DEFAULT bg-surface-white text-center shadow-sm">
+<div class="w-9 h-9 rounded-full bg-blush-tint/70 text-primary flex items-center justify-center mb-space-xs">
+<span class="material-symbols-outlined text-[19px]">auto_stories</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-ink-primary leading-tight">18</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Memories</span>
+</div>
+<!-- Mutual Vows -->
+<div class="flex flex-col items-center justify-center p-space-md rounded-DEFAULT bg-surface-white text-center shadow-sm">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed/70 text-secondary flex items-center justify-center mb-space-xs">
+<span class="material-symbols-outlined text-[19px]">draw</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-ink-primary leading-tight">7</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mutual Vows</span>
+</div>
+<!-- BOT Bond Pool -->
+<div class="flex flex-col items-center justify-center p-space-md rounded-DEFAULT bg-surface-white text-center shadow-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-sage-deep flex items-center justify-center mb-space-xs">
+<span class="material-symbols-outlined text-[19px]">savings</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-ink-primary leading-tight">260</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">BOT Bond Pool</span>
+</div>
+</section>
+<!-- Bell Agent Suggestion & Pending Dual-Sign Vow Card -->
+<section class="flex flex-col rounded-DEFAULT bg-surface-white p-space-lg shadow-sm gap-space-md">
+<!-- Header Badge Line -->
+<div class="flex items-center justify-between">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blush-tint/80 text-primary">
+<span class="material-symbols-outlined text-[14px]">arrow_back_ios_new</span>
+<span class="font-label-sm text-label-sm font-semibold">Bell Agent Suggestion</span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-pending-dark">
+<span class="w-1.5 h-1.5 rounded-full bg-pending-amber"></span>
+<span class="font-label-sm text-label-sm">Waiting for You</span>
+</div>
+</div>
+<!-- Content Title & Quote -->
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">
+        Luna drafted a sacred vow
+      </h3>
+<div class="p-space-md rounded-DEFAULT bg-surface-container-low text-ink-secondary">
+<p class="font-headline-sm text-headline-sm italic text-secondary leading-snug">
+          “Travel to Japan together next autumn &amp; watch the leaves change in Kyoto.”
+        </p>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+        Off-chain draft · Both signatures needed for On-Chain SBT seal
+      </span>
+</div>
+<!-- Dual Signature Progress Flow -->
+<div class="flex items-center justify-between p-space-sm px-space-md rounded-full bg-surface-container text-body-sm">
+<div class="flex items-center gap-space-xs text-sage-deep font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="">Luna Signed</span>
+</div>
+<div class="flex-1 mx-space-md h-0.5 bg-outline-variant/50 rounded-full"></div>
+<div class="flex items-center gap-space-xs text-pending-dark font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span class="">Your Turn</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-3.5 px-space-lg rounded-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md text-center transition-all duration-200 active:scale-95 shadow-md" type="button">
+        Review &amp; Sign
+      </button>
+<button class="py-3.5 px-space-md rounded-full bg-surface-container hover:bg-surface-container-high text-ink-secondary font-label-md text-label-md transition-colors active:scale-95" type="button">
+        Later
+      </button>
+</div>
+</section>
+<!-- Today's Moments Section -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<h3 class="font-headline-sm text-headline-sm text-ink-primary">Today's Moments</h3>
+</div>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-container flex items-center gap-0.5" href="#">
+        View Story <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+<!-- Memory Card Item -->
+<div class="flex items-center gap-space-md p-space-md rounded-DEFAULT bg-surface-white shadow-sm">
+<!-- Thumbnail -->
+<div class="w-20 h-20 rounded-DEFAULT overflow-hidden flex-shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Two porcelain ceramic matcha latte cups side by side on a rustic light wood cafe table with scattered cherry blossom petals, gentle morning sunlight streaming, serene intimate composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWNACnxlq_k2qylRMnEGu6m0c3_8p6Pa9BU3L9ENP2rBhncDZ-aWrYI_H48vXICYP0i_TkEn3zMpoOqmB25hDIWup3tBgnbJwDALXZJYmL0NytzbCPavipi5uFTdUbmMalN64_b3Gq7feoD2GipT9gtEC5MNfK3EvJLZY-9DECEbdzhDbdHG56G5EgZnkI9fH7L1aEqXHSaOJzNT6Z0kCbHH89dSHw_tCJGV8-mxE">
+</div>
+<!-- Details -->
+<div class="flex flex-col min-w-0 flex-1 gap-1">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-accent"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Luna added a memory</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-ink-primary truncate">First movie together...</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+          So many laughs and warm moments shared over the evening.
+        </p>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm mt-0.5">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span class="">Encrypted in Bell Vault</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Interaction Bar: Ring Her Bell -->
+<section class="flex items-center justify-between p-space-md rounded-DEFAULT bg-gradient-to-r from-surface-white via-surface-container-low to-blush-tint/40 shadow-sm">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-full bg-blush-tint text-primary flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[24px]">notifications_active</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-ink-primary">Ring Her Bell</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Send an instant haptic heartbeat to Luna</span>
+</div>
+</div>
+<button class="flex-shrink-0 px-space-lg py-3 rounded-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md shadow-md transition-all active:scale-90 flex items-center gap-1.5" id="chimeBtn" type="button">
+<span class="">Chime</span>
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+</button>
+</section>
+</div>
+<script>
+  (function() {
+    const chimeBtn = document.getElementById('chimeBtn');
+    if (chimeBtn) {
+      chimeBtn.addEventListener('click', () => {
+        chimeBtn.classList.add('scale-95');
+        const originalText = chimeBtn.innerHTML;
+        chimeBtn.innerHTML = '<span>Sent ♥</span><span class="material-symbols-outlined text-[18px]">favorite</span>';
+        if (navigator.vibrate) {
+          navigator.vibrate([40, 60, 40]);
+        }
+        setTimeout(() => {
+          chimeBtn.classList.remove('scale-95');
+          chimeBtn.innerHTML = originalText;
+        }, 1400);
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-white/85 backdrop-blur-2xl shadow-[0_-4px_24px_rgba(23,23,23,0.04)]" data-active-classes="text-primary-container font-medium [&amp;_.nav-dot]:opacity-100 [&amp;_.nav-icon]:scale-105"><div class="h-16 max-w-[720px] mx-auto px-space-xs grid grid-cols-5 items-center"><a class="group flex flex-col items-center justify-center h-14 min-w-[44px] text-ink-secondary/45 transition-all duration-200" data-path="ring" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined nav-icon text-[24px] transition-transform duration-200">radio_button_checked</span><span class="nav-dot absolute -top-1 right-[-6px] w-1.5 h-1.5 rounded-full bg-primary-container opacity-100 transition-opacity duration-200 shadow-[0_0_6px_rgba(217,140,149,0.8)]"></span></div><span class="font-label-sm text-label-sm mt-1 tracking-tight">Ring</span></a><a class="group flex flex-col items-center justify-center h-14 min-w-[44px] text-ink-secondary/45 transition-all duration-200" data-path="story" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined nav-icon text-[24px] transition-transform duration-200">auto_stories</span><span class="nav-dot absolute -top-1 right-[-6px] w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 transition-opacity duration-200 shadow-[0_0_6px_rgba(217,140,149,0.8)]"></span></div><span class="font-label-sm text-label-sm mt-1 tracking-tight">Story</span></a><a class="group flex flex-col items-center justify-center h-14 min-w-[44px] text-ink-secondary/45 transition-all duration-200" data-path="vow" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined nav-icon text-[24px] transition-transform duration-200">draw</span><span class="nav-dot absolute -top-1 right-[-6px] w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 transition-opacity duration-200 shadow-[0_0_6px_rgba(217,140,149,0.8)]"></span></div><span class="font-label-sm text-label-sm mt-1 tracking-tight">Vow</span></a><a class="group flex flex-col items-center justify-center h-14 min-w-[44px] text-ink-secondary/45 transition-all duration-200" data-path="bond" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined nav-icon text-[24px] transition-transform duration-200">savings</span><span class="nav-dot absolute -top-1 right-[-6px] w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 transition-opacity duration-200 shadow-[0_0_6px_rgba(217,140,149,0.8)]"></span></div><span class="font-label-sm text-label-sm mt-1 tracking-tight">Bond</span></a><a class="group flex flex-col items-center justify-center h-14 min-w-[44px] text-ink-secondary/45 transition-all duration-200" data-path="me" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined nav-icon text-[24px] transition-transform duration-200">favorite</span><span class="nav-dot absolute -top-1 right-[-6px] w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 transition-opacity duration-200 shadow-[0_0_6px_rgba(217,140,149,0.8)]"></span></div><span class="font-label-sm text-label-sm mt-1 tracking-tight">Me</span></a></div></nav>
+<div id="st-root"></div>
+
+</body></html>
