@@ -62,3 +62,29 @@ receipt verification match the deployed bytecode:
   fresh accounts)
 - Full test suite 75/75 green (chain close-loop tests run on local Anvil
   with the same ABI)
+
+## Full lifecycle verification · Ring #1 (real mainnet Ring)
+
+Two funded wallets (A = deployer, B = persisted test participant) completed
+the entire relationship lifecycle on mainnet against
+0x18d7B2Dd3202Dc9507f414508516E2A669Df8008:
+
+1. createInvitation (B → A) ✓
+2. acceptInvitation (A) → relation #1 ACTIVE, RingSBT minted ✓
+3. proposePrivateVow (A) + confirmVow (B) — executed three times,
+   vowCount reached 3 ✓
+4. deposit (A) — 0.005 BOT into the shared pool ✓
+5. requestEnd (A) + confirmEnd (B) → status ARCHIVED ✓
+6. withdrawFrom (A) — 0.005 BOT returned to the depositor ✓
+7. relationOf cleared for both wallets; history remains queryable ✓
+
+Attempts that correctly reverted prove the guards: inviting while a
+pending invitation exists ("you already have an invitation"),
+inviting while already in a Ring ("you already have a Ring"), and
+withdrawing with no attribution ("nothing to withdraw") — the contract
+enforces its own rules on mainnet exactly as designed.
+
+Connection summary: RPC rpc.botchain.ai reachable from both the local
+machine and the production server; chainId 677; the deployed app at
+https://bell.playertwo.fun reads and writes this contract through the
+same ABI.
